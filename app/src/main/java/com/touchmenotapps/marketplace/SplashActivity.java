@@ -91,4 +91,10 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(intent, options.toBundle());
         finish();
     }
+
+    @OnClick(R.id.splash_login_facebook_btn)
+    public void onLoginWithFacebook() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
 }

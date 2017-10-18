@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fragmentBackground"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/offers_location_access"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_access_location"
+            android:cropToPadding="true"
+            android:padding="10dp"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_margin="15dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="We need access to your location to get nearby offers."
+            android:textSize="20sp"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="Retry"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/cardview_dark_background"
+            android:elevation="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

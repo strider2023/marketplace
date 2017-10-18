@@ -14,6 +14,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="HintLabel" parent="TextAppearance.AppCompat">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">@android:color/white</item>
@@ -32,6 +36,15 @@
         <item name="cardElevation">0dp</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="contentPadding">5dp</item>
+    </style>
+
+    <style name="BottomNavigation">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="itemBackground">@drawable/selector_bottom_tab</item>
+        <item name="itemIconTint">@android:color/white</item>
+        <item name="itemTextColor">@android:color/white</item>
+        <item name="paddingStart">0dp</item>
+        <item name="paddingEnd">0dp</item>
     </style>
 
 </resources>
