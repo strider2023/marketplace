@@ -8,6 +8,6 @@
     <color name="primary">#4e43f9</color>
     <color name="yellow">#fced2a</color>
 
-    <color name="fragmentBackground">#DDD</color>
+    <color name="fragmentBackground">#CCC</color>
     <color name="lightGreen">#0d9681</color>
 </resources>
