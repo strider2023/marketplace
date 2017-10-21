@@ -58,7 +58,7 @@ public class OffersFragment extends Fragment implements CategorySelectionListene
         gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         categoriesList.setLayoutManager(gridLayoutManager);
         categoriesList.setAdapter(categoriesAdapter);
-        categoriesAdapter.setCategoryDAOList(categoryDAOList);
+        categoriesAdapter.setData(categoryDAOList);
 
         return mViewHolder;
     }

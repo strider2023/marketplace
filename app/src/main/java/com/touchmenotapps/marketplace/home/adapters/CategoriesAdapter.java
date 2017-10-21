@@ -26,7 +26,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> 
         this.categorySelectionListener = categorySelectionListener;
     }
 
-    public void setCategoryDAOList(List<CategoryDAO> categoryDAOList) {
+    public void setData(List<CategoryDAO> categoryDAOList) {
         this.categoryDAOList = categoryDAOList;
         notifyDataSetChanged();
     }
