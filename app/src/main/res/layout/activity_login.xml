@@ -106,7 +106,6 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:hint="@string/prompt_password"
-                            android:imeActionId="@+id/login"
                             android:imeActionLabel="@string/login"
                             android:imeOptions="actionUnspecified"
                             android:inputType="textPassword"

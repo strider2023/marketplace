@@ -1,4 +1,5 @@
 <resources>
+    <string name="base_url">http://bazaar-830807618.ap-south-1.elb.amazonaws.com/</string>
     <string name="app_name">The Bazaar</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

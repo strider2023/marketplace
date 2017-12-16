@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
+import com.touchmenotapps.marketplace.common.enums.UserType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,8 @@ public class SignupActivity extends AppCompatActivity {
     @BindView(R.id.signup_user_info)
     LinearLayout signupUserInfoForm;
 
+    private UserType selectedUserType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +46,14 @@ public class SignupActivity extends AppCompatActivity {
     public void signUpAsSeller() {
         signupUserType.setVisibility(View.GONE);
         signupUserInfoForm.setVisibility(View.VISIBLE);
+        selectedUserType = UserType.BUSINESS;
     }
 
     @OnClick(R.id.sigup_as_buyer_btn)
     public void signUpAsBuyer() {
         signupUserType.setVisibility(View.GONE);
         signupUserInfoForm.setVisibility(View.VISIBLE);
+        selectedUserType = UserType.CONSUMER;
     }
 
     @OnClick(R.id.signup_btn)

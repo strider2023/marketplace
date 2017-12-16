@@ -2,37 +2,43 @@ package com.touchmenotapps.marketplace.login;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
+import com.touchmenotapps.marketplace.common.enums.ServerEvents;
+import com.touchmenotapps.marketplace.dao.LoginDao;
+import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.home.MainActivity;
+import com.touchmenotapps.marketplace.login.threads.UserLoginAsyncTask;
+
+import org.json.simple.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity implements ServerResponseListener {
 
     @BindView(R.id.splash_app_name)
     AppCompatTextView splashText;
     @BindView(R.id.splash_app_icon)
     ImageView splashIcon;
+    @BindView(R.id.login_email)
+    AppCompatEditText userMail;
+    @BindView(R.id.login_password)
+    AppCompatEditText userPassword;
+
+    private LoginDao loginDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +48,17 @@ public class LoginActivity extends AppCompatActivity {
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         splashText.setTypeface(myTypeface);
+
+        loginDao = new LoginDao(this);
     }
 
     @OnClick(R.id.login_btn)
     public void onLoginButtonClicked() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        if(userMail.getEditableText().toString().trim().length() > 0) {
+            loginDao.setUserMailPhone(userMail.getEditableText().toString().trim());
+            new UserLoginAsyncTask(1, this, this)
+                    .execute(new JSONObject[]{loginDao.toJSON()});
+        }
     }
 
     @OnClick(R.id.back_btn)
@@ -78,6 +89,17 @@ public class LoginActivity extends AppCompatActivity {
                 makeSceneTransitionAnimation(this, p1, p2);
         startActivity(intent, options.toBundle());
         finish();
+    }
+
+    @Override
+    public void onSuccess(int threadId, Object object) {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onFaliure(ServerEvents serverEvents, Object object) {
+        Snackbar.make(splashText, object.toString(), Snackbar.LENGTH_LONG).show();
     }
 }
 
