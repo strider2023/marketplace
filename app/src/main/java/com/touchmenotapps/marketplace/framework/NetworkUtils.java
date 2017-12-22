@@ -15,6 +15,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 
+import com.touchmenotapps.marketplace.common.enums.RequestType;
+
 public class NetworkUtils {
 
 	private Context context;
@@ -57,7 +59,7 @@ public class NetworkUtils {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	@SuppressWarnings("deprecation")
-	public HttpURLConnection getHttpURLConInstance(String mURL, boolean isGet) throws Exception {
+	public HttpURLConnection getHttpURLConInstance(String mURL, RequestType requestType) throws Exception {
 	    	URL url = new URL(mURL);
 	    	HttpURLConnection mHttpPost= null;
 	    	String proxyString = null;
@@ -77,15 +79,27 @@ public class NetworkUtils {
 				mHttpPost = (HttpURLConnection) url.openConnection();
 	    	
 	    	mHttpPost.setRequestProperty("User-Agent", "Mozilla/5.0");
-	    	if(isGet)
-	    		mHttpPost.setRequestMethod("GET");
-	    	else {
-	    		mHttpPost.setDoInput(true);
-	        	mHttpPost.setDoOutput(true);
-	        	mHttpPost.setRequestMethod("POST");
-	        	mHttpPost.setRequestProperty("Content-Type", "application/json"); 
-	    	}
-	    	
+
+	    	switch (requestType) {
+				case GET:
+					mHttpPost.setRequestMethod("GET");
+					break;
+				case POST:
+					mHttpPost.setDoInput(true);
+					mHttpPost.setDoOutput(true);
+					mHttpPost.setRequestMethod("POST");
+					mHttpPost.setRequestProperty("Content-Type", "application/json");
+					break;
+				case PUT:
+					mHttpPost.setDoInput(true);
+					mHttpPost.setDoOutput(true);
+					mHttpPost.setRequestMethod("PUT");
+					mHttpPost.setRequestProperty("Content-Type", "application/json");
+					break;
+				case DELETE:
+					mHttpPost.setRequestMethod("DELETE");
+					break;
+			}
 	    	return mHttpPost;
     }
 }

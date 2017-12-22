@@ -7,6 +7,7 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.BaseAppTask;
 import com.touchmenotapps.marketplace.common.constants.AppConstants;
 import com.touchmenotapps.marketplace.common.constants.URLConstants;
+import com.touchmenotapps.marketplace.common.enums.RequestType;
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
@@ -67,7 +68,7 @@ public class UserSignupTask extends BaseAppTask {
 
     private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.REGISTER_URL, false);
+                getContext().getString(R.string.base_url) + URLConstants.REGISTER_URL, RequestType.POST);
         DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
         out.writeBytes(object.toString());
         out.flush();
