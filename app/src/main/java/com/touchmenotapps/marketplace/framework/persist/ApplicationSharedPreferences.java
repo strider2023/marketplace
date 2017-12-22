@@ -17,6 +17,12 @@ public class ApplicationSharedPreferences {
         mAppPrefs = context.getSharedPreferences("TheBazaarPreferences", 0);
     }
 
+    public void setRegisterOTPComplete(boolean isComplete) {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putBoolean("registerOTP", isComplete);
+        edit.commit();
+    }
+
     public void setLoggedIn() {
         SharedPreferences.Editor edit = mAppPrefs.edit();
         edit.putBoolean("appLoggedIn", true);
@@ -29,6 +35,12 @@ public class ApplicationSharedPreferences {
         edit.commit();
     }
 
+    public void setUserPhoneNumber(String number) {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putString("phoneNumber", number);
+        edit.commit();
+    }
+
     public void setAuthResponse(String token, String expires, String accountType) {
         SharedPreferences.Editor edit = mAppPrefs.edit();
         edit.putString("token", token);
@@ -37,11 +49,19 @@ public class ApplicationSharedPreferences {
         edit.commit();
     }
 
+    public String getUserPhoneNumber() {
+        return mAppPrefs.getString("phoneNumber", "");
+    }
+
     public UserType getUserType() {
         return UserType.BUSINESS;
     }
 
     public boolean isUserLoggedIn() {
         return mAppPrefs.getBoolean("appLoggedIn", false);
+    }
+
+    public boolean isRegisterOTPComplete() {
+        return mAppPrefs.getBoolean("registerOTP", true);
     }
 }

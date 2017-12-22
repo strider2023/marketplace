@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.login.threads;
+package com.touchmenotapps.marketplace.signup.threads;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,15 +18,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
- * Created by i7 on 16-10-2017.
+ * Created by i7 on 22-12-2017.
  */
 
-public class UserLoginAsyncTask extends BaseAppTask {
+public class UserSignupTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public UserLoginAsyncTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public UserSignupTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -67,7 +67,7 @@ public class UserLoginAsyncTask extends BaseAppTask {
 
     private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, false);
+                getContext().getString(R.string.base_url) + URLConstants.REGISTER_URL, false);
         DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
         out.writeBytes(object.toString());
         out.flush();
@@ -78,14 +78,8 @@ public class UserLoginAsyncTask extends BaseAppTask {
         while ((decodedString = in.readLine()) != null)
             sb.append(decodedString);
         in.close();
-        JSONObject response = (JSONObject) getParser().parse(sb.toString());
         Log.i(AppConstants.APP_TAG, sb.toString());
-        getAppPreferences().setAuthResponse(
-                response.get("token").toString(),
-                response.get("expires").toString(),
-                response.get("accountType").toString()
-        );
-        getAppPreferences().setLoggedIn();
+        getAppPreferences().setRegisterOTPComplete(false);
         return ServerEvents.SUCCESS;
     }
 }

@@ -11,13 +11,15 @@ import android.text.TextWatcher;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.GlobalConstants;
+import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
+import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RegistrationOTPActivity extends AppCompatActivity {
+public class RegistrationOTPActivity extends AppCompatActivity implements ServerResponseListener{
 
     @BindView(R.id.otp_enter_number)
     AppCompatEditText otpText;
@@ -59,5 +61,15 @@ public class RegistrationOTPActivity extends AppCompatActivity {
                 //TODO Send server request
             }
         }
+    }
+
+    @Override
+    public void onSuccess(int threadId, Object object) {
+
+    }
+
+    @Override
+    public void onFaliure(ServerEvents serverEvents, Object object) {
+
     }
 }

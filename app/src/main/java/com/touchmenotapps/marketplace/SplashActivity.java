@@ -17,7 +17,8 @@ import android.widget.ImageView;
 import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
 import com.touchmenotapps.marketplace.home.MainActivity;
 import com.touchmenotapps.marketplace.login.LoginActivity;
-import com.touchmenotapps.marketplace.signup.SignupActivity;
+import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
+import com.touchmenotapps.marketplace.signup.UserSignupActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,9 +64,13 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }
             }, 2000);
-        }
-
-        if(!applicationSharedPreferences.isUserLoggedIn()) {
+        } else if(!applicationSharedPreferences.isRegisterOTPComplete()) {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    startActivity(new Intent(SplashActivity.this, RegistrationOTPActivity.class));
+                }
+            }, 2000);
+        } else {
             findViewById(R.id.splash_button_holder).setVisibility(View.VISIBLE);
         }
     }
@@ -83,7 +88,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.splash_signup_btn)
     public void onSignupClicked(){
-        Intent intent = new Intent(this, SignupActivity.class);
+        Intent intent = new Intent(this, UserSignupActivity.class);
         Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
         Pair<View, String> p2 = Pair.create((View) splashText, "splash");
         ActivityOptionsCompat options = ActivityOptionsCompat.
@@ -94,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.splash_login_facebook_btn)
     public void onLoginWithFacebook() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        //startActivity(new Intent(this, MainActivity.class));
+        //finish();
     }
 }

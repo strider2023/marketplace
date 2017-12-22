@@ -48,7 +48,7 @@
                 android:value="com.touchmenotapps.marketplace.SplashActivity" />
         </activity>
         <activity
-            android:name=".signup.SignupActivity"
+            android:name=".signup.UserSignupActivity"
             android:label="@string/signup"
             android:parentActivityName=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">
