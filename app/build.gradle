@@ -30,5 +30,6 @@ dependencies {
     implementation 'com.android.support:design:26.+'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.github.iammert:MaterialIntroView:1.+'
+    implementation 'org.apache.commons:commons-lang3:3.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

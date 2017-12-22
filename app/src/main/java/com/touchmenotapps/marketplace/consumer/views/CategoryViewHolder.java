@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.views;
+package com.touchmenotapps.marketplace.consumer.views;
 
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.dao.CategoryDAO;
-import com.touchmenotapps.marketplace.home.interfaces.CategorySelectionListener;
+import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
+import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

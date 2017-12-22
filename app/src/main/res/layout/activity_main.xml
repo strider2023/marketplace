@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/fragmentBackground"
-    tools:context="com.touchmenotapps.marketplace.home.MainActivity">
+    tools:context="com.touchmenotapps.marketplace.consumer.ConsumerMainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.adapters;
+package com.touchmenotapps.marketplace.consumer.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.dao.CategoryDAO;
-import com.touchmenotapps.marketplace.home.interfaces.CategorySelectionListener;
-import com.touchmenotapps.marketplace.home.views.CategoryViewHolder;
+import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
+import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
+import com.touchmenotapps.marketplace.consumer.views.CategoryViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

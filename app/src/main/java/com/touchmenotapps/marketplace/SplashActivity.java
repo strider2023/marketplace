@@ -14,8 +14,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
-import com.touchmenotapps.marketplace.home.MainActivity;
 import com.touchmenotapps.marketplace.login.LoginActivity;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 import com.touchmenotapps.marketplace.signup.UserSignupActivity;
@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
         if(applicationSharedPreferences.isUserLoggedIn()) {
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    startActivity(new Intent(SplashActivity.this, ConsumerMainActivity.class));
                 }
             }, 2000);
         } else if(!applicationSharedPreferences.isRegisterOTPComplete()) {
@@ -99,7 +99,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.splash_login_facebook_btn)
     public void onLoginWithFacebook() {
-        //startActivity(new Intent(this, MainActivity.class));
+        //startActivity(new Intent(this, ConsumerMainActivity.class));
         //finish();
     }
 }

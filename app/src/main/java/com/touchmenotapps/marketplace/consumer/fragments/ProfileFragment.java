@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.fragments;
+package com.touchmenotapps.marketplace.consumer.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

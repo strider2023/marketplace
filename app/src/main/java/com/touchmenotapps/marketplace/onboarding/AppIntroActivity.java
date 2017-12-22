@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.transition.Explode;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.MainActivity;
+import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.onboarding.listeners.IntroOnboardingOnRightOutListener;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class AppIntroActivity extends AppCompatActivity {
         onBoardingFragment.setOnRightOutListener(new IntroOnboardingOnRightOutListener() {
             @Override
             public void onRightOut() {
-                Intent loginIntent = new Intent(AppIntroActivity.this, MainActivity.class);
+                Intent loginIntent = new Intent(AppIntroActivity.this, ConsumerMainActivity.class);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Explode explode = new Explode();
                     explode.setDuration(500);

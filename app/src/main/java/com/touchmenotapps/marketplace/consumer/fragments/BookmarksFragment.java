@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.fragments;
+package com.touchmenotapps.marketplace.consumer.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.adapters.BookmarksAdapter;
-import com.touchmenotapps.marketplace.home.dao.BookmarksDAO;
-import com.touchmenotapps.marketplace.home.interfaces.BookmarkSelectionListener;
+import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
+import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
+import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;

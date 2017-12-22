@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.adapters;
+package com.touchmenotapps.marketplace.consumer.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.dao.BookmarksDAO;
-import com.touchmenotapps.marketplace.home.interfaces.BookmarkSelectionListener;
-import com.touchmenotapps.marketplace.home.views.BookmarksViewHolder;
+import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
+import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
+import com.touchmenotapps.marketplace.consumer.views.BookmarksViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home.fragments;
+package com.touchmenotapps.marketplace.consumer.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.adapters.CategoriesAdapter;
-import com.touchmenotapps.marketplace.home.dao.CategoryDAO;
-import com.touchmenotapps.marketplace.home.interfaces.CategorySelectionListener;
+import com.touchmenotapps.marketplace.consumer.adapters.CategoriesAdapter;
+import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
+import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -16,9 +16,9 @@ import android.widget.ImageView;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
+import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.dao.LoginDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.home.MainActivity;
 import com.touchmenotapps.marketplace.login.threads.UserLoginAsyncTask;
 
 import org.json.simple.JSONObject;
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, ConsumerMainActivity.class));
         finish();
     }
 

@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.home;
+package com.touchmenotapps.marketplace.consumer;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,16 +10,16 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.home.fragments.BookmarksFragment;
-import com.touchmenotapps.marketplace.home.fragments.OffersFragment;
-import com.touchmenotapps.marketplace.home.fragments.ProfileFragment;
-import com.touchmenotapps.marketplace.home.fragments.PurchasesFragment;
-import com.touchmenotapps.marketplace.home.fragments.SearchFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.OffersFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.PurchasesFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class ConsumerMainActivity extends AppCompatActivity {
 
     @BindView(R.id.app_name_text)
     TextView titleText;

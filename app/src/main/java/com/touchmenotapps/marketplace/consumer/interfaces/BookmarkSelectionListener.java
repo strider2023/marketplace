@@ -1,6 +1,6 @@
-package com.touchmenotapps.marketplace.home.interfaces;
+package com.touchmenotapps.marketplace.consumer.interfaces;
 
-import com.touchmenotapps.marketplace.home.dao.BookmarksDAO;
+import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
 
 /**
  * Created by i7 on 21-10-2017.
