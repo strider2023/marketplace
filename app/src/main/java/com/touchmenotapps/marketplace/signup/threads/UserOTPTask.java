@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.login.threads;
+package com.touchmenotapps.marketplace.signup.threads;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,15 +19,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
- * Created by i7 on 16-10-2017.
+ * Created by i7 on 26-12-2017.
  */
 
-public class UserLoginAsyncTask extends BaseAppTask {
+public class UserOTPTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public UserLoginAsyncTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public UserOTPTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -68,7 +68,7 @@ public class UserLoginAsyncTask extends BaseAppTask {
 
     private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, RequestType.POST);
+                getContext().getString(R.string.base_url) + URLConstants.OTP_URL, RequestType.POST);
         DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
         out.writeBytes(object.toString());
         out.flush();
@@ -80,13 +80,7 @@ public class UserLoginAsyncTask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
-        JSONObject response = (JSONObject) getParser().parse(sb.toString());
-        getAppPreferences().setAuthResponse(
-                response.get("token").toString(),
-                response.get("expires").toString(),
-                response.get("accountType").toString()
-        );
-        getAppPreferences().setLoggedIn();
+        getAppPreferences().setRegisterOTPComplete(true);
         return ServerEvents.SUCCESS;
     }
 }
