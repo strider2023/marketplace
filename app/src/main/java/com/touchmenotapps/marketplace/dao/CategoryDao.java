@@ -27,7 +27,7 @@ public class CategoryDao extends BaseDao {
         return categoriesMap;
     }
 
-    public void addHoursMap(String category, String subCategory) {
+    public void addCategory(String category, String subCategory) {
         Set<String> subCategorySet = new HashSet<>();
         subCategorySet.add(subCategory);
         this.categoriesMap.put(category, subCategorySet);
@@ -49,12 +49,15 @@ public class CategoryDao extends BaseDao {
 
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.putAll(categoriesMap);
-        /*for(String key : categoriesMap.keySet()) {
-            JSONArray timeArray = new JSONArray();
-            timeArray.put(categoriesMap.get(key));
-            jsonObject.put(key, timeArray);
-        }*/
+        //jsonObject.putAll(categoriesMap);
+        for(String key : categoriesMap.keySet()) {
+            JSONArray categories = new JSONArray();
+            for (String category : categoriesMap.get(key)) {
+                categories.add(category);
+            }
+            //timeArray.add(categoriesMap.get(key));
+            jsonObject.put(key, categories);
+        }
         return jsonObject;
     }
 }

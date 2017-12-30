@@ -56,12 +56,15 @@ public class HoursOfOperationDao extends BaseDao {
 
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.putAll(hoursMap);
-        /*for(String key : hoursMap.keySet()) {
+        //jsonObject.putAll(hoursMap);
+        for(String key : hoursMap.keySet()) {
             JSONArray timeArray = new JSONArray();
-            timeArray.put(hoursMap.get(key));
+            for (String time : hoursMap.get(key)) {
+                timeArray.add(time);
+            }
+            //timeArray.add(categoriesMap.get(key));
             jsonObject.put(key, timeArray);
-        }*/
+        }
         return jsonObject;
     }
 }

@@ -147,7 +147,13 @@ public class BusinessDao extends BaseDao {
         jsonObject.put("website", website);
         jsonObject.put("address", businessAddressDao.toJSON());
         jsonObject.put("hrsOfOperation", hoursOfOperationDao.toJSON());
-        jsonObject.put("phs", phoneNumber);
+        JSONArray phoneNumbers = new JSONArray();
+        for (String phone : phoneNumber) {
+            phoneNumbers.add(phone);
+        }
+        //timeArray.add(categoriesMap.get(key));
+        jsonObject.put("phs", phoneNumbers);
+        //jsonObject.put("phs", phoneNumber);
         jsonObject.put("category", categoryDao.toJSON());
         return jsonObject;
     }

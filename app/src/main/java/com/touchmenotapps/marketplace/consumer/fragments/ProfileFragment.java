@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -20,6 +22,11 @@ import butterknife.OnClick;
  */
 
 public class ProfileFragment extends Fragment {
+
+    @BindView(R.id.profile_phone_number)
+    AppCompatTextView phoneNumber;
+    @BindView(R.id.profile_role)
+    AppCompatTextView role;
 
     private View mViewHolder;
     private AppPreferences appPreferences;
@@ -37,6 +44,8 @@ public class ProfileFragment extends Fragment {
 
         appPreferences = new AppPreferences(getContext());
 
+        phoneNumber.setText(appPreferences.getUserPhoneNumber());
+        role.setText(appPreferences.getUserType().toString());
         return mViewHolder;
     }
 
