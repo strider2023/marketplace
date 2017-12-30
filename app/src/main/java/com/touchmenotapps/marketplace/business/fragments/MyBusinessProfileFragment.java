@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.consumer.fragments;
+package com.touchmenotapps.marketplace.business.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +16,16 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by i7 on 18-10-2017.
+ * Created by arindamnath on 30/12/17.
  */
 
-public class ProfileFragment extends Fragment {
+public class MyBusinessProfileFragment extends Fragment {
 
     private View mViewHolder;
     private AppPreferences appPreferences;
 
-    public static ProfileFragment newInstance() {
-        ProfileFragment fragment = new ProfileFragment();
+    public static MyBusinessProfileFragment newInstance() {
+        MyBusinessProfileFragment fragment = new MyBusinessProfileFragment();
         return fragment;
     }
 

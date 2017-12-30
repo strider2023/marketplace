@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_business_feed"
+        android:icon="@drawable/ic_offers_black_24dp"
+        android:title="Offers" />
+
+    <item
+        android:id="@+id/navigation_businesses"
+        android:icon="@drawable/ic_purchases_black_24dp"
+        android:title="My Offers" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="Me" />
+</menu>

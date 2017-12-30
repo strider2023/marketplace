@@ -15,11 +15,13 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
+import com.touchmenotapps.marketplace.business.BusinessMainActivity;
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.common.enums.UserType;
+import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.dao.SignupDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.signup.threads.UserSignupTask;
 
 import org.json.simple.JSONObject;
@@ -44,7 +46,7 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
     AppCompatEditText phoneNumber;
 
     private SignupDao signupDao;
-    private ApplicationSharedPreferences appPreferences;
+    private AppPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         splashText.setTypeface(myTypeface);
 
-        appPreferences = new ApplicationSharedPreferences(this);
+        appPreferences = new AppPreferences(this);
 
         signupDao = new SignupDao(this);
     }
@@ -76,8 +78,10 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
 
     @OnClick(R.id.signup_btn)
     public void signupClicked() {
-        if(phoneNumber.getEditableText().toString().trim().length() > 0) {
+        if(phoneNumber.getEditableText().toString().trim().length() > 0
+                && email.getEditableText().toString().trim().length() > 0) {
             signupDao.setPhoneNumber(phoneNumber.getEditableText().toString().trim());
+            signupDao.setEmailId(email.getEditableText().toString().trim());
             new UserSignupTask(1, this, this)
                     .execute(new JSONObject[]{signupDao.toJSON()});
         } else {
@@ -108,7 +112,20 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
     @Override
     public void onSuccess(int threadId, Object object) {
         appPreferences.setUserPhoneNumber(phoneNumber.getEditableText().toString().trim());
-        startActivity(new Intent(this, RegistrationOTPActivity.class));
+        appPreferences.setUserEmail(email.getEditableText().toString().trim());
+        Intent intent;
+        switch (appPreferences.getUserType()) {
+            case BUSINESS:
+                intent = new Intent(this, BusinessMainActivity.class);
+                break;
+            case CONSUMER:
+                intent = new Intent(this, ConsumerMainActivity.class);
+                break;
+            default:
+                intent = new Intent(this, RegistrationOTPActivity.class);
+                break;
+        }
+        startActivity(intent);
         finish();
     }
 

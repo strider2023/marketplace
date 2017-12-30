@@ -32,7 +32,7 @@ public abstract class BaseDao {
         this.jsonParser = new JSONParser();
     }
 
-    protected abstract void parse(JSONParser jsonParser, JSONObject jsonObject);
+    protected abstract void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception;
 
     public Context getContext() {
         return context;

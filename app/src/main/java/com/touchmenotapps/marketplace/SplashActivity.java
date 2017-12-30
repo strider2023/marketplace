@@ -14,8 +14,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.touchmenotapps.marketplace.business.BusinessMainActivity;
 import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
-import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.login.LoginActivity;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 import com.touchmenotapps.marketplace.signup.UserSignupActivity;
@@ -36,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.splash_signup_btn)
     AppCompatButton splashSignup;
 
-    private ApplicationSharedPreferences applicationSharedPreferences;
+    private AppPreferences appPreferences;
 
     private Animation animFast, animSlow, animVerySlow;
 
@@ -49,7 +50,7 @@ public class SplashActivity extends AppCompatActivity {
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         splashText.setTypeface(myTypeface);
 
-        applicationSharedPreferences = new ApplicationSharedPreferences(this);
+        appPreferences = new AppPreferences(this);
         animFast = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim);
         animSlow = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim_slow);
         animVerySlow = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim_very_slow);
@@ -58,21 +59,40 @@ public class SplashActivity extends AppCompatActivity {
         findViewById(R.id.cloud_image_2).startAnimation(animSlow);
         findViewById(R.id.cloud_image_3).startAnimation(animFast);
 
-        if(applicationSharedPreferences.isUserLoggedIn()) {
+        if(appPreferences.isUserLoggedIn()) {
             new Handler().postDelayed(new Runnable() {
                 public void run() {
-                    startActivity(new Intent(SplashActivity.this, ConsumerMainActivity.class));
-                }
-            }, 2000);
-        } else if(!applicationSharedPreferences.isRegisterOTPComplete()) {
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    startActivity(new Intent(SplashActivity.this, RegistrationOTPActivity.class));
+                    launchMainActivity();
                 }
             }, 2000);
         } else {
             findViewById(R.id.splash_button_holder).setVisibility(View.VISIBLE);
         }
+
+        /*else if(!appPreferences.isRegisterOTPComplete()) {
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    startActivity(new Intent(SplashActivity.this, RegistrationOTPActivity.class));
+                }
+            }, 2000);
+        }*/
+    }
+
+    private void launchMainActivity() {
+        Intent intent;
+        switch (appPreferences.getUserType()) {
+            case BUSINESS:
+                intent = new Intent(this, BusinessMainActivity.class);
+                break;
+            case CONSUMER:
+                intent = new Intent(this, ConsumerMainActivity.class);
+                break;
+            default:
+                intent = new Intent(this, RegistrationOTPActivity.class);
+                break;
+        }
+        startActivity(intent);
+        finish();
     }
 
     @OnClick(R.id.splash_login_btn)

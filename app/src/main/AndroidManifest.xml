@@ -37,7 +37,10 @@
         </activity>
         <activity
             android:name=".consumer.ConsumerMainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".business.BusinessMainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
@@ -58,13 +61,15 @@
         </activity>
         <activity
             android:name=".signup.RegistrationOTPActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.ForgotPasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".onboarding.AppIntroActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".business.AddBusinessActivity" />
+        <activity android:name=".business.AddBusinessFeedActivity"></activity>
     </application>
 
 </manifest>

@@ -15,11 +15,14 @@ import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
+import com.touchmenotapps.marketplace.business.BusinessMainActivity;
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.dao.LoginDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.login.threads.UserLoginAsyncTask;
+import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 
 import org.json.simple.JSONObject;
 
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
     AppCompatEditText userPassword;
 
     private LoginDao loginDao;
+    private AppPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
 
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         splashText.setTypeface(myTypeface);
+
+        appPreferences = new AppPreferences(this);
 
         loginDao = new LoginDao(this);
     }
@@ -93,7 +99,20 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        startActivity(new Intent(this, ConsumerMainActivity.class));
+        appPreferences.setUserPhoneNumber(userMail.getEditableText().toString().trim());
+        Intent intent;
+        switch (appPreferences.getUserType()) {
+            case BUSINESS:
+                intent = new Intent(this, BusinessMainActivity.class);
+                break;
+            case CONSUMER:
+                intent = new Intent(this, ConsumerMainActivity.class);
+                break;
+            default:
+                intent = new Intent(this, RegistrationOTPActivity.class);
+                break;
+        }
+        startActivity(intent);
         finish();
     }
 

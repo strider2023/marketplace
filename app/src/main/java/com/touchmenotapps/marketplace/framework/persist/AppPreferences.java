@@ -9,11 +9,11 @@ import com.touchmenotapps.marketplace.common.enums.UserType;
  * Created by i7 on 17-10-2017.
  */
 
-public class ApplicationSharedPreferences {
+public class AppPreferences {
 
     private SharedPreferences mAppPrefs;
 
-    public ApplicationSharedPreferences(Context context) {
+    public AppPreferences(Context context) {
         mAppPrefs = context.getSharedPreferences("TheBazaarPreferences", 0);
     }
 
@@ -29,7 +29,7 @@ public class ApplicationSharedPreferences {
         edit.commit();
     }
 
-    public void setLopggedOut() {
+    public void setLoggedOut() {
         SharedPreferences.Editor edit = mAppPrefs.edit();
         edit.putBoolean("appLoggedIn", false);
         edit.commit();
@@ -38,6 +38,12 @@ public class ApplicationSharedPreferences {
     public void setUserPhoneNumber(String number) {
         SharedPreferences.Editor edit = mAppPrefs.edit();
         edit.putString("phoneNumber", number);
+        edit.commit();
+    }
+
+    public void setUserEmail(String email) {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putString("email", email);
         edit.commit();
     }
 
@@ -53,8 +59,16 @@ public class ApplicationSharedPreferences {
         return mAppPrefs.getString("phoneNumber", "");
     }
 
+    public String getUserToken() {
+        return mAppPrefs.getString("token", "");
+    }
+
     public UserType getUserType() {
-        return UserType.BUSINESS;
+        UserType userType = UserType.BUSINESS;
+        if(mAppPrefs.getString("accountType", "BUSINESS").equals(UserType.CONSUMER.toString())) {
+            userType = UserType.CONSUMER;
+        }
+        return userType;
     }
 
     public boolean isUserLoggedIn() {

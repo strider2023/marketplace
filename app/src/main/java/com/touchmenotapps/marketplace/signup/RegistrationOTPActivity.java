@@ -16,7 +16,7 @@ import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.dao.OTPDao;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
 import com.touchmenotapps.marketplace.signup.threads.UserOTPTask;
 
@@ -32,7 +32,7 @@ public class RegistrationOTPActivity extends AppCompatActivity implements Server
 
     private OTPDao otpDao;
     private PermissionsUtil permissionsUtil;
-    private ApplicationSharedPreferences appPreference;
+    private AppPreferences appPreference;
     private boolean isSMSPermissionAvailable;
 
     @Override
@@ -42,7 +42,7 @@ public class RegistrationOTPActivity extends AppCompatActivity implements Server
         ButterKnife.bind(this);
 
         permissionsUtil = new PermissionsUtil(this);
-        appPreference = new ApplicationSharedPreferences(this);
+        appPreference = new AppPreferences(this);
         otpDao = new OTPDao(this);
 
         isSMSPermissionAvailable = permissionsUtil.checkSMSPermission(otpText);

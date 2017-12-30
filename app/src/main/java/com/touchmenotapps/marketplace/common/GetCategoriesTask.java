@@ -1,14 +1,14 @@
-package com.touchmenotapps.marketplace.signup.threads;
+package com.touchmenotapps.marketplace.common;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.BaseAppTask;
 import com.touchmenotapps.marketplace.common.constants.AppConstants;
 import com.touchmenotapps.marketplace.common.constants.URLConstants;
 import com.touchmenotapps.marketplace.common.enums.RequestType;
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
+import com.touchmenotapps.marketplace.dao.CategoryDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.json.simple.JSONObject;
@@ -19,25 +19,25 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
- * Created by i7 on 22-12-2017.
+ * Created by arindamnath on 30/12/17.
  */
 
-public class UserSignupTask extends BaseAppTask {
+public class GetCategoriesTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
+    private CategoryDao categoryDao;
 
-    public UserSignupTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
+        categoryDao = new CategoryDao(context);
     }
 
     @Override
     protected ServerEvents doInBackground(Object... objects) {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
-                JSONObject dato = (JSONObject) objects[0];
-                Log.i(AppConstants.APP_TAG, dato.toJSONString());
-                return getServerResponse(dato);
+                return getServerResponse();
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -55,7 +55,7 @@ public class UserSignupTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), null);
+                getServerResponseListener().onSuccess(getId(), categoryDao);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -66,13 +66,11 @@ public class UserSignupTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(JSONObject object) throws Exception {
+    private ServerEvents getServerResponse() throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.REGISTER_URL, RequestType.POST);
-        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
-        out.writeBytes(object.toString());
-        out.flush();
-        out.close();
+                getContext().getString(R.string.base_url) + URLConstants.GET_ALL_CATEGORIES_URL, RequestType.GET);
+        httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
+        httppost.setRequestProperty("did", getDeviceId());
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
@@ -81,12 +79,7 @@ public class UserSignupTask extends BaseAppTask {
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
         JSONObject response = (JSONObject) getParser().parse(sb.toString());
-        getAppPreferences().setAuthResponse(
-                response.get("token").toString(),
-                response.get("expires").toString(),
-                response.get("accountType").toString()
-        );
-        getAppPreferences().setLoggedIn();
+        categoryDao.parse(getParser(), response);
         return ServerEvents.SUCCESS;
     }
 }

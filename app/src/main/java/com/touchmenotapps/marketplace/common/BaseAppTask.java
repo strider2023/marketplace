@@ -4,13 +4,12 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.provider.Settings.Secure;
 
 import com.touchmenotapps.marketplace.common.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.framework.persist.ApplicationSharedPreferences;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.json.simple.parser.JSONParser;
 
@@ -26,7 +25,7 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
     private int id;
     private ServerResponseListener serverResponseListener;
     private NetworkUtils networkUtils;
-    private ApplicationSharedPreferences appPreferences;
+    private AppPreferences appPreferences;
     private JSONParser parser;
     private ProgressDialog mProgress;
     private Context context;
@@ -36,7 +35,7 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
         this.context = context;
         this.serverResponseListener = serverResponseListener;
         this.networkUtils = new NetworkUtils(context);
-        this.appPreferences = new ApplicationSharedPreferences(context);
+        this.appPreferences = new AppPreferences(context);
         this.mProgress = new ProgressDialog(context, AlertDialog.THEME_HOLO_LIGHT);
         this.mProgress.setMessage("Loading...");
         this.mProgress.setCancelable(false);
@@ -67,7 +66,7 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
         return networkUtils;
     }
 
-    public ApplicationSharedPreferences getAppPreferences() {
+    public AppPreferences getAppPreferences() {
         return appPreferences;
     }
 

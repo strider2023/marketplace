@@ -15,6 +15,7 @@ import org.json.simple.parser.JSONParser;
 public class SignupDao extends BaseDao {
 
     private String phoneNumber;
+    private String emailId;
     private String country;
     private UserType type;
     private String deviceId;
@@ -49,6 +50,14 @@ public class SignupDao extends BaseDao {
         this.type = type;
     }
 
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
     @Override
     protected void parse(JSONParser jsonParser, JSONObject jsonObject) {
 
@@ -57,6 +66,7 @@ public class SignupDao extends BaseDao {
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ph", phoneNumber);
+        jsonObject.put("email", emailId);
         jsonObject.put("country", country);
         jsonObject.put("type", type.toString());
         jsonObject.put("deviceId", deviceId);
