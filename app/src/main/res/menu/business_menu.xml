@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_business_feed"
-        android:icon="@drawable/ic_offers_black_24dp"
-        android:title="Offers" />
+        android:id="@+id/navigation_businesses"
+        android:icon="@drawable/ic_store_mall_directory_black_24dp"
+        android:title="My Businesses" />
 
     <item
-        android:id="@+id/navigation_businesses"
+        android:id="@+id/navigation_business_feed"
         android:icon="@drawable/ic_purchases_black_24dp"
         android:title="My Offers" />
 

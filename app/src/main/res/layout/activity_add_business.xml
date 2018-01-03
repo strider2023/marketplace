@@ -1,53 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightGreen"
-    android:fillViewport="true"
+    android:orientation="vertical"
     tools:context="com.touchmenotapps.marketplace.business.AddBusinessActivity">
 
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageView
+                        android:id="@+id/close_add_business_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_close_black_24dp"
+                        android:tint="@android:color/white" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/add_business_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="Save"
+                        android:textColor="@android:color/white"
+                        android:textAllCaps="true"/>
+
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:theme="@style/HintLabel"
+                    android:layout_marginBottom="5dp">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/business_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="Business Name*"
+                        android:inputType="textNoSuggestions"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:orientation="vertical">
+        android:layout_marginTop="5dp"
+        android:fillViewport="true">
 
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:theme="@style/AddBusinessHintLabel">
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_name"
+                    android:id="@+id/business_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="Business Name"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:hint="Phone Number*"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:theme="@style/AddBusinessHintLabel">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/business_website"
@@ -56,51 +123,63 @@
                     android:background="@android:color/transparent"
                     android:hint="Website"
                     android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_phone"
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/business_categories_spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
-            </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
+                    android:layout_weight="1" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/yellow"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/business_sub_categories_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightGreen" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="ADDRESS"
+                    android:textColor="@color/lightGreen"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightGreen" />
+
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:theme="@style/AddBusinessHintLabel">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/business_address_line1"
@@ -109,21 +188,14 @@
                     android:background="@android:color/transparent"
                     android:hint="Address"
                     android:inputType="textPostalAddress"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:theme="@style/AddBusinessHintLabel">
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/business_address_city"
@@ -132,66 +204,53 @@
                     android:background="@android:color/transparent"
                     android:hint="City"
                     android:inputType="textPostalAddress"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/HintLabel">
+                android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_address_state"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="State"
-                    android:inputType="textPostalAddress"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
-            </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:theme="@style/AddBusinessHintLabel">
 
-        <android.support.v7.widget.CardView
-            style="@style/LoginEdittextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/business_address_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="State"
+                        android:inputType="textPostalAddress"
+                        android:maxLines="1" />
+                </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/HintLabel">
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_address_zip"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="Zip"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white" />
-            </android.support.design.widget.TextInputLayout>
-        </android.support.v7.widget.CardView>
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:theme="@style/AddBusinessHintLabel">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/add_business_btn"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:backgroundTint="#fced2a"
-            android:elevation="5dp"
-            android:text="Add new Buisness"
-            android:textColor="@color/colorPrimary" />
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/business_address_zip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:hint="Zip"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1" />
+                </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+            </LinearLayout>
 
-</ScrollView>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.touchmenotapps.marketplace.dao;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -128,15 +129,18 @@ public class BusinessDao extends BaseDao {
             }
         }
         if (jsonObject.containsKey("hrsOfOperation")) {
-            hoursOfOperationDao.parse(jsonParser, (JSONObject) jsonParser.parse("hrsOfOperation"));
+            hoursOfOperationDao.parse(jsonParser,
+                    (JSONObject) jsonParser.parse(jsonObject.get("hrsOfOperation").toString()));
             setHoursOfOperationDao(hoursOfOperationDao);
         }
         if (jsonObject.containsKey("category")) {
-            categoryDao.parse(jsonParser, (JSONObject) jsonParser.parse("category"));
+            categoryDao.parse(jsonParser,
+                    (JSONObject) jsonParser.parse(jsonObject.get("category").toString()));
             setCategoryDao(categoryDao);
         }
         if (jsonObject.containsKey("address")) {
-            businessAddressDao.parse(jsonParser, (JSONObject) jsonParser.parse("address"));
+            businessAddressDao.parse(jsonParser,
+                    (JSONObject) jsonParser.parse(jsonObject.get("address").toString()));
             setBusinessAddressDao(businessAddressDao);
         }
     }

@@ -1,9 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
     tools:context="com.touchmenotapps.marketplace.business.AddBusinessFeedActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take/Select Image"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:cardUseCompatPadding="true"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/lightGreen">
+
+        <ImageView
+            android:id="@+id/feed_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_camera"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:theme="@style/AddBusinessHintLabel"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/feed_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Description" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Starts From"
+        android:layout_marginLeft="10dp"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/feed_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/feed_start_options"
+        android:layout_margin="10dp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ends After"
+        android:layout_marginLeft="10dp"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/feed_end_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/feed_end_options"
+        android:layout_margin="10dp"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/add_new_feed"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:backgroundTint="@color/lightGreen"
+        android:text="Add Feed"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

@@ -1,10 +1,13 @@
 package com.touchmenotapps.marketplace.business;
 
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
-import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.threads.AddBusinessTask;
@@ -19,9 +22,12 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 
 import org.json.simple.JSONObject;
 
+import java.util.Arrays;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 public class AddBusinessActivity extends AppCompatActivity implements ServerResponseListener {
 
@@ -39,18 +45,25 @@ public class AddBusinessActivity extends AppCompatActivity implements ServerResp
     AppCompatEditText state;
     @BindView(R.id.business_address_zip)
     AppCompatEditText zip;
+    @BindView(R.id.business_categories_spinner)
+    AppCompatSpinner categoriesSpinner;
+    @BindView(R.id.business_sub_categories_spinner)
+    AppCompatSpinner subCategoriesSpinner;
 
     private BusinessDao businessDao;
     private BusinessAddressDao businessAddressDao;
     private CategoryDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
+    private ArrayAdapter<String> categoriesAdapter, subCategoriesAdapter;
+    private String selectedCategory, selectedSubCategory;
+    private CategoryDao allCategoryDao;
+    private String[] categories, subCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_business);
         ButterKnife.bind(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         new GetCategoriesTask(1, this, this)
                 .execute(new JSONObject[]{});
@@ -66,49 +79,83 @@ public class AddBusinessActivity extends AppCompatActivity implements ServerResp
         hoursOfOperationDao.addHoursMap("SUN", "10AM-10PM");
 
         categoryDao = new CategoryDao(this);
-        categoryDao.addCategory("APPARELS","MENS_CLOTHING");
+
+        categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
+        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categoriesSpinner.setAdapter(categoriesAdapter);
+        subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
+        subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
 
         businessAddressDao = new BusinessAddressDao(this);
         businessDao = new BusinessDao(this);
-        businessDao.setCategoryDao(categoryDao);
         businessDao.setHoursOfOperationDao(hoursOfOperationDao);
+    }
+
+    @OnItemSelected(R.id.business_categories_spinner)
+    public void categorySelected(Spinner spinner, int position) {
+        selectedCategory = categories[position];
+        subCategories = allCategoryDao.getCategoriesMap().get(selectedCategory).toArray(
+                new String[allCategoryDao.getCategoriesMap().get(selectedCategory).size()]);
+        subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
+        subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
+    }
+
+    @OnItemSelected(R.id.business_sub_categories_spinner)
+    public void subCategorySelected(Spinner spinner, int position) {
+        selectedSubCategory = subCategories[position];
     }
 
     @OnClick(R.id.add_business_btn)
     public void addBusiness() {
-        businessDao.setName(name.getEditableText().toString().trim());
-        businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
-        businessDao.setWebsite(website.getEditableText().toString().trim());
+        if(name.getEditableText().toString().trim().length() > 0
+                && phone.getEditableText().toString().trim().length() > 0) {
+            categoryDao.addCategory(selectedCategory,selectedSubCategory);
+            businessDao.setCategoryDao(categoryDao);
 
-        businessAddressDao.setAddress(line1.getEditableText().toString().trim());
-        businessAddressDao.setCity(city.getEditableText().toString().trim());
-        businessAddressDao.setState(state.getEditableText().toString().trim());
-        businessAddressDao.setZip(zip.getEditableText().toString().trim());
-        businessDao.setBusinessAddressDao(businessAddressDao);
+            businessDao.setName(name.getEditableText().toString().trim());
+            businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
+            businessDao.setWebsite(website.getEditableText().toString().trim());
 
-        new AddBusinessTask(2, this, this)
-                .execute(new JSONObject[]{businessDao.toJSON()});
+            businessAddressDao.setAddress(line1.getEditableText().toString().trim());
+            businessAddressDao.setCity(city.getEditableText().toString().trim());
+            businessAddressDao.setState(state.getEditableText().toString().trim());
+            businessAddressDao.setZip(zip.getEditableText().toString().trim());
+            businessDao.setBusinessAddressDao(businessAddressDao);
+
+            new AddBusinessTask(2, this, this)
+                    .execute(new JSONObject[]{businessDao.toJSON()});
+        } else {
+            Snackbar.make(name, "Please update the mandatory(*) fields", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    @OnClick(R.id.close_add_business_btn)
+    public void onClose() {
+        finish();
     }
 
     @Override
     public void onSuccess(int threadId, Object object) {
         switch (threadId) {
             case 1:
-                CategoryDao allCategoryDao = (CategoryDao) object;
-                Log.i(AppConstants.APP_TAG, String.valueOf(allCategoryDao.getCategoriesMap().size()));
+                //Set categories and sub-categories
+                allCategoryDao = (CategoryDao) object;
+                categories = allCategoryDao.getCategoriesMap().keySet().toArray(
+                        new String[allCategoryDao.getCategoriesMap().keySet().size()]);
+                categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categories);
+                categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                categoriesSpinner.setAdapter(categoriesAdapter);
+
+                subCategories = allCategoryDao.getCategoriesMap().get(categories[0]).toArray(
+                        new String[allCategoryDao.getCategoriesMap().get(categories[0]).size()]);
+                subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
+                subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                subCategoriesSpinner.setAdapter(subCategoriesAdapter);
                 break;
             case 2:
+                //New business added. Close activity.
                 finish();
                 break;
         }
@@ -116,6 +163,6 @@ public class AddBusinessActivity extends AppCompatActivity implements ServerResp
 
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
-
+        Snackbar.make(name, object.toString(), Snackbar.LENGTH_LONG).show();
     }
 }

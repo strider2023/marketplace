@@ -68,8 +68,11 @@
         <activity
             android:name=".onboarding.AppIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".business.AddBusinessActivity" />
-        <activity android:name=".business.AddBusinessFeedActivity"></activity>
+        <activity android:name=".business.AddBusinessActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".business.AddBusinessFeedActivity" />
+        <activity android:name=".business.ViewMyBusinessActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

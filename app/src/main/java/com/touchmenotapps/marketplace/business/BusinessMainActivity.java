@@ -61,12 +61,12 @@ public class BusinessMainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_business_feed:
+                case R.id.navigation_businesses:
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.business_content, MyBusinessesFragment.newInstance())
                             .commit();
                     return true;
-                case R.id.navigation_businesses:
+                case R.id.navigation_business_feed:
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.business_content, MyBusinessFeedFragment.newInstance())
                             .commit();

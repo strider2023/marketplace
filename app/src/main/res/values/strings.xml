@@ -24,4 +24,16 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string-array name="feed_start_options">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>1 Week from Today</item>
+    </string-array>
+
+    <string-array name="feed_end_options">
+        <item>1 Week After</item>
+        <item>2 Weeks After</item>
+        <item>1 Month After</item>
+    </string-array>
 </resources>

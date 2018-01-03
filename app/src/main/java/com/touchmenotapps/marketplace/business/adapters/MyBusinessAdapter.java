@@ -1,6 +1,7 @@
 package com.touchmenotapps.marketplace.business.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,8 @@ public class MyBusinessAdapter extends RecyclerView.Adapter<BusinessViewHolder> 
     }
 
     public void setData(List<BusinessDao> businessDaoList) {
-        this.businessDaoList = businessDaoList;
+        this.businessDaoList.clear();
+        this.businessDaoList.addAll(businessDaoList);
         notifyDataSetChanged();
     }
 

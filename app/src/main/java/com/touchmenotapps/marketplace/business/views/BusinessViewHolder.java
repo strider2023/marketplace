@@ -54,5 +54,8 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
     public void setData(BusinessDao businessDao) {
         this.businessDao = businessDao;
         this.name.setText(businessDao.getName());
+        for(String categoryName : businessDao.getCategoryDao().getCategoriesMap().keySet()) {
+            this.category.setText(categoryName);
+        }
     }
 }

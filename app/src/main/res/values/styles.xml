@@ -30,6 +30,17 @@
         <item name="colorControlActivated">@android:color/white</item>
     </style>
 
+    <style name="AddBusinessHintLabel" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@android:color/secondary_text_light</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+        <item name="colorAccent">@android:color/secondary_text_light</item>
+        <item name="colorControlNormal">@android:color/secondary_text_light</item>
+        <item name="colorControlActivated">@android:color/secondary_text_light</item>
+    </style>
+
     <style name="LoginEdittextCard" parent="CardView">
         <item name="cardBackgroundColor">#20FFFFFF</item>
         <item name="cardCornerRadius">5dp</item>
