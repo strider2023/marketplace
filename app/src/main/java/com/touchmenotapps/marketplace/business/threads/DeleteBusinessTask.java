@@ -4,12 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.BaseAppTask;
-import com.touchmenotapps.marketplace.common.constants.AppConstants;
-import com.touchmenotapps.marketplace.common.constants.URLConstants;
-import com.touchmenotapps.marketplace.common.enums.RequestType;
-import com.touchmenotapps.marketplace.common.enums.ServerEvents;
-import com.touchmenotapps.marketplace.dao.BusinessDao;
+import com.touchmenotapps.marketplace.framework.BaseAppTask;
+import com.touchmenotapps.marketplace.framework.constants.AppConstants;
+import com.touchmenotapps.marketplace.framework.constants.URLConstants;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.apache.commons.lang3.text.StrSubstitutor;

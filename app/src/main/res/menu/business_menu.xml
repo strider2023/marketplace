@@ -4,12 +4,12 @@
     <item
         android:id="@+id/navigation_businesses"
         android:icon="@drawable/ic_store_mall_directory_black_24dp"
-        android:title="My Businesses" />
+        android:title="Businesses" />
 
     <item
         android:id="@+id/navigation_business_feed"
         android:icon="@drawable/ic_purchases_black_24dp"
-        android:title="My Offers" />
+        android:title="Offers" />
 
     <item
         android:id="@+id/navigation_profile"

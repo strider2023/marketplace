@@ -1,6 +1,6 @@
 package com.touchmenotapps.marketplace.business.interfaces;
 
-import com.touchmenotapps.marketplace.dao.BusinessDao;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
 
 /**
  * Created by arindamnath on 30/12/17.

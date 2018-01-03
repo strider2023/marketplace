@@ -15,7 +15,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 
-import com.touchmenotapps.marketplace.common.enums.RequestType;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
 
 public class NetworkUtils {
 

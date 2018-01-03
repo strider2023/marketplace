@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.dao.BusinessDao;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,6 +1,6 @@
 package com.touchmenotapps.marketplace.framework.interfaces;
 
-import com.touchmenotapps.marketplace.common.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 
 /**
  * Created by i7 on 16-10-2017.

@@ -3,7 +3,7 @@ package com.touchmenotapps.marketplace.framework.persist;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.touchmenotapps.marketplace.common.enums.UserType;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 
 /**
  * Created by i7 on 17-10-2017.

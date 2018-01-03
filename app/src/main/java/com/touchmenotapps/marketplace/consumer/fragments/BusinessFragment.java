@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  * Created by i7 on 17-10-2017.
  */
 
-public class OffersFragment extends Fragment implements CategorySelectionListener {
+public class BusinessFragment extends Fragment implements CategorySelectionListener {
 
     private View mViewHolder;
     @BindView(R.id.categories_list)
@@ -34,8 +34,8 @@ public class OffersFragment extends Fragment implements CategorySelectionListene
     private GridLayoutManager gridLayoutManager;
     private CategoriesAdapter categoriesAdapter;
 
-    public static OffersFragment newInstance() {
-        OffersFragment fragment = new OffersFragment();
+    public static BusinessFragment newInstance() {
+        BusinessFragment fragment = new BusinessFragment();
         return fragment;
     }
 
@@ -54,7 +54,7 @@ public class OffersFragment extends Fragment implements CategorySelectionListene
         categoryDAOList.add(new CategoryDAO(R.drawable.ic_travel, "Travel"));
         categoryDAOList.add(new CategoryDAO(R.drawable.ic_view_all, "View All"));
 
-        categoriesAdapter = new CategoriesAdapter(OffersFragment.this);
+        categoriesAdapter = new CategoriesAdapter(BusinessFragment.this);
         gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         categoriesList.setLayoutManager(gridLayoutManager);
         categoriesList.setAdapter(categoriesAdapter);

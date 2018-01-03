@@ -16,12 +16,12 @@ import android.widget.ImageView;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
 import com.touchmenotapps.marketplace.business.BusinessMainActivity;
-import com.touchmenotapps.marketplace.common.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
-import com.touchmenotapps.marketplace.dao.LoginDao;
+import com.touchmenotapps.marketplace.bo.LoginDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
-import com.touchmenotapps.marketplace.login.threads.UserLoginAsyncTask;
+import com.touchmenotapps.marketplace.login.threads.LoginTask;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 
 import org.json.simple.JSONObject;
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
     public void onLoginButtonClicked() {
         if(userMail.getEditableText().toString().trim().length() > 0) {
             loginDao.setUserMailPhone(userMail.getEditableText().toString().trim());
-            new UserLoginAsyncTask(1, this, this)
+            new LoginTask(1, this, this)
                     .execute(new JSONObject[]{loginDao.toJSON()});
         }
     }

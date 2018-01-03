@@ -11,14 +11,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.GlobalConstants;
-import com.touchmenotapps.marketplace.common.enums.ServerEvents;
-import com.touchmenotapps.marketplace.dao.OTPDao;
+import com.touchmenotapps.marketplace.framework.constants.GlobalConstants;
+import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
+import com.touchmenotapps.marketplace.bo.OTPDao;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
-import com.touchmenotapps.marketplace.signup.threads.UserOTPTask;
+import com.touchmenotapps.marketplace.signup.threads.OTPTask;
 
 import org.json.simple.JSONObject;
 
@@ -60,7 +60,7 @@ public class RegistrationOTPActivity extends AppCompatActivity implements Server
                 //916286
                 if(editable.toString().trim().length() == 6) {
                     otpDao.setUserOTP(editable.toString().trim());
-                    new UserOTPTask(1, RegistrationOTPActivity.this, RegistrationOTPActivity.this)
+                    new OTPTask(1, RegistrationOTPActivity.this, RegistrationOTPActivity.this)
                             .execute(new JSONObject[]{otpDao.toJSON()});
                 }
             }

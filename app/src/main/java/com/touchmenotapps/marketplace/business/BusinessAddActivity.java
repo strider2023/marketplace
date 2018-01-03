@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.threads.AddBusinessTask;
-import com.touchmenotapps.marketplace.common.GetCategoriesTask;
+import com.touchmenotapps.marketplace.common.threads.GetCategoriesTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessAddressDao;
 import com.touchmenotapps.marketplace.bo.BusinessDao;

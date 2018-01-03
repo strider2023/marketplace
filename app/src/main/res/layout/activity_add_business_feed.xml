@@ -7,7 +7,7 @@
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
-    tools:context="com.touchmenotapps.marketplace.business.AddBusinessFeedActivity">
+    tools:context="com.touchmenotapps.marketplace.business.BusinessAddFeedActivity">
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"

@@ -17,13 +17,13 @@ import butterknife.ButterKnife;
  * Created by i7 on 18-10-2017.
  */
 
-public class PurchasesFragment extends Fragment{
+public class FeedFragment extends Fragment{
 
     private View mViewHolder;
     private Animation animFast, animSlow;
 
-    public static PurchasesFragment newInstance() {
-        PurchasesFragment fragment = new PurchasesFragment();
+    public static FeedFragment newInstance() {
+        FeedFragment fragment = new FeedFragment();
         return fragment;
     }
 

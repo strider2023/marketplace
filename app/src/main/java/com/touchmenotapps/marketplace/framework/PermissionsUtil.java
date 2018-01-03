@@ -4,16 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.GlobalConstants;
+import com.touchmenotapps.marketplace.framework.constants.GlobalConstants;
 
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_CONTACTS;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_SMS;
 
 /**
