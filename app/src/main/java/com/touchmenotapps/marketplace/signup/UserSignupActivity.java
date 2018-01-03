@@ -15,14 +15,13 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
-import com.touchmenotapps.marketplace.business.BusinessMainActivity;
-import com.touchmenotapps.marketplace.common.enums.ServerEvents;
-import com.touchmenotapps.marketplace.common.enums.UserType;
-import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
-import com.touchmenotapps.marketplace.dao.SignupDao;
+import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
+import com.touchmenotapps.marketplace.bo.SignupDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
-import com.touchmenotapps.marketplace.signup.threads.UserSignupTask;
+import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
+import com.touchmenotapps.marketplace.signup.threads.SignupTask;
 
 import org.json.simple.JSONObject;
 
@@ -82,7 +81,7 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
                 && email.getEditableText().toString().trim().length() > 0) {
             signupDao.setPhoneNumber(phoneNumber.getEditableText().toString().trim());
             signupDao.setEmailId(email.getEditableText().toString().trim());
-            new UserSignupTask(1, this, this)
+            new SignupTask(1, this, this)
                     .execute(new JSONObject[]{signupDao.toJSON()});
         } else {
             Snackbar.make(splashText, "Please enter the required details.", Snackbar.LENGTH_LONG).show();
@@ -114,17 +113,8 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
         appPreferences.setUserPhoneNumber(phoneNumber.getEditableText().toString().trim());
         appPreferences.setUserEmail(email.getEditableText().toString().trim());
         Intent intent;
-        switch (appPreferences.getUserType()) {
-            case BUSINESS:
-                intent = new Intent(this, BusinessMainActivity.class);
-                break;
-            case CONSUMER:
-                intent = new Intent(this, ConsumerMainActivity.class);
-                break;
-            default:
-                intent = new Intent(this, RegistrationOTPActivity.class);
-                break;
-        }
+        intent = new Intent(this, AppIntroActivity.class);
+        //intent = new Intent(this, RegistrationOTPActivity.class);
         startActivity(intent);
         finish();
     }

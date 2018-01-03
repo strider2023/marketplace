@@ -2,7 +2,6 @@ package com.touchmenotapps.marketplace.business.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +18,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.AddBusinessActivity;
-import com.touchmenotapps.marketplace.business.ViewMyBusinessActivity;
-import com.touchmenotapps.marketplace.business.adapters.MyBusinessAdapter;
+import com.touchmenotapps.marketplace.business.BusinessAddActivity;
+import com.touchmenotapps.marketplace.business.BusinessDetailsActivity;
+import com.touchmenotapps.marketplace.business.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.business.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.business.threads.ShowBusinessLoaderTask;
-import com.touchmenotapps.marketplace.common.enums.LoaderID;
-import com.touchmenotapps.marketplace.dao.BusinessDao;
+import com.touchmenotapps.marketplace.business.loaders.BusinessLoaderTask;
+import com.touchmenotapps.marketplace.framework.enums.LoaderID;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
 
 import java.util.List;
 
@@ -34,8 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.business.ViewMyBusinessActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.business.ViewMyBusinessActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.business.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.business.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
 
 /**
  * Created by arindamnath on 30/12/17.
@@ -55,7 +53,7 @@ public class MyBusinessesFragment extends Fragment
 
     private View mViewHolder;
     private Bundle queryData;
-    private MyBusinessAdapter adapter;
+    private BusinessAdapter adapter;
     private Animation animFast, animSlow;
 
     public static MyBusinessesFragment newInstance() {
@@ -69,7 +67,7 @@ public class MyBusinessesFragment extends Fragment
         mViewHolder = inflater.inflate(R.layout.fragment_my_business, container, false);
         ButterKnife.bind(this, mViewHolder);
 
-        adapter = new MyBusinessAdapter(this);
+        adapter = new BusinessAdapter(this);
         refreshBusiness.setRefreshing(false);
         businessList.setLayoutManager(new LinearLayoutManager(getContext()));
         businessList.setAdapter(adapter);
@@ -101,13 +99,13 @@ public class MyBusinessesFragment extends Fragment
 
     @OnClick(R.id.add_business_button)
     public void onAddBusinessClick() {
-        startActivity(new Intent(getActivity(), AddBusinessActivity.class));
+        startActivity(new Intent(getActivity(), BusinessAddActivity.class));
     }
 
     @Override
     public Loader<List<BusinessDao>> onCreateLoader(int id, Bundle args) {
         refreshBusiness.setRefreshing(true);
-        return new ShowBusinessLoaderTask(getActivity(), args);
+        return new BusinessLoaderTask(getActivity(), args);
     }
 
     @Override
@@ -134,7 +132,7 @@ public class MyBusinessesFragment extends Fragment
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), ViewMyBusinessActivity.class);
+        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(SELECTED_BUSINESS_ID, businessDao.getId());
         intent.putExtra(SELECTED_BUSINESS_NAME, businessDao.getName());
         startActivity(intent);

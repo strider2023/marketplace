@@ -10,17 +10,24 @@ import android.os.Bundle;
 import android.transition.Explode;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.business.BusinessMainActivity;
 import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.onboarding.listeners.IntroOnboardingOnRightOutListener;
+import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 
 import java.util.ArrayList;
 
 public class AppIntroActivity extends AppCompatActivity {
 
+    private AppPreferences appPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_intro);
+
+        appPreferences = new AppPreferences(this);
 
         IntroOnboardingPage scr1 = new IntroOnboardingPage("Offers Near You",
                 "Flashy helps users to quickly summarize complex topics via flashcards.",
@@ -46,7 +53,18 @@ public class AppIntroActivity extends AppCompatActivity {
         onBoardingFragment.setOnRightOutListener(new IntroOnboardingOnRightOutListener() {
             @Override
             public void onRightOut() {
-                Intent loginIntent = new Intent(AppIntroActivity.this, ConsumerMainActivity.class);
+                Intent loginIntent;
+                switch (appPreferences.getUserType()) {
+                    case BUSINESS:
+                        loginIntent = new Intent(AppIntroActivity.this, BusinessMainActivity.class);
+                        break;
+                    case CONSUMER:
+                        loginIntent = new Intent(AppIntroActivity.this, ConsumerMainActivity.class);
+                        break;
+                    default:
+                        loginIntent = new Intent(AppIntroActivity.this, ConsumerMainActivity.class);
+                        break;
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Explode explode = new Explode();
                     explode.setDuration(500);
