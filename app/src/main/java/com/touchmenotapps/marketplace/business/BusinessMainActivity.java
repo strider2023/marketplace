@@ -14,11 +14,6 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessFeedFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessProfileFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.OffersFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.PurchasesFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.SearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

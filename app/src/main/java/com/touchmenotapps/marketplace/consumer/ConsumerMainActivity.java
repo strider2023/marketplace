@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.OffersFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.BusinessFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.PurchasesFragment;
+import com.touchmenotapps.marketplace.consumer.fragments.FeedFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.SearchFragment;
 
 import butterknife.BindView;
@@ -42,7 +42,7 @@ public class ConsumerMainActivity extends AppCompatActivity {
 
         /** Start with the offers page **/
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, OffersFragment.newInstance())
+                .replace(R.id.content, BusinessFragment.newInstance())
                 .commit();
     }
 
@@ -54,7 +54,7 @@ public class ConsumerMainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_offers:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content, OffersFragment.newInstance())
+                            .replace(R.id.content, BusinessFragment.newInstance())
                             .commit();
                     return true;
                 case R.id.navigation_search:
@@ -64,7 +64,7 @@ public class ConsumerMainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_purchases:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content, PurchasesFragment.newInstance())
+                            .replace(R.id.content, FeedFragment.newInstance())
                             .commit();
                     return true;
                 case R.id.navigation_bookmarks:
