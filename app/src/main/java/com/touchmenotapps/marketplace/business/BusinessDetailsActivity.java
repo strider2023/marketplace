@@ -8,13 +8,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.View;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.threads.DeleteBusinessTask;
 import com.touchmenotapps.marketplace.business.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.json.simple.JSONObject;
 
@@ -38,12 +41,19 @@ public class BusinessDetailsActivity extends AppCompatActivity implements Server
 
     private long businessId = -1l;
     private BusinessDao businessDao;
+    private AppPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_my_business);
         ButterKnife.bind(this);
+
+        appPreferences = new AppPreferences(this);
+        if(appPreferences.getUserType() != UserType.BUSINESS) {
+            findViewById(R.id.close_view_btn).setVisibility(View.GONE);
+            findViewById(R.id.edit_business_btn).setVisibility(View.GONE);
+        }
 
         if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
             businessId = getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l);

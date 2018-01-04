@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 import com.touchmenotapps.marketplace.consumer.views.BookmarksViewHolder;
 
@@ -19,15 +19,16 @@ import java.util.List;
 
 public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksViewHolder> {
 
-    private List<BookmarksDAO> bookmarksDAOList = new ArrayList<>();
+    private List<BusinessDao> businessDaoList = new ArrayList<>();
     private BookmarkSelectionListener bookmarkSelectionListener;
 
     public BookmarksAdapter(BookmarkSelectionListener bookmarkSelectionListener) {
         this.bookmarkSelectionListener = bookmarkSelectionListener;
     }
 
-    public void setData(List<BookmarksDAO> bookmarksDAOList) {
-        this.bookmarksDAOList = bookmarksDAOList;
+    public void setData(List<BusinessDao> businessDaoList) {
+        this.businessDaoList.clear();
+        this.businessDaoList.addAll(businessDaoList);
         notifyDataSetChanged();
     }
 
@@ -41,11 +42,11 @@ public class BookmarksAdapter extends RecyclerView.Adapter<BookmarksViewHolder> 
     @Override
     public void onBindViewHolder(BookmarksViewHolder holder, int position) {
         holder.setBookmarkSelectionListener(bookmarkSelectionListener);
-        holder.setData(bookmarksDAOList.get(position));
+        holder.setData(businessDaoList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return bookmarksDAOList.size();
+        return businessDaoList.size();
     }
 }

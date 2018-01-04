@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 
@@ -32,7 +33,7 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.bookmark_shop_distance)
     AppCompatTextView shopDistance;
 
-    private BookmarksDAO bookmarksDAO;
+    private BusinessDao businessDao;
     private BookmarkSelectionListener bookmarkSelectionListener;
 
     public BookmarksViewHolder(View itemView) {
@@ -43,7 +44,7 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
     @OnClick(R.id.bookmark_base_container)
     public void onBookmarkClicked() {
         if(bookmarkSelectionListener != null){
-            bookmarkSelectionListener.onBookmarkSelected(bookmarksDAO);
+            bookmarkSelectionListener.onBookmarkSelected(businessDao);
         }
     }
 
@@ -51,7 +52,8 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
         this.bookmarkSelectionListener = bookmarkSelectionListener;
     }
 
-    public void setData(BookmarksDAO bookmarksDAO) {
-        this.bookmarksDAO = bookmarksDAO;
+    public void setData(BusinessDao businessDao) {
+        this.businessDao = businessDao;
+        shopName.setText(businessDao.getName());
     }
 }
