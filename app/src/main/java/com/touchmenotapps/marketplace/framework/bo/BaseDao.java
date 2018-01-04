@@ -43,7 +43,7 @@ public abstract class BaseDao {
     }
 
     public String getDate(String dateAsString) throws Exception {
-        SimpleDateFormat serverFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat serverFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:SS");
         Date date = serverFormat.parse(dateAsString);
         return dateFormat.format(date);
     }

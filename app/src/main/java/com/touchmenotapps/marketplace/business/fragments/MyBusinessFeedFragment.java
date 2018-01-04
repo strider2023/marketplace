@@ -94,6 +94,7 @@ public class MyBusinessFeedFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<List<FeedDao>> loader, List<FeedDao> data) {
+        refreshBusiness.setRefreshing(false);
         if(data.size() > 0) {
             emptyBusiness.setVisibility(View.GONE);
             refreshBusiness.setVisibility(View.VISIBLE);

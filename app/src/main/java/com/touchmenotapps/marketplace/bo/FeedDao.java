@@ -19,15 +19,15 @@ public class FeedDao extends BaseDao {
     private String redeeemCode;
     private String startDate;
     private String endDate;
-    private String updatedOn;
+    private String imageURL;
     private boolean canDelete;
     private long startDateFromToday;
     private long endDateFromToday;
 
     public FeedDao(Context context) {
         super(context);
-        name = "1234";
-        data = "hello.jpg";
+        name = "hello.jpg";
+        data = "1234";
     }
 
     @Override
@@ -44,8 +44,8 @@ public class FeedDao extends BaseDao {
         if(jsonObject.containsKey("endDate")) {
             setEndDate(getDate(jsonObject.get("endDate").toString()));
         }
-        if(jsonObject.containsKey("updatedOn")) {
-            setUpdatedOn(getDate(jsonObject.get("updatedOn").toString()));
+        if(jsonObject.containsKey("file")) {
+            setImageURL(jsonObject.get("file").toString());
         }
         if(jsonObject.containsKey("canDelete")) {
             setCanDelete(Boolean.parseBoolean(jsonObject.get("updatedOn").toString()));
@@ -116,20 +116,20 @@ public class FeedDao extends BaseDao {
         this.endDate = endDate;
     }
 
-    public String getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(String updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
     public boolean isCanDelete() {
         return canDelete;
     }
 
     public void setCanDelete(boolean canDelete) {
         this.canDelete = canDelete;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public JSONObject toJSON() {
