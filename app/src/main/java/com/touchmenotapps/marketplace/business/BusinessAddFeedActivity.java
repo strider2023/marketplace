@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.business.threads.AddFeedTask;
 import com.touchmenotapps.marketplace.business.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.FeedDao;
@@ -68,7 +69,7 @@ public class BusinessAddFeedActivity extends AppCompatActivity implements Server
 
             JSONObject id = new JSONObject();
             id.put("id", String.valueOf(businessId));
-            new GetBusinessByIdTask(1, this, this)
+            new AddFeedTask(1, this, this)
                     .execute(new JSONObject[]{id, feedDao.toJSON()});
         } else {
             Snackbar.make(description, "Description cannot be empty.", Snackbar.LENGTH_LONG).show();

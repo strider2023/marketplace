@@ -40,11 +40,11 @@ public class AddFeedTask extends BaseAppTask {
             try {
                 JSONObject dato = (JSONObject) objects[0];
                 Map<String, String> data = new HashMap<>();
-                data.put("businessid", dato.get("id").toString());
+                data.put("businessId", dato.get("id").toString());
                 String url = StrSubstitutor.replace(URLConstants.CREATE_BUSINESS_FEED_URL, data);
 
                 JSONObject dato1 = (JSONObject) objects[1];
-                Log.i(AppConstants.APP_TAG, dato.toJSONString());
+                Log.i(AppConstants.APP_TAG, dato1.toJSONString());
                 return getServerResponse(url, dato1);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -90,7 +90,8 @@ public class AddFeedTask extends BaseAppTask {
         while ((decodedString = in.readLine()) != null)
             sb.append(decodedString);
         in.close();
-        Log.i(AppConstants.APP_TAG, sb.toString());
+        int statusCode = httppost.getResponseCode();
+        Log.i(AppConstants.APP_TAG, String.valueOf(statusCode));
         return ServerEvents.SUCCESS;
     }
 }

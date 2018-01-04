@@ -111,7 +111,7 @@ public class MyBusinessesFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<List<BusinessDao>> loader, final List<BusinessDao> data) {
         refreshBusiness.setRefreshing(false);
-        if(data != null) {
+        if(data.size() > 0) {
             mViewHolder.findViewById(R.id.cloud_image_1).clearAnimation();
             mViewHolder.findViewById(R.id.cloud_image_2).clearAnimation();
             emptyBusiness.setVisibility(View.GONE);

@@ -42,7 +42,7 @@ public class GetBusinessByIdTask extends BaseAppTask {
             try {
                 JSONObject dato = (JSONObject) objects[0];
                 Map<String, String> data = new HashMap<>();
-                data.put("businessid", dato.get("id").toString());
+                data.put("businessId", dato.get("id").toString());
                 String url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_BY_ID_URL, data);
                 return getServerResponse(url);
             } catch (Exception e) {

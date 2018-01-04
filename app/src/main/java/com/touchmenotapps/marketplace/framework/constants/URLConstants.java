@@ -10,9 +10,9 @@ public class URLConstants {
     public static final String OTP_URL = "cb/account/otp";
 
     public static final String ADD_BUSINESS_URL = "cb/business/entity";
-    public static final String GET_BUSINESS_BY_ID_URL = "cb/business/entity/${businessid}";
+    public static final String GET_BUSINESS_BY_ID_URL = "cb/business/entity/${businessId}";
     public static final String GET_ALL_BUSINESS_URL = "cb/business/entity";
-    public static final String DELETE_BUSINESS_URL = "cb/business/entity/${businessid}";
+    public static final String DELETE_BUSINESS_URL = "cb/business/entity/${businessId}";
     public static final String UPDATE_BUSINESS_URL = "cb/business/entity/${businessId}";
     public static final String UPLOAD_BUSINESS_PHOTO_URL = "cb/business/entity/photos/${businessId}";
     public static final String GET_ALL_BUSINESS_PHOTOS_URL = "cb/business/entity/photos/${businessId}";
@@ -21,8 +21,8 @@ public class URLConstants {
     public static final String CREATE_BUSINESS_FEED_URL = "cb/business/entity/feeds/${businessId}";
     public static final String UPDATE_BUSINESS_FEED_URL = "cb/business/entity/feeds/${businessId}/${feedId}";
     public static final String DELETE_BUSINESS_FEED_URL = "cb/business/entity/feeds/${businessId}/${feedId}";
-    public static final String GET_ALL_BUSINESS_FEED_URL = "/cb/business/entity/feeds/";
-    public static final String GET_BUSINESS_FEED_URL = "/cb/business/entity/feeds/${businessId}";
+    public static final String GET_ALL_BUSINESS_FEED_URL = "cb/business/entity/feeds";
+    public static final String GET_BUSINESS_FEED_URL = "cb/business/entity/feeds/${businessId}";
 
     public static final String GET_ALL_CATEGORIES_URL = "cb/business/categories";
 

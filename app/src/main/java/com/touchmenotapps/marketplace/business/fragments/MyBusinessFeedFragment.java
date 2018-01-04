@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
+import com.touchmenotapps.marketplace.business.adapters.BusinessFeedAdapter;
+import com.touchmenotapps.marketplace.business.interfaces.BusinessFeedSelectedListener;
 import com.touchmenotapps.marketplace.business.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.FeedDao;
@@ -31,7 +33,7 @@ import butterknife.OnClick;
  */
 
 public class MyBusinessFeedFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<FeedDao>>{
+        implements LoaderManager.LoaderCallbacks<List<FeedDao>>, BusinessFeedSelectedListener{
 
     @BindView(R.id.my_business_feed_empty)
     LinearLayout emptyBusiness;
@@ -42,6 +44,7 @@ public class MyBusinessFeedFragment extends Fragment
 
     private View mViewHolder;
     private Bundle queryData;
+    private BusinessFeedAdapter businessFeedAdapter;
 
     public static MyBusinessFeedFragment newInstance() {
         MyBusinessFeedFragment fragment = new MyBusinessFeedFragment();
@@ -54,8 +57,10 @@ public class MyBusinessFeedFragment extends Fragment
         mViewHolder = inflater.inflate(R.layout.fragment_my_business_feed, container, false);
         ButterKnife.bind(this, mViewHolder);
 
+        businessFeedAdapter = new BusinessFeedAdapter(this);
         refreshBusiness.setRefreshing(false);
         businessList.setLayoutManager(new LinearLayoutManager(getContext()));
+        businessList.setAdapter(businessFeedAdapter);
 
         refreshBusiness.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -89,9 +94,10 @@ public class MyBusinessFeedFragment extends Fragment
 
     @Override
     public void onLoadFinished(Loader<List<FeedDao>> loader, List<FeedDao> data) {
-        if(data != null) {
+        if(data.size() > 0) {
             emptyBusiness.setVisibility(View.GONE);
             refreshBusiness.setVisibility(View.VISIBLE);
+            businessFeedAdapter.setData(data);
         } else {
             emptyBusiness.setVisibility(View.VISIBLE);
             refreshBusiness.setVisibility(View.GONE);
@@ -101,5 +107,10 @@ public class MyBusinessFeedFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<List<FeedDao>> loader) {
         refreshBusiness.setRefreshing(false);
+    }
+
+    @Override
+    public void onBusinessFeedSelected(FeedDao feedDao) {
+
     }
 }

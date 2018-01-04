@@ -16,6 +16,11 @@ public class FeedDao extends BaseDao {
     private String name;
     private String data;
     private String caption;
+    private String redeeemCode;
+    private String startDate;
+    private String endDate;
+    private String updatedOn;
+    private boolean canDelete;
     private long startDateFromToday;
     private long endDateFromToday;
 
@@ -29,6 +34,21 @@ public class FeedDao extends BaseDao {
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if(jsonObject.containsKey("caption")) {
             setCaption(jsonObject.get("caption").toString());
+        }
+        if(jsonObject.containsKey("redeeemCode")) {
+            setRedeeemCode(jsonObject.get("redeeemCode").toString());
+        }
+        if(jsonObject.containsKey("startDate")) {
+            setStartDate(getDate(jsonObject.get("startDate").toString()));
+        }
+        if(jsonObject.containsKey("endDate")) {
+            setEndDate(getDate(jsonObject.get("endDate").toString()));
+        }
+        if(jsonObject.containsKey("updatedOn")) {
+            setUpdatedOn(getDate(jsonObject.get("updatedOn").toString()));
+        }
+        if(jsonObject.containsKey("canDelete")) {
+            setCanDelete(Boolean.parseBoolean(jsonObject.get("updatedOn").toString()));
         }
     }
 
@@ -70,6 +90,46 @@ public class FeedDao extends BaseDao {
 
     public void setEndDateFromToday(long endDateFromToday) {
         this.endDateFromToday = endDateFromToday;
+    }
+
+    public String getRedeeemCode() {
+        return redeeemCode;
+    }
+
+    public void setRedeeemCode(String redeeemCode) {
+        this.redeeemCode = redeeemCode;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(String updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public boolean isCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
     }
 
     public JSONObject toJSON() {

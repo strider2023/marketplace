@@ -42,8 +42,9 @@ public abstract class BaseDao {
         return amountFormatter;
     }
 
-    public String getDate(Long millis) throws Exception {
-        Date date = new Date(millis);
+    public String getDate(String dateAsString) throws Exception {
+        SimpleDateFormat serverFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = serverFormat.parse(dateAsString);
         return dateFormat.format(date);
     }
 
