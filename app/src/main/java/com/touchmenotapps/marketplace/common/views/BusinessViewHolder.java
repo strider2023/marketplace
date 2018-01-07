@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.views;
+package com.touchmenotapps.marketplace.common.views;
 
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 
 import butterknife.BindView;

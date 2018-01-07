@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business;
+package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,8 +11,10 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.business.threads.DeleteBusinessTask;
-import com.touchmenotapps.marketplace.business.threads.GetBusinessByIdTask;
+import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
+import com.touchmenotapps.marketplace.common.threads.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
@@ -51,8 +53,10 @@ public class BusinessDetailsActivity extends AppCompatActivity implements Server
 
         appPreferences = new AppPreferences(this);
         if(appPreferences.getUserType() != UserType.BUSINESS) {
-            findViewById(R.id.close_view_btn).setVisibility(View.GONE);
+            findViewById(R.id.delete_business_btn).setVisibility(View.GONE);
             findViewById(R.id.edit_business_btn).setVisibility(View.GONE);
+            findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+            findViewById(R.id.bookmark_business_feed_button).setVisibility(View.VISIBLE);
         }
 
         if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
@@ -83,7 +87,14 @@ public class BusinessDetailsActivity extends AppCompatActivity implements Server
         id.put("id", String.valueOf(businessId));
         new DeleteBusinessTask(2, this, this)
                 .execute(new JSONObject[]{id});
-        finish();
+    }
+
+    @OnClick(R.id.bookmark_business_feed_button)
+    public void onBusinessBookmark() {
+        JSONObject id = new JSONObject();
+        id.put("id", String.valueOf(businessId));
+        new BookmarksTask(3, this, this)
+                .execute(new JSONObject[]{id});
     }
 
     @OnClick(R.id.business_phone_btn)
@@ -130,6 +141,9 @@ public class BusinessDetailsActivity extends AppCompatActivity implements Server
                 break;
             case 2:
                 finish();
+                break;
+            case 3:
+                Snackbar.make(name, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
                 break;
         }
     }

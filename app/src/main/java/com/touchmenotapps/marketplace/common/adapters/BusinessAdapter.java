@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.adapters;
+package com.touchmenotapps.marketplace.common.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.business.views.BusinessViewHolder;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.common.views.BusinessViewHolder;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 
 import java.util.ArrayList;

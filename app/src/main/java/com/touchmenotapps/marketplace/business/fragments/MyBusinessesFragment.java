@@ -19,9 +19,9 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.BusinessAddActivity;
-import com.touchmenotapps.marketplace.business.BusinessDetailsActivity;
-import com.touchmenotapps.marketplace.business.adapters.BusinessAdapter;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
+import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.business.loaders.BusinessLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
@@ -32,8 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.business.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.business.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
 
 /**
  * Created by arindamnath on 30/12/17.

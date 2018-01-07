@@ -8,14 +8,16 @@ public class CategoryDAO {
 
     private int categoryIcon;
     private String categoryName;
+    private String keyword;
 
     public CategoryDAO() {
 
     }
 
-    public CategoryDAO(int categoryIcon, String categoryName) {
+    public CategoryDAO(int categoryIcon, String categoryName, String keyword) {
         this.categoryIcon = categoryIcon;
         this.categoryName = categoryName;
+        this.keyword = keyword;
     }
 
     public int getCategoryIcon() {
@@ -32,5 +34,13 @@ public class CategoryDAO {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

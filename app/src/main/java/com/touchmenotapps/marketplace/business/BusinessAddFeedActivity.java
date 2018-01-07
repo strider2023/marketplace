@@ -19,10 +19,8 @@ import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 import com.touchmenotapps.marketplace.business.loaders.BusinessLoaderTask;
 import com.touchmenotapps.marketplace.business.threads.AddFeedTask;
-import com.touchmenotapps.marketplace.business.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
 import com.touchmenotapps.marketplace.common.threads.GetEncodedImageTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
@@ -44,7 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
-import static com.touchmenotapps.marketplace.business.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
 
 public class BusinessAddFeedActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,

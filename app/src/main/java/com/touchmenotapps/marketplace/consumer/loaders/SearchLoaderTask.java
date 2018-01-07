@@ -71,8 +71,18 @@ public class SearchLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
     }
 
     private JSONArray getServerResponse() throws Exception {
+        String url = URLConstants.CONSUMER_SEARCH_URL;
+        if(args != null) {
+            url += "?";
+            if(args.getString("categories") != null) {
+                url += "categories=" + args.getString("categories");
+            }
+            if(args.getString("name") != null) {
+                url += "name=" + args.getString("name");
+            }
+        }
         HttpURLConnection httppost = networkUtil.getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.CONSUMER_SEARCH_URL, RequestType.GET);
+                getContext().getString(R.string.base_url) + url, RequestType.GET);
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 

@@ -19,6 +19,7 @@ import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
 import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
+import com.touchmenotapps.marketplace.consumer.loaders.BookmarkLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class BookmarksFragment extends Fragment
     @Override
     public Loader<List<BusinessDao>> onCreateLoader(int id, Bundle args) {
         refreshLayout.setRefreshing(true);
-        return null;
+        return new BookmarkLoaderTask(getActivity(), args);
     }
 
     @Override
