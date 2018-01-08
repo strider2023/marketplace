@@ -75,7 +75,7 @@ public class BookmarksTask extends BaseAppTask {
 
     private ServerEvents getServerResponse(String url) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.GET);
+                getContext().getString(R.string.base_url) + url, RequestType.POST);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 
@@ -87,7 +87,6 @@ public class BookmarksTask extends BaseAppTask {
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
         JSONObject response = (JSONObject) getParser().parse(sb.toString());
-        businessDao.parse(getParser(), response);
         return ServerEvents.SUCCESS;
     }
 }

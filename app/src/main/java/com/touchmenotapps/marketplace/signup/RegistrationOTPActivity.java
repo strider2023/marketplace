@@ -11,7 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.framework.constants.GlobalConstants;
+import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.OTPDao;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
@@ -70,7 +70,7 @@ public class RegistrationOTPActivity extends AppCompatActivity implements Server
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == GlobalConstants.REQUEST_ACCESS_SMS) {
+        if (requestCode == AppConstants.REQUEST_ACCESS_SMS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //TODO Send server request
             }

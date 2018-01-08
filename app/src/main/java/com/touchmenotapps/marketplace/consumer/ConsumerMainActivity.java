@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.consumer;
 
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.touchmenotapps.marketplace.consumer.fragments.BusinessFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.FeedFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.SearchFragment;
+import com.touchmenotapps.marketplace.framework.PermissionsUtil;
+import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +28,11 @@ public class ConsumerMainActivity extends AppCompatActivity {
     TextView titleText;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.navigation)
+    BottomNavigationView navigation;
+
+    private PermissionsUtil permissionsUtil;
+    private boolean isLocationAccessible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +45,29 @@ public class ConsumerMainActivity extends AppCompatActivity {
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         titleText.setTypeface(myTypeface);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        /** Start with the offers page **/
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content, BusinessFragment.newInstance())
-                .commit();
+        permissionsUtil = new PermissionsUtil(this);
+        isLocationAccessible = permissionsUtil.checkLocationPermission(navigation);
+        if(isLocationAccessible) {
+            /** Start with the offers page **/
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, BusinessFragment.newInstance())
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == AppConstants.REQUEST_ACCESS_LOCATION) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                /** Start with the offers page **/
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, BusinessFragment.newInstance())
+                        .commit();
+            }
+        }
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener

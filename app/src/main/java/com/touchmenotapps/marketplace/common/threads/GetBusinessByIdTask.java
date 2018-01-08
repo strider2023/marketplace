@@ -10,6 +10,7 @@ import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -43,7 +44,12 @@ public class GetBusinessByIdTask extends BaseAppTask {
                 JSONObject dato = (JSONObject) objects[0];
                 Map<String, String> data = new HashMap<>();
                 data.put("businessId", dato.get("id").toString());
-                String url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_BY_ID_URL, data);
+                String url;
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_BY_ID_URL, data);
+                } else {
+                    url = StrSubstitutor.replace(URLConstants.CONSUMER_GET_BUSINESS_INFO_URL, data);
+                }
                 return getServerResponse(url);
             } catch (Exception e) {
                 e.printStackTrace();

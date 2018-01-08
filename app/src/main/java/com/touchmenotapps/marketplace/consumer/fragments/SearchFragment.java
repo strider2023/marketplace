@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.consumer.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.consumer.loaders.SearchLoaderTask;
@@ -29,6 +31,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
 
 /**
  * Created by i7 on 18-10-2017.
@@ -74,6 +79,8 @@ public class SearchFragment extends Fragment
                 if(charSequence.toString().length() > 0) {
                     clearInput.setVisibility(View.VISIBLE);
                     queryData = new Bundle();
+                    queryData.putDouble("lat", 0);
+                    queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
                     getActivity().getSupportLoaderManager()
                             .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
@@ -82,6 +89,8 @@ public class SearchFragment extends Fragment
                 }
                 if(charSequence.toString().length() > 3) {
                     queryData = new Bundle();
+                    queryData.putDouble("lat", 0);
+                    queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
                     getActivity().getSupportLoaderManager()
                             .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
@@ -103,6 +112,8 @@ public class SearchFragment extends Fragment
             public void onRefresh() {
                 if(searchText.getEditableText().toString().trim().length() > 0) {
                     queryData = new Bundle();
+                    queryData.putDouble("lat", 0);
+                    queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
                     getActivity().getSupportLoaderManager()
                             .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
@@ -143,6 +154,9 @@ public class SearchFragment extends Fragment
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-
+        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
+        intent.putExtra(SELECTED_BUSINESS_ID, businessDao.getId());
+        intent.putExtra(SELECTED_BUSINESS_NAME, businessDao.getName());
+        startActivity(intent);
     }
 }
