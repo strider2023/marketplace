@@ -37,10 +37,10 @@ public class MyBusinessFeedFragment extends Fragment
 
     @BindView(R.id.my_business_feed_empty)
     LinearLayout emptyBusiness;
-    @BindView(R.id.business_feed_refresh_layout)
-    SwipeRefreshLayout refreshBusiness;
-    @BindView(R.id.business_feed_list)
-    RecyclerView businessList;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.details_list)
+    RecyclerView detailsList;
 
     private View mViewHolder;
     private Bundle queryData;
@@ -58,11 +58,11 @@ public class MyBusinessFeedFragment extends Fragment
         ButterKnife.bind(this, mViewHolder);
 
         businessFeedAdapter = new BusinessFeedAdapter(this);
-        refreshBusiness.setRefreshing(false);
-        businessList.setLayoutManager(new LinearLayoutManager(getContext()));
-        businessList.setAdapter(businessFeedAdapter);
+        refreshLayout.setRefreshing(false);
+        detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        detailsList.setAdapter(businessFeedAdapter);
 
-        refreshBusiness.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 queryData = new Bundle();
@@ -88,26 +88,26 @@ public class MyBusinessFeedFragment extends Fragment
 
     @Override
     public Loader<List<FeedDao>> onCreateLoader(int id, Bundle args) {
-        refreshBusiness.setRefreshing(true);
+        refreshLayout.setRefreshing(true);
         return new BusinessFeedLoaderTask(getActivity(), args);
     }
 
     @Override
     public void onLoadFinished(Loader<List<FeedDao>> loader, List<FeedDao> data) {
-        refreshBusiness.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
         if(data.size() > 0) {
             emptyBusiness.setVisibility(View.GONE);
-            refreshBusiness.setVisibility(View.VISIBLE);
+            refreshLayout.setVisibility(View.VISIBLE);
             businessFeedAdapter.setData(data);
         } else {
             emptyBusiness.setVisibility(View.VISIBLE);
-            refreshBusiness.setVisibility(View.GONE);
+            refreshLayout.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<List<FeedDao>> loader) {
-        refreshBusiness.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

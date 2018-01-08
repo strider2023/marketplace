@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.threads;
+package com.touchmenotapps.marketplace.common.threads;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,23 +11,25 @@ import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by arindamnath on 30/12/17.
+ * Created by i7 on 03-01-2018.
  */
 
-public class AddBusinessTask extends BaseAppTask {
+public class DeleteBusinessTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public AddBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public DeleteBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -36,8 +38,10 @@ public class AddBusinessTask extends BaseAppTask {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
                 JSONObject dato = (JSONObject) objects[0];
-                Log.i(AppConstants.APP_TAG, dato.toJSONString());
-                return getServerResponse(dato);
+                Map<String, String> data = new HashMap<>();
+                data.put("businessId", dato.get("id").toString());
+                String url = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_URL, data);
+                return getServerResponse(url);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -66,16 +70,12 @@ public class AddBusinessTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(JSONObject object) throws Exception {
+    private ServerEvents getServerResponse(String url) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.ADD_BUSINESS_URL, RequestType.POST);
+                getContext().getString(R.string.base_url) + url, RequestType.DELETE);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 
-        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
-        out.writeBytes(object.toString());
-        out.flush();
-        out.close();
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));

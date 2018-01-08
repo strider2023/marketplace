@@ -9,12 +9,12 @@ import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
-import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
@@ -22,22 +22,22 @@ import java.net.HttpURLConnection;
  * Created by arindamnath on 30/12/17.
  */
 
-public class GetCategoriesTask extends BaseAppTask {
+public class AddBusinessTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
-    private CategoryDao categoryDao;
 
-    public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public AddBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        categoryDao = new CategoryDao(context);
     }
 
     @Override
     protected ServerEvents doInBackground(Object... objects) {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
-                return getServerResponse();
+                JSONObject dato = (JSONObject) objects[0];
+                Log.i(AppConstants.APP_TAG, dato.toJSONString());
+                return getServerResponse(dato);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -55,7 +55,7 @@ public class GetCategoriesTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), categoryDao);
+                getServerResponseListener().onSuccess(getId(), null);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -66,28 +66,23 @@ public class GetCategoriesTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse() throws Exception {
-        //if(getAppPreferences().getCategories().trim().length() > 0) {
-            HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                    getContext().getString(R.string.base_url) + URLConstants.GET_ALL_CATEGORIES_URL, RequestType.GET);
-            httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
-            httppost.setRequestProperty("did", getDeviceId());
-            StringBuilder sb = new StringBuilder();
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    httppost.getInputStream()));
-            while ((decodedString = in.readLine()) != null)
-                sb.append(decodedString);
-            in.close();
-            Log.i(AppConstants.APP_TAG, sb.toString());
-            JSONObject response = (JSONObject) getParser().parse(sb.toString());
-            categoryDao.parse(getParser(), response);
-            getAppPreferences().setCategories(sb.toString());
-        /*} else {
-            //TODO improve logic to check with server timestamp
-            Log.i(AppConstants.APP_TAG, "Present" + getAppPreferences().getCategories());
-            JSONObject response = (JSONObject) getParser().parse(getAppPreferences().getCategories());
-            categoryDao.parse(getParser(), response);
-        }*/
+    private ServerEvents getServerResponse(JSONObject object) throws Exception {
+        HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
+                getContext().getString(R.string.base_url) + URLConstants.ADD_BUSINESS_URL, RequestType.POST);
+        httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
+        httppost.setRequestProperty("did", getDeviceId());
+
+        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+        out.writeBytes(object.toString());
+        out.flush();
+        out.close();
+        StringBuilder sb = new StringBuilder();
+        BufferedReader in = new BufferedReader(new InputStreamReader(
+                httppost.getInputStream()));
+        while ((decodedString = in.readLine()) != null)
+            sb.append(decodedString);
+        in.close();
+        Log.i(AppConstants.APP_TAG, sb.toString());
         return ServerEvents.SUCCESS;
     }
 }

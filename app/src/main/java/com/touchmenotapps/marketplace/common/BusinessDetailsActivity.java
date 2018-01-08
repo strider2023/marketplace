@@ -11,8 +11,9 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.business.BusinessAddActivity;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
-import com.touchmenotapps.marketplace.business.threads.DeleteBusinessTask;
+import com.touchmenotapps.marketplace.common.threads.DeleteBusinessTask;
 import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.common.threads.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -78,6 +79,10 @@ public class BusinessDetailsActivity extends AppCompatActivity implements Server
 
     @OnClick(R.id.edit_business_btn)
     public void onViewEdit() {
+        Intent intent = new Intent(this, BusinessAddActivity.class);
+        intent.putExtra(SELECTED_BUSINESS_ID, businessId);
+        intent.putExtra(SELECTED_BUSINESS_NAME, name.getText());
+        startActivity(intent);
         finish();
     }
 

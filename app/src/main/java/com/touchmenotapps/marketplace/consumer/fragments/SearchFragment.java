@@ -48,10 +48,10 @@ public class SearchFragment extends Fragment
     AppCompatEditText searchText;
     @BindView(R.id.search_clear_input)
     ImageView clearInput;
-    @BindView(R.id.search_list)
-    RecyclerView searchList;
-    @BindView(R.id.search_refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.details_list)
+    RecyclerView detailsList;
     @BindView(R.id.search_empty)
     LinearLayout emptyList;
 
@@ -104,8 +104,8 @@ public class SearchFragment extends Fragment
         refreshLayout.setRefreshing(false);
         businessAdapter = new BusinessAdapter(this);
         linearLayoutManager = new LinearLayoutManager(getContext());
-        searchList.setLayoutManager(linearLayoutManager);
-        searchList.setAdapter(businessAdapter);
+        detailsList.setLayoutManager(linearLayoutManager);
+        detailsList.setAdapter(businessAdapter);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

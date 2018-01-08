@@ -35,17 +35,16 @@ import butterknife.ButterKnife;
 public class BookmarksFragment extends Fragment
         implements BookmarkSelectionListener, LoaderManager.LoaderCallbacks<List<BusinessDao>>{
 
-    @BindView(R.id.bookmarks_refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
-    @BindView(R.id.bookmarks_list)
-    RecyclerView bookmarksList;
+    @BindView(R.id.details_list)
+    RecyclerView detailsList;
     @BindView(R.id.bookmarks_empty)
     LinearLayout emptyList;
 
     private View mViewHolder;
     private Bundle queryData;
     private BookmarksAdapter bookmarksAdapter;
-    private LinearLayoutManager linearLayoutManager;
 
     public static BookmarksFragment newInstance() {
         BookmarksFragment fragment = new BookmarksFragment();
@@ -60,9 +59,8 @@ public class BookmarksFragment extends Fragment
 
         refreshLayout.setRefreshing(false);
         bookmarksAdapter = new BookmarksAdapter(this);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        bookmarksList.setLayoutManager(linearLayoutManager);
-        bookmarksList.setAdapter(bookmarksAdapter);
+        detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        detailsList.setAdapter(bookmarksAdapter);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

@@ -55,6 +55,16 @@ public class AppPreferences {
         edit.commit();
     }
 
+    public void setCategories(String categories) {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putString("categories", categories);
+        edit.commit();
+    }
+
+    public String getCategories() {
+        return mAppPrefs.getString("categories", "");
+    }
+
     public String getUserPhoneNumber() {
         return mAppPrefs.getString("phoneNumber", "");
     }

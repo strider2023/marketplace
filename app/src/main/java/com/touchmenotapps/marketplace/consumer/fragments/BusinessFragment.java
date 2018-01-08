@@ -60,22 +60,20 @@ public class BusinessFragment extends Fragment
         implements CategorySelectionListener, LoaderManager.LoaderCallbacks<List<BusinessDao>>,
         BusinessSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    @BindView(R.id.business_refresh_layout)
+    @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.details_list)
+    RecyclerView detailsList;
     @BindView(R.id.categories_list)
     RecyclerView categoriesList;
-    @BindView(R.id.offers_list)
-    RecyclerView businessList;
     @BindView(R.id.offers_location_access)
     LinearLayout emptyList;
 
     private View mViewHolder;
     private List<CategoryDAO> categoryDAOList = new ArrayList<>();
-    private GridLayoutManager gridLayoutManager;
     private CategoriesAdapter categoriesAdapter;
     private Bundle queryData;
     private BusinessAdapter businessAdapter;
-    private LinearLayoutManager linearLayoutManager;
 
     //Define a request code to send to Google Play services
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -106,42 +104,33 @@ public class BusinessFragment extends Fragment
 
 
         categoriesAdapter = new CategoriesAdapter(BusinessFragment.this);
-        gridLayoutManager = new GridLayoutManager(getActivity(), 4);
-        categoriesList.setLayoutManager(gridLayoutManager);
+        categoriesList.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         categoriesList.setAdapter(categoriesAdapter);
         categoriesAdapter.setData(categoryDAOList);
 
         refreshLayout.setRefreshing(false);
         businessAdapter = new BusinessAdapter(this);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        businessList.setLayoutManager(linearLayoutManager);
-        businessList.setAdapter(businessAdapter);
+        detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        detailsList.setAdapter(businessAdapter);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                queryData = new Bundle();
-                queryData.putDouble("lat", 0);//currentLatitude);
-                queryData.putDouble("lng", 0);//currentLongitude);
-                queryData.putString("categories", "HEALTHCARE");
-                getActivity().getSupportLoaderManager()
-                        .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, BusinessFragment.this).forceLoad();
+                //TODO change to current lat and lng
+                fetchData(0, 0, "HEALTHCARE");
             }
         });
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                // The next two lines tell the new client that “this” current class will handle connection stuff
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
-                //fourth line adds the LocationServices API endpoint from GooglePlayServices
                 .addApi(LocationServices.API)
                 .build();
 
-        // Create the LocationRequest object
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
 
         return mViewHolder;
     }
@@ -150,18 +139,13 @@ public class BusinessFragment extends Fragment
     public void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
-        queryData = new Bundle();
-        queryData.putDouble("lat", 0);
-        queryData.putDouble("lng", 0);
-        queryData.putString("categories", "HEALTHCARE");
-        getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, BusinessFragment.this).forceLoad();
+        //TODO Remove
+        fetchData(0, 0, "HEALTHCARE");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //Disconnect from API onPause()
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
@@ -170,12 +154,7 @@ public class BusinessFragment extends Fragment
 
     @Override
     public void onCategorySelected(CategoryDAO categoryDAO) {
-        queryData = new Bundle();
-        queryData.putDouble("lat", currentLatitude);
-        queryData.putDouble("lng", currentLongitude);
-        queryData.putString("categories", categoryDAO.getKeyword());
-        getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, BusinessFragment.this).forceLoad();
+        fetchData(currentLatitude, currentLongitude, categoryDAO.getKeyword());
     }
 
     @Override
@@ -225,20 +204,13 @@ public class BusinessFragment extends Fragment
             //If everything went fine lets get latitude and longitude
             currentLatitude = location.getLatitude();
             currentLongitude = location.getLongitude();
-            /*queryData = new Bundle();
-            queryData.putDouble("lat", currentLatitude);
-            queryData.putDouble("lng", currentLongitude);
-            queryData.putString("categories", "HEALTHCARE");
-            getActivity().getSupportLoaderManager()
-                    .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();*/
+            //fetchData(currentLatitude, currentLongitude, "HEALTHCARE");
             Log.i(AppConstants.APP_TAG, currentLatitude + ", " + currentLongitude + " - Location");
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
+    public void onConnectionSuspended(int i) { }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -260,12 +232,7 @@ public class BusinessFragment extends Fragment
                 e.printStackTrace();
             }
         } else {
-            /*queryData = new Bundle();
-            queryData.putDouble("lat", 0);
-            queryData.putDouble("lng", 0);
-            queryData.putString("categories", "HEALTHCARE");
-            getActivity().getSupportLoaderManager()
-                    .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();*/
+            //fetchData(0, 0, "HEALTHCARE");
             Log.e("Error", "Location services connection failed with code " + connectionResult.getErrorCode());
         }
     }
@@ -275,5 +242,14 @@ public class BusinessFragment extends Fragment
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
         Log.i(AppConstants.APP_TAG, currentLatitude + ", " + currentLongitude + " - Location");
+    }
+
+    private void fetchData(double lat, double lng, String category) {
+        queryData = new Bundle();
+        queryData.putDouble("lat", lat);
+        queryData.putDouble("lng", lng);
+        queryData.putString("categories", category);
+        getActivity().getSupportLoaderManager()
+                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();
     }
 }

@@ -46,10 +46,10 @@ public class MyBusinessesFragment extends Fragment
     FloatingActionButton addBusiness;
     @BindView(R.id.my_business_empty)
     LinearLayout emptyBusiness;
-    @BindView(R.id.business_refresh_layout)
-    SwipeRefreshLayout refreshBusiness;
-    @BindView(R.id.business_list)
-    RecyclerView businessList;
+    @BindView(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+    @BindView(R.id.details_list)
+    RecyclerView detailsList;
 
     private View mViewHolder;
     private Bundle queryData;
@@ -68,16 +68,16 @@ public class MyBusinessesFragment extends Fragment
         ButterKnife.bind(this, mViewHolder);
 
         adapter = new BusinessAdapter(this);
-        refreshBusiness.setRefreshing(false);
-        businessList.setLayoutManager(new LinearLayoutManager(getContext()));
-        businessList.setAdapter(adapter);
+        refreshLayout.setRefreshing(false);
+        detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
+        detailsList.setAdapter(adapter);
 
         animFast = AnimationUtils.loadAnimation(getActivity(), R.anim.float_anim);
         animSlow = AnimationUtils.loadAnimation(getActivity(), R.anim.float_anim_slow);
         mViewHolder.findViewById(R.id.cloud_image_1).startAnimation(animFast);
         mViewHolder.findViewById(R.id.cloud_image_2).startAnimation(animSlow);
 
-        refreshBusiness.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 queryData = new Bundle();
@@ -104,22 +104,22 @@ public class MyBusinessesFragment extends Fragment
 
     @Override
     public Loader<List<BusinessDao>> onCreateLoader(int id, Bundle args) {
-        refreshBusiness.setRefreshing(true);
+        refreshLayout.setRefreshing(true);
         return new BusinessLoaderTask(getActivity(), args);
     }
 
     @Override
     public void onLoadFinished(Loader<List<BusinessDao>> loader, final List<BusinessDao> data) {
-        refreshBusiness.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
         if(data.size() > 0) {
             mViewHolder.findViewById(R.id.cloud_image_1).clearAnimation();
             mViewHolder.findViewById(R.id.cloud_image_2).clearAnimation();
             emptyBusiness.setVisibility(View.GONE);
-            refreshBusiness.setVisibility(View.VISIBLE);
+            refreshLayout.setVisibility(View.VISIBLE);
             adapter.setData(data);
         } else {
             emptyBusiness.setVisibility(View.VISIBLE);
-            refreshBusiness.setVisibility(View.GONE);
+            refreshLayout.setVisibility(View.GONE);
             mViewHolder.findViewById(R.id.cloud_image_1).startAnimation(animFast);
             mViewHolder.findViewById(R.id.cloud_image_2).startAnimation(animSlow);
         }
@@ -127,7 +127,7 @@ public class MyBusinessesFragment extends Fragment
 
     @Override
     public void onLoaderReset(Loader<List<BusinessDao>> loader) {
-        refreshBusiness.setRefreshing(false);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

@@ -187,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:hint="Address"
-                    android:inputType="textPostalAddress"
+                    android:inputType="textPostalAddress|textCapWords"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
@@ -203,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:hint="City"
-                    android:inputType="textPostalAddress"
+                    android:inputType="textPostalAddress|textCapWords"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
@@ -225,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:hint="State"
-                        android:inputType="textPostalAddress"
+                        android:inputType="textPostalAddress|textCapWords"
                         android:maxLines="1" />
                 </android.support.design.widget.TextInputLayout>
 

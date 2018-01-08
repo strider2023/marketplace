@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.threads;
+package com.touchmenotapps.marketplace.common.threads;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,21 +15,22 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by i7 on 03-01-2018.
+ * Created by i7 on 08-01-2018.
  */
 
-public class DeleteBusinessTask extends BaseAppTask {
+public class UpdateBusinessTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public DeleteBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public UpdateBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -39,11 +40,12 @@ public class DeleteBusinessTask extends BaseAppTask {
             try {
                 JSONObject dato = (JSONObject) objects[0];
                 Map<String, String> data = new HashMap<>();
-                data.put("businessid", dato.get("id").toString());
-                String url = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_URL, data);
-                return getServerResponse(url);
+                data.put("businessId", dato.get("id").toString());
+                String url = StrSubstitutor.replace(URLConstants.UPDATE_BUSINESS_URL, data);
+                JSONObject dato1 = (JSONObject) objects[1];
+                Log.i(AppConstants.APP_TAG, dato1.toJSONString());
+                return getServerResponse(url, dato1);
             } catch (Exception e) {
-                e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
                 errorMessage = "Oops something went wrong!";
                 return ServerEvents.FAILURE;
@@ -70,12 +72,16 @@ public class DeleteBusinessTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(String url) throws Exception {
+    private ServerEvents getServerResponse(String url, JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.DELETE);
+                getContext().getString(R.string.base_url) + url, RequestType.PUT);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 
+        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+        out.writeBytes(object.toString());
+        out.flush();
+        out.close();
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));

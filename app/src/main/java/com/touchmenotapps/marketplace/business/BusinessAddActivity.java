@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.threads.AddBusinessTask;
+import com.touchmenotapps.marketplace.common.threads.AddBusinessTask;
+import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.common.threads.GetCategoriesTask;
+import com.touchmenotapps.marketplace.common.threads.UpdateBusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessAddressDao;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
@@ -24,6 +26,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
 
 public class BusinessAddActivity extends AppCompatActivity implements ServerResponseListener {
 
@@ -54,6 +59,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private String selectedCategory, selectedSubCategory;
     private CategoryDao allCategoryDao;
     private String[] categories, subCategories;
+    private long businessId = -1l;
+    private boolean isEdit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +93,20 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         businessAddressDao = new BusinessAddressDao(this);
         businessDao = new BusinessDao(this);
         businessDao.setHoursOfOperationDao(hoursOfOperationDao);
+
+        if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
+            isEdit = true;
+            businessId = getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l);
+            JSONObject id = new JSONObject();
+            id.put("id", String.valueOf(businessId));
+            new GetBusinessByIdTask(3, this, this)
+                    .execute(new JSONObject[]{id});
+        }
+
+        if(getIntent().getStringExtra(SELECTED_BUSINESS_NAME) != null) {
+            name.setText(getIntent().getStringExtra(SELECTED_BUSINESS_NAME));
+            name.setEnabled(false);
+        }
     }
 
     @OnItemSelected(R.id.business_categories_spinner)
@@ -120,8 +141,17 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
             businessAddressDao.setZip(zip.getEditableText().toString().trim());
             businessDao.setBusinessAddressDao(businessAddressDao);
 
-            new AddBusinessTask(2, this, this)
-                    .execute(new JSONObject[]{businessDao.toJSON()});
+            if(isEdit) {
+                //If edit then update
+                JSONObject id = new JSONObject();
+                id.put("id", String.valueOf(businessId));
+                new UpdateBusinessTask(4, this, this)
+                        .execute(new JSONObject[]{id, businessDao.toJSON()});
+            } else {
+                //Add new business
+                new AddBusinessTask(2, this, this)
+                        .execute(new JSONObject[]{businessDao.toJSON()});
+            }
         } else {
             Snackbar.make(name, "Please update the mandatory(*) fields", Snackbar.LENGTH_SHORT).show();
         }
@@ -152,6 +182,22 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 break;
             case 2:
                 //New business added. Close activity.
+                finish();
+                break;
+            case 3:
+                //Map Business data
+                businessDao = (BusinessDao) object;
+                for(String number : businessDao.getPhoneNumber()) {
+                    phone.setText(number);
+                }
+                website.setText(businessDao.getWebsite());
+                line1.setText(businessDao.getBusinessAddressDao().getAddress());
+                city.setText(businessDao.getBusinessAddressDao().getCity());
+                state.setText(businessDao.getBusinessAddressDao().getState());
+                zip.setText(businessDao.getBusinessAddressDao().getZip());
+                break;
+            case 4:
+                //Business updated. Close activity.
                 finish();
                 break;
         }
