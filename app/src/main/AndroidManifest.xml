@@ -70,7 +70,7 @@
         <activity
             android:name=".common.BusinessDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".common.CaptureImageActivity"></activity>
+        <activity android:name=".common.CaptureImageActivity" />
     </application>
 
 </manifest>

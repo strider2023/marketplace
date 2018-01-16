@@ -35,6 +35,10 @@ captures/
 # Intellij
 *.iml
 .idea/workspace.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/dictionaries
@@ -54,9 +58,4 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
-.idea/misc.xml
 .idea/modules.xml
-.idea/modules.xml
-.idea/compiler.xml
-.idea/copyright/profiles_settings.xml
-.idea/misc.xml
