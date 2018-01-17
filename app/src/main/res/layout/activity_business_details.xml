@@ -8,14 +8,14 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:background="?attr/colorPrimary"
+        android:background="@color/lightGreen"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@color/lightGreen"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
@@ -45,7 +45,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.3"
+                android:alpha="0.0"
                 android:background="@android:color/black"/>
 
             <android.support.v7.widget.Toolbar
@@ -60,8 +60,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:tabIndicatorColor="@android:color/white"
-                app:tabSelectedTextColor="@android:color/white"
+                app:tabIndicatorColor="@color/yellow"
+                app:tabSelectedTextColor="@color/yellow"
                 app:tabTextColor="@android:color/white"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -73,5 +73,72 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bookmark_business_feed_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_bookmark_black_24dp"
+        android:tint="@color/yellow"
+        android:visibility="gone"
+        app:backgroundTint="@color/lightGreen"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/business_deatils_viewpager"
+        app:layout_anchorGravity="bottom|right|end"/>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/business_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:menu_colorNormal="@color/lightGreen"
+        app:menu_colorPressed="@color/lightGreen"
+        app:menu_colorRipple="@color/lightGreen"
+        app:menu_fab_size="normal"
+        app:layout_anchor="@+id/business_deatils_viewpager"
+        app:layout_anchorGravity="bottom|right|end">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/edit_business_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit_black_24dp"
+            app:fab_colorNormal="@color/lightGreen"
+            app:fab_colorPressed="@color/lightGreen"
+            app:fab_colorRipple="@color/lightGreen"
+            app:fab_label="Edit"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/delete_business_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_black_24dp"
+            app:fab_colorNormal="@color/lightGreen"
+            app:fab_colorPressed="@color/lightGreen"
+            app:fab_colorRipple="@color/lightGreen"
+            app:fab_label="Delete"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_business_feed_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_message_black_24dp"
+            app:fab_colorNormal="@color/lightGreen"
+            app:fab_colorPressed="@color/lightGreen"
+            app:fab_colorRipple="@color/lightGreen"
+            app:fab_label="Add Feed"
+            app:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>

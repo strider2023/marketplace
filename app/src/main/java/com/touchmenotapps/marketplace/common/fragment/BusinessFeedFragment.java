@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.fragments;
+package com.touchmenotapps.marketplace.common.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,9 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
-import com.touchmenotapps.marketplace.business.adapters.BusinessFeedAdapter;
+import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.business.interfaces.BusinessFeedSelectedListener;
-import com.touchmenotapps.marketplace.business.loaders.BusinessFeedLoaderTask;
+import com.touchmenotapps.marketplace.common.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.FeedDao;
 
@@ -28,11 +28,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+
 /**
  * Created by arindamnath on 30/12/17.
  */
 
-public class MyBusinessFeedFragment extends Fragment
+public class BusinessFeedFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<List<FeedDao>>, BusinessFeedSelectedListener{
 
     @BindView(R.id.my_business_feed_empty)
@@ -43,12 +45,23 @@ public class MyBusinessFeedFragment extends Fragment
     RecyclerView detailsList;
 
     private View mViewHolder;
+    private long businessId = -1l;
     private Bundle queryData;
     private BusinessFeedAdapter businessFeedAdapter;
 
-    public static MyBusinessFeedFragment newInstance() {
-        MyBusinessFeedFragment fragment = new MyBusinessFeedFragment();
+    public static BusinessFeedFragment newInstance(long businessId) {
+        BusinessFeedFragment fragment = new BusinessFeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong(SELECTED_BUSINESS_ID, businessId);
+        fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        businessId = args.getLong(SELECTED_BUSINESS_ID, -1l);
     }
 
     @Nullable
@@ -62,12 +75,17 @@ public class MyBusinessFeedFragment extends Fragment
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(businessFeedAdapter);
 
+        if(businessId != -1l) {
+            mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+        }
+
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 queryData = new Bundle();
+                queryData.putLong(SELECTED_BUSINESS_ID, businessId);
                 getActivity().getSupportLoaderManager()
-                        .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, MyBusinessFeedFragment.this).forceLoad();
+                        .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
             }
         });
         return mViewHolder;
@@ -77,8 +95,9 @@ public class MyBusinessFeedFragment extends Fragment
     public void onResume() {
         super.onResume();
         queryData = new Bundle();
+        queryData.putLong(SELECTED_BUSINESS_ID, businessId);
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, MyBusinessFeedFragment.this).forceLoad();
+                .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
     }
 
     @OnClick(R.id.add_business_feed_button)

@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.fragments.MyBusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessProfileFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 
@@ -63,7 +63,7 @@ public class BusinessMainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_business_feed:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.business_content, MyBusinessFeedFragment.newInstance())
+                            .replace(R.id.business_content, BusinessFeedFragment.newInstance(-1l))
                             .commit();
                     return true;
                 case R.id.navigation_profile:
