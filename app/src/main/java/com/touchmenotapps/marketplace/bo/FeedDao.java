@@ -1,6 +1,8 @@
 package com.touchmenotapps.marketplace.bo;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.touchmenotapps.marketplace.framework.bo.BaseDao;
 
@@ -11,7 +13,7 @@ import org.json.simple.parser.JSONParser;
  * Created by arindamnath on 30/12/17.
  */
 
-public class FeedDao extends BaseDao {
+public class FeedDao extends BaseDao implements Parcelable {
 
     private String name;
     private String data;
@@ -21,17 +23,19 @@ public class FeedDao extends BaseDao {
     private String endDate;
     private String imageURL;
     private boolean canDelete;
+    private long businessId = -1l;
     private long startDateFromToday;
     private long endDateFromToday;
 
-    public FeedDao(Context context) {
-        super(context);
-        name = "hello.jpg";
-        data = "1234";
+    public FeedDao() {
+
     }
 
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
+        if(jsonObject.containsKey("id")) {
+            setId(Long.parseLong(jsonObject.get("id").toString()));
+        }
         if(jsonObject.containsKey("caption")) {
             setCaption(jsonObject.get("caption").toString());
         }
@@ -49,6 +53,9 @@ public class FeedDao extends BaseDao {
         }
         if(jsonObject.containsKey("canDelete")) {
             setCanDelete(Boolean.parseBoolean(jsonObject.get("updatedOn").toString()));
+        }
+        if(jsonObject.containsKey("businessId")) {
+            setBusinessId(Long.parseLong(jsonObject.get("businessId").toString()));
         }
     }
 
@@ -132,6 +139,14 @@ public class FeedDao extends BaseDao {
         this.imageURL = imageURL;
     }
 
+    public long getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(long businessId) {
+        this.businessId = businessId;
+    }
+
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", name);
@@ -141,4 +156,44 @@ public class FeedDao extends BaseDao {
         jsonObject.put("endDateFromToday", endDateFromToday);
         return jsonObject;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    public FeedDao(Parcel in){
+        this.setId(in.readLong());
+        this.businessId = in.readLong();
+        this.caption =  in.readString();
+        this.redeeemCode = in.readString();
+        this.startDate =  in.readString();
+        this.endDate =  in.readString();
+        this.imageURL =  in.readString();
+        this.canDelete = in.readByte() != 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeLong(businessId);
+        dest.writeString(caption);
+        dest.writeString(redeeemCode);
+        dest.writeString(startDate);
+        dest.writeString(endDate);
+        dest.writeString(imageURL);
+        dest.writeByte((byte) (canDelete ? 1 : 0));
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public FeedDao createFromParcel(Parcel in) {
+            return new FeedDao(in);
+        }
+
+        public FeedDao[] newArray(int size) {
+            return new FeedDao[size];
+        }
+    };
 }

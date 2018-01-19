@@ -76,7 +76,7 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        feedDao = new FeedDao(this);
+        feedDao = new FeedDao();
         feedDao.setStartDateFromToday(1l);
         feedDao.setEndDateFromToday(7l);
 

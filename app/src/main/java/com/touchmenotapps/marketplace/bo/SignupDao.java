@@ -22,7 +22,6 @@ public class SignupDao extends BaseDao {
     private String deviceId;
 
     public SignupDao(Context context) {
-        super(context);
         deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         country = "INDIA";
     }

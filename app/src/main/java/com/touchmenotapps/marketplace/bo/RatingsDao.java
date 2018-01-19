@@ -1,7 +1,5 @@
 package com.touchmenotapps.marketplace.bo;
 
-import android.content.Context;
-
 import com.touchmenotapps.marketplace.framework.bo.BaseDao;
 
 import org.json.simple.JSONObject;
@@ -13,8 +11,8 @@ import org.json.simple.parser.JSONParser;
 
 public class RatingsDao extends BaseDao {
 
-    public RatingsDao(Context context) {
-        super(context);
+    public RatingsDao() {
+
     }
 
     @Override

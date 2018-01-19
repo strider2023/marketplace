@@ -1,7 +1,5 @@
 package com.touchmenotapps.marketplace.bo;
 
-import android.content.Context;
-
 import com.touchmenotapps.marketplace.framework.bo.BaseDao;
 
 import org.json.simple.JSONObject;
@@ -18,8 +16,8 @@ public class BusinessAddressDao extends BaseDao {
     private String state;
     private String zip;
 
-    public BusinessAddressDao(Context context) {
-        super(context);
+    public BusinessAddressDao() {
+
     }
 
     public String getAddress() {

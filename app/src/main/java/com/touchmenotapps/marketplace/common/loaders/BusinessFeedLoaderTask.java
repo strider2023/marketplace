@@ -60,7 +60,7 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
                 if(response != null) {
                     if(response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
-                            FeedDao feedDao = new FeedDao(getContext());
+                            FeedDao feedDao = new FeedDao();
                             feedDao.parse(jsonParser, (JSONObject) response.get(i));
                             data.add(feedDao);
                         }

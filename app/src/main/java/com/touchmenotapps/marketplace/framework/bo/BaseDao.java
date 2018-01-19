@@ -16,15 +16,13 @@ import java.util.Date;
 public abstract class BaseDao {
 
     private Long id;
-    private Context context;
     private Date today;
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat dateOfTheMonth;
     private DecimalFormat amountFormatter;
     private JSONParser jsonParser;
 
-    public BaseDao(Context context) {
-        this.context = context;
+    public BaseDao() {
         this.today = new Date();
         this.dateOfTheMonth = new SimpleDateFormat("dd");
         this.dateFormat = new SimpleDateFormat("E, dd MMM yyyy");
@@ -33,10 +31,6 @@ public abstract class BaseDao {
     }
 
     protected abstract void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception;
-
-    public Context getContext() {
-        return context;
-    }
 
     public DecimalFormat getAmountFormatter() {
         return amountFormatter;

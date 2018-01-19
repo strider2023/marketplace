@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,9 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
+import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessFeedSelectedListener;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 import com.touchmenotapps.marketplace.common.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.FeedDao;
@@ -29,6 +31,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.APP_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
 /**
  * Created by arindamnath on 30/12/17.
@@ -131,6 +135,9 @@ public class BusinessFeedFragment extends Fragment
 
     @Override
     public void onBusinessFeedSelected(FeedDao feedDao) {
-
+        Log.i(APP_TAG, "Called");
+        Intent intent = new Intent(getActivity(), FeedDetailsActivity.class);
+        intent.putExtra(FEED_TAG, feedDao);
+        getActivity().startActivity(intent);
     }
 }

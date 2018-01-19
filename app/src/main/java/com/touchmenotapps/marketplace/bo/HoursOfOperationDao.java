@@ -21,8 +21,7 @@ public class HoursOfOperationDao extends BaseDao {
 
     private Map<String, Set<String>> hoursMap = new HashMap<>();
 
-    public HoursOfOperationDao(Context context) {
-        super(context);
+    public HoursOfOperationDao() {
         /*hoursMap.put("MON", "10AM-10PM");
         hoursMap.put("TUE", "10AM-10PM");
         hoursMap.put("WED", "10AM-10PM");

@@ -72,7 +72,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 .execute(new JSONObject[]{});
 
         //Hard coded
-        hoursOfOperationDao = new HoursOfOperationDao(this);
+        hoursOfOperationDao = new HoursOfOperationDao();
         hoursOfOperationDao.addHoursMap("MON", "10AM-10PM");
         hoursOfOperationDao.addHoursMap("TUE", "10AM-10PM");
         hoursOfOperationDao.addHoursMap("WED", "10AM-10PM");
@@ -81,7 +81,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         hoursOfOperationDao.addHoursMap("SAT", "10AM-10PM");
         hoursOfOperationDao.addHoursMap("SUN", "10AM-10PM");
 
-        categoryDao = new CategoryDao(this);
+        categoryDao = new CategoryDao();
 
         categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
         categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,8 +90,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subCategoriesSpinner.setAdapter(subCategoriesAdapter);
 
-        businessAddressDao = new BusinessAddressDao(this);
-        businessDao = new BusinessDao(this);
+        businessAddressDao = new BusinessAddressDao();
+        businessDao = new BusinessDao();
         businessDao.setHoursOfOperationDao(hoursOfOperationDao);
 
         if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {

@@ -19,7 +19,6 @@ public class OTPDao extends BaseDao {
     private String deviceId;
 
     public OTPDao(Context context) {
-        super(context);
         deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 

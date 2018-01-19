@@ -28,12 +28,11 @@ public class BusinessDao extends BaseDao {
     private HoursOfOperationDao hoursOfOperationDao;
     private BusinessAddressDao businessAddressDao;
 
-    public BusinessDao(Context context) {
-        super(context);
-        ratingsDao = new RatingsDao(context);
-        categoryDao = new CategoryDao(context);
-        hoursOfOperationDao = new HoursOfOperationDao(context);
-        businessAddressDao = new BusinessAddressDao(context);
+    public BusinessDao() {
+        ratingsDao = new RatingsDao();
+        categoryDao = new CategoryDao();
+        hoursOfOperationDao = new HoursOfOperationDao();
+        businessAddressDao = new BusinessAddressDao();
     }
 
     public String getName() {

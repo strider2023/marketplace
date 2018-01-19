@@ -34,7 +34,7 @@ public class GetBusinessByIdTask extends BaseAppTask {
 
     public GetBusinessByIdTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        businessDao = new BusinessDao(context);
+        businessDao = new BusinessDao();
     }
 
     @Override

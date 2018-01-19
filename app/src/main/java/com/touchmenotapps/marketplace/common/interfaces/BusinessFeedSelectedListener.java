@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.interfaces;
+package com.touchmenotapps.marketplace.common.interfaces;
 
 import com.touchmenotapps.marketplace.bo.FeedDao;
 

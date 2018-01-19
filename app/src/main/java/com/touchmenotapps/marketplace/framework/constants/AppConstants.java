@@ -11,4 +11,8 @@ public class AppConstants {
     public static final int REQUEST_ACCESS_SMS = 2;
     public static final int REQUEST_ACCESS_STORAGE = 3;
     public static final int REQUEST_ACCESS_LOCATION = 4;
+
+    public static final String BUSINESS_ID_TAG = "businessId";
+    public static final String BUSINESS_NAME_TAG = "businessName";
+    public static final String FEED_TAG = "feedId";
 }

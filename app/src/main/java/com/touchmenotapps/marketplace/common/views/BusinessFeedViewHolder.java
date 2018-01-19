@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.FeedDao;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessFeedSelectedListener;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -30,7 +30,7 @@ public class GetCategoriesTask extends BaseAppTask {
 
     public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        categoryDao = new CategoryDao(context);
+        categoryDao = new CategoryDao();
     }
 
     @Override

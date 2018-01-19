@@ -55,7 +55,7 @@ public class BookmarkLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
                 if (response != null) {
                     if (response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
-                            BusinessDao businessDao = new BusinessDao(getContext());
+                            BusinessDao businessDao = new BusinessDao();
                             businessDao.parse(jsonParser, (JSONObject) response.get(i));
                             data.add(businessDao);
                         }

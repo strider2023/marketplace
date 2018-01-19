@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.FeedDao;
-import com.touchmenotapps.marketplace.business.interfaces.BusinessFeedSelectedListener;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 import com.touchmenotapps.marketplace.common.views.BusinessFeedViewHolder;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedViewHo
     private List<FeedDao> feedDaoList = new ArrayList<>();
     private BusinessFeedSelectedListener businessFeedSelectedListener;
 
-    public BusinessFeedAdapter(BusinessFeedSelectedListener businessSelectedListener) {
-        this.businessFeedSelectedListener = businessFeedSelectedListener;
+    public BusinessFeedAdapter(BusinessFeedSelectedListener callback) {
+        this.businessFeedSelectedListener = callback;
     }
 
     public void setData(List<FeedDao> feedDaoList) {

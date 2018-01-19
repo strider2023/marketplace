@@ -33,7 +33,7 @@ public class BookmarksTask extends BaseAppTask {
 
     public BookmarksTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        businessDao = new BusinessDao(context);
+        businessDao = new BusinessDao();
     }
 
     @Override

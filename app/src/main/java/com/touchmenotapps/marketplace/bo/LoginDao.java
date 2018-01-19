@@ -17,7 +17,6 @@ public class LoginDao extends BaseDao {
     private String deviceId;
 
     public LoginDao(Context context) {
-        super(context);
         deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 

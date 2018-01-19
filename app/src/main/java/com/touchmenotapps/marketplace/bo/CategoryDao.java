@@ -21,8 +21,8 @@ public class CategoryDao extends BaseDao {
 
     private Map<String, Set<String>> categoriesMap = new HashMap<>();
 
-    public CategoryDao(Context context) {
-        super(context);
+    public CategoryDao() {
+
     }
 
     public Map<String, Set<String>> getCategoriesMap() {
