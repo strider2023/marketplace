@@ -28,7 +28,7 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your one stop location for great online deals."
+            android:text="@string/app_caption"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/splash_terms_btn"
@@ -109,7 +109,8 @@
             android:layout_marginBottom="10dp"
             android:text="View usage Terms and Conditions."
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/splash_login_facebook_btn"
@@ -121,7 +122,14 @@
             android:text="Login with Facebook"
             android:drawableLeft="@drawable/ic_facebook"
             android:drawableTint="@android:color/white"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:visibility="gone"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"

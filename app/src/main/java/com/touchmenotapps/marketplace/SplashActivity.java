@@ -19,7 +19,7 @@ import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.login.LoginActivity;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
-import com.touchmenotapps.marketplace.signup.UserSignupActivity;
+import com.touchmenotapps.marketplace.signup.SignupActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,7 +108,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.splash_signup_btn)
     public void onSignupClicked(){
-        Intent intent = new Intent(this, UserSignupActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
         Pair<View, String> p2 = Pair.create((View) splashText, "splash");
         ActivityOptionsCompat options = ActivityOptionsCompat.

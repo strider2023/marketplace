@@ -8,46 +8,9 @@
     android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.touchmenotapps.marketplace.login.LoginActivity">
 
-    <RelativeLayout
+    <include layout="@layout/view_app_logo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:elevation="5dp"
-            android:src="@drawable/ic_arrow_back_black_24dp"
-            android:tint="@android:color/white" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/splash_app_icon"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/ic_shop"
-                android:transitionName="splash" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/splash_app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="@string/app_name"
-                android:textColor="@android:color/white"
-                android:textSize="48sp"
-                android:transitionName="splash" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,20 +32,19 @@
                     style="@style/LoginEdittextCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:theme="@style/HintLabel">
-
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/login_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:hint="@string/prompt_email"
-                            android:inputType="textEmailAddress"
+                            android:inputType="phone"
+                            android:maxLength="10"
                             android:maxLines="1"
                             android:textColor="@android:color/white" />
                     </android.support.design.widget.TextInputLayout>
@@ -94,13 +56,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:visibility="gone">
-
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:theme="@style/HintLabel">
-
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/login_password"
                             android:layout_width="match_parent"
@@ -127,14 +87,15 @@
             android:textColor="@color/colorPrimary" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/login_forgot_password"
+            android:id="@+id/new_user_signup_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="Forgot Password?"
+            android:text="@string/new_user_signup"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="visible"/>
 
     </LinearLayout>
 

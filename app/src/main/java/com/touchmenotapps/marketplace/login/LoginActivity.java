@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -23,6 +24,7 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.login.threads.LoginTask;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
+import com.touchmenotapps.marketplace.signup.SignupActivity;
 
 import org.json.simple.JSONObject;
 
@@ -60,10 +62,13 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
 
     @OnClick(R.id.login_btn)
     public void onLoginButtonClicked() {
-        if(userMail.getEditableText().toString().trim().length() > 0) {
-            loginDao.setUserMailPhone(userMail.getEditableText().toString().trim());
+        String phone = userMail.getEditableText().toString().trim();
+        if(phone.length() == 10 && Patterns.PHONE.matcher(phone).matches()) {
+            loginDao.setUserMailPhone(phone);
             new LoginTask(1, this, this)
                     .execute(new JSONObject[]{loginDao.toJSON()});
+        } else {
+            Snackbar.make(userMail, R.string.error_phone, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -72,7 +77,17 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
         goPrevious();
     }
 
-    @OnClick(R.id.login_forgot_password)
+    @OnClick(R.id.new_user_signup_btn)
+    public void onSignupClicked() {
+        Intent intent = new Intent(this, SignupActivity.class);
+        Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
+        Pair<View, String> p2 = Pair.create((View) splashText, "splash");
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(intent, options.toBundle());
+    }
+
+    /*@OnClick(R.id.login_forgot_password)
     public void onForgotPasswordClicked() {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
         Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
@@ -80,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
         ActivityOptionsCompat options = ActivityOptionsCompat.
                 makeSceneTransitionAnimation(this, p1, p2);
         startActivity(intent, options.toBundle());
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

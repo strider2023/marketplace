@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.bo.SignupDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
+import com.touchmenotapps.marketplace.login.LoginActivity;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
 import com.touchmenotapps.marketplace.signup.threads.SignupTask;
 
@@ -29,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UserSignupActivity extends AppCompatActivity implements ServerResponseListener {
+public class SignupActivity extends AppCompatActivity implements ServerResponseListener {
 
     @BindView(R.id.splash_app_name)
     AppCompatTextView splashText;
@@ -77,15 +79,26 @@ public class UserSignupActivity extends AppCompatActivity implements ServerRespo
 
     @OnClick(R.id.signup_btn)
     public void signupClicked() {
-        if(phoneNumber.getEditableText().toString().trim().length() > 0
-                && email.getEditableText().toString().trim().length() > 0) {
+        String phone = phoneNumber.getEditableText().toString().trim();
+        if(phone.length() > 0 && Patterns.PHONE.matcher(phone).matches()) {
             signupDao.setPhoneNumber(phoneNumber.getEditableText().toString().trim());
             signupDao.setEmailId(email.getEditableText().toString().trim());
             new SignupTask(1, this, this)
                     .execute(new JSONObject[]{signupDao.toJSON()});
         } else {
-            Snackbar.make(splashText, "Please enter the required details.", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(splashText, R.string.error_phone, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    @OnClick({R.id.existing_user_signin_btn, R.id.signup_go_to_login_btn})
+    public void onSignupClicked() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
+        Pair<View, String> p2 = Pair.create((View) splashText, "splash");
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, p1, p2);
+        startActivity(intent, options.toBundle());
+        finish();
     }
 
     @OnClick(R.id.back_btn)
