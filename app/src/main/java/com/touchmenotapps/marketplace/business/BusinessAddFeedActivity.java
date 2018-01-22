@@ -42,7 +42,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 public class BusinessAddFeedActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,
@@ -81,9 +82,9 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         feedDao.setEndDateFromToday(7l);
 
         //If activity is launched without a business pre-selected, then show menu by fetching data
-        if (getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
+        if (getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             findViewById(R.id.business_selector_container).setVisibility(View.GONE);
-            businessId = getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l);
+            businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
         } else {
             findViewById(R.id.business_selector_container).setVisibility(View.VISIBLE);
             queryData = new Bundle();

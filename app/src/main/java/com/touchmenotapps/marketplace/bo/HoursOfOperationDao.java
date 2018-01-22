@@ -8,8 +8,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +22,7 @@ import java.util.Set;
 public class HoursOfOperationDao extends BaseDao {
 
     private Map<String, Set<String>> hoursMap = new HashMap<>();
+    private List<DailyTimeInfoDao> dailyTimeInfoList = new ArrayList<>();
 
     public HoursOfOperationDao() {
         /*hoursMap.put("MON", "10AM-10PM");
@@ -33,6 +36,10 @@ public class HoursOfOperationDao extends BaseDao {
 
     public Map<String, Set<String>> getHoursMap() {
         return hoursMap;
+    }
+
+    public List<DailyTimeInfoDao> getDailyTimeInfoList() {
+        return dailyTimeInfoList;
     }
 
     public void addHoursMap(String day, String time) {
@@ -52,6 +59,7 @@ public class HoursOfOperationDao extends BaseDao {
             Set<String> timeSet = new HashSet<>();
             timeSet.add(timeArray.get(0).toString());
             hoursMap.put(key.toString(), timeSet);
+            dailyTimeInfoList.add(new DailyTimeInfoDao(key.toString(), timeArray.get(0).toString()));
         }
     }
 

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 
 /**
  * Created by arindamnath on 03/01/18.
@@ -56,7 +56,7 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
         if(networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
-                JSONArray response = getServerResponse(args.getLong(SELECTED_BUSINESS_ID, -1l));
+                JSONArray response = getServerResponse(args.getLong(BUSINESS_ID_TAG, -1l));
                 if(response != null) {
                     if(response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {

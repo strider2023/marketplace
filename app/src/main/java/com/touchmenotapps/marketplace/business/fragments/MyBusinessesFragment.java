@@ -32,8 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 /**
  * Created by arindamnath on 30/12/17.
@@ -133,8 +133,8 @@ public class MyBusinessesFragment extends Fragment
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
         Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
-        intent.putExtra(SELECTED_BUSINESS_ID, businessDao.getId());
-        intent.putExtra(SELECTED_BUSINESS_NAME, businessDao.getName());
+        intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
+        intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         startActivity(intent);
     }
 }

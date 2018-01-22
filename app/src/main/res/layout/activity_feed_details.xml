@@ -4,26 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.touchmenotapps.marketplace.common.FeedDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
+        android:layout_height="250dp"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             app:contentScrim="@color/lightGreen"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleEnabled="false">
+            app:titleEnabled="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
+                android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax">
 
                 <ImageView
@@ -33,28 +37,44 @@
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_shop" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/feed_caption"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.7"
+                    android:background="@android:color/black" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Business Name"
+                    android:orientation="vertical"
                     android:layout_margin="10dp"
-                    android:textColor="@android:color/white"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/feed_coupon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Business Name"
+                        android:textAllCaps="true"
+                        android:textSize="36sp"
+                        android:textColor="@color/yellow"/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/feed_caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Business Name"
+                        android:textColor="@android:color/white"/>
+
+                </LinearLayout>
 
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.0"
-                android:background="@android:color/black" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>

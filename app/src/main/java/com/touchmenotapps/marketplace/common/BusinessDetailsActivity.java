@@ -2,6 +2,7 @@ package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -38,14 +39,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+
 public class BusinessDetailsActivity extends AppCompatActivity
         implements ServerResponseListener, BusinessDeleteListener {
 
-    public static final String SELECTED_BUSINESS_ID = "businessId";
-    public static final String SELECTED_BUSINESS_NAME = "businessName";
-
-    @BindView(R.id.business_name)
-    AppCompatTextView name;
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.business_deatils_viewpager)
     ViewPager viewPager;
     @BindView(R.id.business_tabs)
@@ -74,12 +75,12 @@ public class BusinessDetailsActivity extends AppCompatActivity
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
-            businessId = getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l);
+        if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
+            businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
         }
 
-        if(getIntent().getStringExtra(SELECTED_BUSINESS_NAME) != null) {
-            name.setText(getIntent().getStringExtra(SELECTED_BUSINESS_NAME));
+        if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
+            getSupportActionBar().setTitle(getIntent().getStringExtra(BUSINESS_NAME_TAG));
         }
 
         if(appPreferences.getUserType() != UserType.BUSINESS) {
@@ -89,10 +90,8 @@ public class BusinessDetailsActivity extends AppCompatActivity
             findViewById(R.id.bookmark_business_feed_button).setVisibility(View.VISIBLE);
         }
 
-        fragments.add(new ViewPagerDao("Details",
-                BusinessDetailFragment.newInstance(businessId)));
-        fragments.add(new ViewPagerDao("Feed",
-                BusinessFeedFragment.newInstance(businessId)));
+        fragments.add(new ViewPagerDao("Offers", BusinessFeedFragment.newInstance(businessId)));
+        fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);
 
@@ -104,8 +103,8 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.edit_business_btn)
     public void onViewEdit() {
         Intent intent = new Intent(this, BusinessAddActivity.class);
-        intent.putExtra(SELECTED_BUSINESS_ID, businessId);
-        intent.putExtra(SELECTED_BUSINESS_NAME, name.getText().toString());
+        intent.putExtra(BUSINESS_ID_TAG, businessId);
+        intent.putExtra(BUSINESS_NAME_TAG, getSupportActionBar().getTitle().toString());
         startActivity(intent);
     }
 
@@ -125,7 +124,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
         Intent intent = new Intent(this, BusinessAddFeedActivity.class);
-        intent.putExtra(SELECTED_BUSINESS_ID, businessId);
+        intent.putExtra(BUSINESS_NAME_TAG, businessId);
         startActivity(intent);
     }
 

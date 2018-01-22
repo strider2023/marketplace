@@ -30,8 +30,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.APP_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
 /**
@@ -56,7 +56,7 @@ public class BusinessFeedFragment extends Fragment
     public static BusinessFeedFragment newInstance(long businessId) {
         BusinessFeedFragment fragment = new BusinessFeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong(SELECTED_BUSINESS_ID, businessId);
+        bundle.putLong(BUSINESS_ID_TAG, businessId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -65,7 +65,7 @@ public class BusinessFeedFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        businessId = args.getLong(SELECTED_BUSINESS_ID, -1l);
+        businessId = args.getLong(BUSINESS_ID_TAG, -1l);
     }
 
     @Nullable
@@ -87,7 +87,7 @@ public class BusinessFeedFragment extends Fragment
             @Override
             public void onRefresh() {
                 queryData = new Bundle();
-                queryData.putLong(SELECTED_BUSINESS_ID, businessId);
+                queryData.putLong(BUSINESS_ID_TAG, businessId);
                 getActivity().getSupportLoaderManager()
                         .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
             }
@@ -99,7 +99,7 @@ public class BusinessFeedFragment extends Fragment
     public void onResume() {
         super.onResume();
         queryData = new Bundle();
-        queryData.putLong(SELECTED_BUSINESS_ID, businessId);
+        queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
                 .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
     }

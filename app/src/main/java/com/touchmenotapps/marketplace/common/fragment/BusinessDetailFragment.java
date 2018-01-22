@@ -1,6 +1,7 @@
 package com.touchmenotapps.marketplace.common.fragment;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,29 +13,26 @@ import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.business.BusinessAddActivity;
-import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
-import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
-import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
-import com.touchmenotapps.marketplace.common.threads.BookmarksTask;
+import com.touchmenotapps.marketplace.common.adapters.OperationTimeBaseAdapter;
+import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
 import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
-import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 
 /**
  * Created by arindamnath on 16/01/18.
@@ -43,21 +41,25 @@ import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELE
 public class BusinessDetailFragment extends Fragment
         implements ServerResponseListener {
 
-    @BindView(R.id.business_phone)
-    AppCompatTextView phone;
     @BindView(R.id.business_website)
     AppCompatTextView website;
     @BindView(R.id.business_address)
     AppCompatTextView address;
+    @BindView(R.id.business_hours_of_operation)
+    ListView operationTime;
+    @BindView(R.id.business_phone_list)
+    ListView phoneList;
 
     private View mViewHolder;
     private Long businessId;
     private BusinessDao businessDao;
+    private PhoneBaseAdapter phoneBaseAdapter;
+    private OperationTimeBaseAdapter operationTimeBaseAdapter;
 
     public static BusinessDetailFragment newInstance(long businessId) {
         BusinessDetailFragment fragment = new BusinessDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong(SELECTED_BUSINESS_ID, businessId);
+        bundle.putLong(BUSINESS_ID_TAG, businessId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -66,8 +68,8 @@ public class BusinessDetailFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args.getLong(SELECTED_BUSINESS_ID, -1l) != -1l) {
-            businessId = args.getLong(SELECTED_BUSINESS_ID, -1l);
+        if (args.getLong(BUSINESS_ID_TAG, -1l) != -1l) {
+            businessId = args.getLong(BUSINESS_ID_TAG, -1l);
         }
     }
 
@@ -77,24 +79,22 @@ public class BusinessDetailFragment extends Fragment
         mViewHolder = inflater.inflate(R.layout.fragment_business_details, container, false);
         ButterKnife.bind(this, mViewHolder);
 
+        phoneBaseAdapter = new PhoneBaseAdapter(getActivity());
+        operationTimeBaseAdapter = new OperationTimeBaseAdapter(getContext());
+        phoneList.setAdapter(phoneBaseAdapter);
+        operationTime.setAdapter(operationTimeBaseAdapter);
+        website.setPaintFlags(website.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         if (businessId != -1l) {
             JSONObject id = new JSONObject();
             id.put("id", String.valueOf(businessId));
             new GetBusinessByIdTask(1, getActivity(), this)
                     .execute(new JSONObject[]{id});
         }
-
         return mViewHolder;
     }
 
-    @OnClick(R.id.business_phone_btn)
-    public void onPhoneClick() {
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel",
-                phone.getText().toString(), null));
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.business_website_btn)
+    @OnClick(R.id.business_website)
     public void onWebisteView() {
         try {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -111,14 +111,17 @@ public class BusinessDetailFragment extends Fragment
     @Override
     public void onSuccess(int threadId, Object object) {
         businessDao = (BusinessDao) object;
+        List<String> phoneNumbers = new ArrayList<>();
         for (String number : businessDao.getPhoneNumber()) {
-            phone.setText(number);
+            phoneNumbers.add(number);
         }
+        phoneBaseAdapter.setData(phoneNumbers);
         website.setText(businessDao.getWebsite());
-        address.setText(businessDao.getBusinessAddressDao().getAddress() + "\n\n" +
-                businessDao.getBusinessAddressDao().getCity() + "\n\n" +
-                businessDao.getBusinessAddressDao().getState() + "\n\n" +
+        address.setText(businessDao.getBusinessAddressDao().getAddress() + "\n" +
+                businessDao.getBusinessAddressDao().getCity() + "\n" +
+                businessDao.getBusinessAddressDao().getState() + "\n" +
                 businessDao.getBusinessAddressDao().getZip());
+        operationTimeBaseAdapter.setData(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
     }
 
     @Override

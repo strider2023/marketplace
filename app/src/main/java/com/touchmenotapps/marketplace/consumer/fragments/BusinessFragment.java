@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,13 +32,10 @@ import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
 import com.touchmenotapps.marketplace.consumer.adapters.CategoriesAdapter;
 import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
-import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 import com.touchmenotapps.marketplace.consumer.loaders.SearchLoaderTask;
-import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 
@@ -49,8 +45,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 /**
  * Created by i7 on 17-10-2017.
@@ -184,8 +180,8 @@ public class BusinessFragment extends Fragment
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
         Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
-        intent.putExtra(SELECTED_BUSINESS_ID, businessDao.getId());
-        intent.putExtra(SELECTED_BUSINESS_NAME, businessDao.getName());
+        intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
+        intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         startActivity(intent);
     }
 

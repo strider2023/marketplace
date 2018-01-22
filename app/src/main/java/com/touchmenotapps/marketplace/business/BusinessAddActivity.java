@@ -27,8 +27,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_ID;
-import static com.touchmenotapps.marketplace.common.BusinessDetailsActivity.SELECTED_BUSINESS_NAME;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 public class BusinessAddActivity extends AppCompatActivity implements ServerResponseListener {
 
@@ -94,17 +94,17 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         businessDao = new BusinessDao();
         businessDao.setHoursOfOperationDao(hoursOfOperationDao);
 
-        if(getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l) != -1l) {
+        if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
-            businessId = getIntent().getLongExtra(SELECTED_BUSINESS_ID, -1l);
+            businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
             JSONObject id = new JSONObject();
             id.put("id", String.valueOf(businessId));
             new GetBusinessByIdTask(3, this, this)
                     .execute(new JSONObject[]{id});
         }
 
-        if(getIntent().getStringExtra(SELECTED_BUSINESS_NAME) != null) {
-            name.setText(getIntent().getStringExtra(SELECTED_BUSINESS_NAME));
+        if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
+            name.setText(getIntent().getStringExtra(BUSINESS_NAME_TAG));
             name.setEnabled(false);
         }
     }

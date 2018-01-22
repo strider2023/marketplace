@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingTop="15dp"
+    android:paddingBottom="15dp">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/adapter_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:text="999999999"/>
+
+    <android.support.v4.widget.Space
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/adapter_call_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:cropToPadding="true"
+        android:padding="4dp"
+        android:layout_marginRight="20dp"
+        android:focusable="false"
+        android:src="@drawable/ic_phone_green_24dp"/>
+
+    <ImageView
+        android:id="@+id/adapter_msg_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:cropToPadding="true"
+        android:padding="4dp"
+        android:focusable="false"
+        android:src="@drawable/ic_message_green_24dp"/>
+</LinearLayout>
