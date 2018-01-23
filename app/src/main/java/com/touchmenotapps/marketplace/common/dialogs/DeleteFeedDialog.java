@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
-import com.touchmenotapps.marketplace.common.threads.DeleteFeedTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.DeleteFeedTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 

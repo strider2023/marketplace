@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.consumer.loaders;
+package com.touchmenotapps.marketplace.threads.loaders;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.json.simple.JSONArray;
@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by i7 on 04-01-2018.
+ * Created by i7 on 03-01-2018.
  */
 
-public class BookmarkLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
+public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
 
     private AppPreferences appPreferences;
     private NetworkUtils networkUtil;
@@ -38,7 +38,7 @@ public class BookmarkLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
     private List<BusinessDao> data = new ArrayList<>();
     private String decodedString;
 
-    public BookmarkLoaderTask(Context context, Bundle args) {
+    public BusinessLoaderTask(Context context, Bundle args) {
         super(context);
         networkUtil = new NetworkUtils(context);
         jsonParser = new JSONParser();
@@ -48,12 +48,12 @@ public class BookmarkLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
 
     @Override
     public List<BusinessDao> loadInBackground() {
-        if (networkUtil.isNetworkAvailable()) {
+        if(networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
                 JSONArray response = getServerResponse();
-                if (response != null) {
-                    if (response.size() > 0) {
+                if(response != null) {
+                    if(response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
                             BusinessDao businessDao = new BusinessDao();
                             businessDao.parse(jsonParser, (JSONObject) response.get(i));
@@ -72,7 +72,7 @@ public class BookmarkLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
 
     private JSONArray getServerResponse() throws Exception {
         HttpURLConnection httppost = networkUtil.getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.CONSUMER_GET_BOOKMARKS_URL, RequestType.GET);
+                getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_URL, RequestType.GET);
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 

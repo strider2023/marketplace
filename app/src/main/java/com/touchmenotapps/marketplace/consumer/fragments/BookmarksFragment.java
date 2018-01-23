@@ -15,14 +15,11 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
-import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
-import com.touchmenotapps.marketplace.consumer.loaders.BookmarkLoaderTask;
+import com.touchmenotapps.marketplace.threads.loaders.BookmarkLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;

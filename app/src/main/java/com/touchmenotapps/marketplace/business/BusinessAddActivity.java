@@ -9,10 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.threads.AddBusinessTask;
-import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
-import com.touchmenotapps.marketplace.common.threads.GetCategoriesTask;
-import com.touchmenotapps.marketplace.common.threads.UpdateBusinessTask;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.BusinessAddressDao;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
@@ -61,6 +60,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private String[] categories, subCategories;
     private long businessId = -1l;
     private boolean isEdit = false;
+    private BusinessTask businessTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +97,9 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
-            JSONObject id = new JSONObject();
-            id.put("id", String.valueOf(businessId));
-            new GetBusinessByIdTask(3, this, this)
-                    .execute(new JSONObject[]{id});
+            businessTask = new BusinessTask(3, this, this);
+            businessTask.setBusinessDetails(businessId, RequestType.GET);
+            businessTask.execute(new JSONObject[]{});
         }
 
         if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
@@ -143,14 +142,13 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
             if(isEdit) {
                 //If edit then update
-                JSONObject id = new JSONObject();
-                id.put("id", String.valueOf(businessId));
-                new UpdateBusinessTask(4, this, this)
-                        .execute(new JSONObject[]{id, businessDao.toJSON()});
+                businessTask = new BusinessTask(4, this, this);
+                businessTask.setBusinessDetails(businessId, RequestType.PUT);
+                businessTask.execute(new JSONObject[]{businessDao.toJSON()});
             } else {
                 //Add new business
-                new AddBusinessTask(2, this, this)
-                        .execute(new JSONObject[]{businessDao.toJSON()});
+                businessTask = new BusinessTask(2, this, this);
+                businessTask.execute(new JSONObject[]{businessDao.toJSON()});
             }
         } else {
             Snackbar.make(name, "Please update the mandatory(*) fields", Snackbar.LENGTH_SHORT).show();

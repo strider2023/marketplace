@@ -5,7 +5,8 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
-import com.touchmenotapps.marketplace.common.threads.DeleteBusinessTask;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
@@ -21,6 +22,7 @@ public class DeleteBusinessDailog implements ServerResponseListener {
     private long businessId;
     private AlertDialog dialog;
     private BusinessDeleteListener businessDeleteListener;
+    private BusinessTask businessTask;
 
     public DeleteBusinessDailog(Activity activity, long businessId, BusinessDeleteListener businessDeleteListener) {
         this.activity = activity;
@@ -34,10 +36,9 @@ public class DeleteBusinessDailog implements ServerResponseListener {
         builder.setMessage("Delete this business?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                JSONObject business = new JSONObject();
-                business.put("id", String.valueOf(businessId));
-                new DeleteBusinessTask(2, activity, DeleteBusinessDailog.this)
-                        .execute(new JSONObject[]{business});
+                businessTask = new BusinessTask(3, activity, DeleteBusinessDailog.this);
+                businessTask.setBusinessDetails(businessId, RequestType.DELETE);
+                businessTask.execute(new JSONObject[]{});
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

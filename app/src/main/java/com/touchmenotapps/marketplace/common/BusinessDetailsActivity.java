@@ -1,14 +1,12 @@
 package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,8 +21,7 @@ import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
-import com.touchmenotapps.marketplace.common.threads.BookmarksTask;
-import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
@@ -124,7 +121,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
         Intent intent = new Intent(this, BusinessAddFeedActivity.class);
-        intent.putExtra(BUSINESS_NAME_TAG, businessId);
+        intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
     }
 

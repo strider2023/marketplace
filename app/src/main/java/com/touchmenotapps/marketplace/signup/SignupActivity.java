@@ -23,7 +23,7 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.login.LoginActivity;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
-import com.touchmenotapps.marketplace.signup.threads.SignupTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.SignupTask;
 
 import org.json.simple.JSONObject;
 

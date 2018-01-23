@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.common;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,13 +16,16 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteFeedDialog;
 import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
@@ -39,6 +43,7 @@ public class FeedDetailsActivity extends AppCompatActivity
 
     private FeedDao feedDao;
     private DeleteFeedDialog feedDialog;
+    private AppPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,8 @@ public class FeedDetailsActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        appPreferences = new AppPreferences(this);
 
         if(getIntent().getParcelableExtra(FEED_TAG) != null) {
             feedDao = getIntent().getParcelableExtra(FEED_TAG);
@@ -59,6 +66,19 @@ public class FeedDetailsActivity extends AppCompatActivity
                     .placeholder(R.drawable.ic_shop)
                     .centerCrop()
                     .into(image);
+        }
+    }
+
+    @OnClick(R.id.feed_edit_btn)
+    public void onFeedEditClicked() {
+        switch (appPreferences.getUserType()) {
+            case BUSINESS:
+                Intent intent = new Intent(this, BusinessAddFeedActivity.class);
+                intent.putExtra(FEED_TAG, feedDao);
+                startActivity(intent);
+                break;
+            case CONSUMER:
+                break;
         }
     }
 

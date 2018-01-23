@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.MenuItem;
@@ -17,12 +18,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.business.loaders.BusinessLoaderTask;
-import com.touchmenotapps.marketplace.business.threads.AddFeedTask;
+import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.AddFeedTask;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
-import com.touchmenotapps.marketplace.common.threads.GetEncodedImageTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.FeedDao;
@@ -43,7 +45,7 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
-import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
 public class BusinessAddFeedActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,
@@ -61,6 +63,8 @@ public class BusinessAddFeedActivity extends AppCompatActivity
     AppCompatSpinner endDate;
     @BindView(R.id.feed_select_business)
     AppCompatSpinner selectBusiness;
+    @BindView(R.id.add_new_feed)
+    AppCompatButton addButton;
 
     private long businessId = -1l;
     private FeedDao feedDao;
@@ -85,6 +89,21 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         if (getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             findViewById(R.id.business_selector_container).setVisibility(View.GONE);
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
+        } else if(getIntent().getParcelableExtra(FEED_TAG) != null) {
+            findViewById(R.id.business_selector_container).setVisibility(View.GONE);
+            findViewById(R.id.feed_image_btn).setClickable(false);
+            addButton.setText("Update Feed");
+            isImageAdded = true;
+
+            feedDao = getIntent().getParcelableExtra(FEED_TAG);
+            businessId = feedDao.getBusinessId();
+            description.setText(feedDao.getCaption());
+            Glide.with(this)
+                    .load(feedDao.getImageURL())
+                    .error(R.drawable.ic_shop)
+                    .placeholder(R.drawable.ic_shop)
+                    .centerCrop()
+                    .into(feedImage);
         } else {
             findViewById(R.id.business_selector_container).setVisibility(View.VISIBLE);
             queryData = new Bundle();

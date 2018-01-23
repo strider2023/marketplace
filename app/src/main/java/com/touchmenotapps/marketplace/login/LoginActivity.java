@@ -22,7 +22,7 @@ import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
 import com.touchmenotapps.marketplace.bo.LoginDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
-import com.touchmenotapps.marketplace.login.threads.LoginTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.LoginTask;
 import com.touchmenotapps.marketplace.signup.RegistrationOTPActivity;
 import com.touchmenotapps.marketplace.signup.SignupActivity;
 

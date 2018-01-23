@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business.loaders;
+package com.touchmenotapps.marketplace.threads.loaders;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,10 +10,11 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
-import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.bo.FeedDao;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,23 +23,27 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 
 /**
- * Created by i7 on 03-01-2018.
+ * Created by arindamnath on 03/01/18.
  */
 
-public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
+public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
 
     private AppPreferences appPreferences;
     private NetworkUtils networkUtil;
     private JSONParser jsonParser;
     private Bundle args;
 
-    private List<BusinessDao> data = new ArrayList<>();
+    private List<FeedDao> data = new ArrayList<>();
     private String decodedString;
 
-    public BusinessLoaderTask(Context context, Bundle args) {
+    public BusinessFeedLoaderTask(Context context, Bundle args) {
         super(context);
         networkUtil = new NetworkUtils(context);
         jsonParser = new JSONParser();
@@ -47,17 +52,17 @@ public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
     }
 
     @Override
-    public List<BusinessDao> loadInBackground() {
+    public List<FeedDao> loadInBackground() {
         if(networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
-                JSONArray response = getServerResponse();
+                JSONArray response = getServerResponse(args.getLong(BUSINESS_ID_TAG, -1l));
                 if(response != null) {
                     if(response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
-                            BusinessDao businessDao = new BusinessDao();
-                            businessDao.parse(jsonParser, (JSONObject) response.get(i));
-                            data.add(businessDao);
+                            FeedDao feedDao = new FeedDao();
+                            feedDao.parse(jsonParser, (JSONObject) response.get(i));
+                            data.add(feedDao);
                         }
                     }
                 }
@@ -70,9 +75,18 @@ public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
         }
     }
 
-    private JSONArray getServerResponse() throws Exception {
-        HttpURLConnection httppost = networkUtil.getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_URL, RequestType.GET);
+    private JSONArray getServerResponse(long businessId) throws Exception {
+        HttpURLConnection httppost;
+        if(businessId == -1l) {
+            httppost = networkUtil.getHttpURLConInstance(
+                    getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_FEED_URL, RequestType.GET);
+        } else {
+            Map<String, String> data = new HashMap<>();
+            data.put("businessId", String.valueOf(businessId));
+            String url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_FEED_URL, data);
+            httppost = networkUtil.getHttpURLConInstance(
+                    getContext().getString(R.string.base_url) + url, RequestType.GET);
+        }
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 

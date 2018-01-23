@@ -18,7 +18,7 @@ import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.onboarding.AppIntroActivity;
-import com.touchmenotapps.marketplace.signup.threads.OTPTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.OTPTask;
 
 import org.json.simple.JSONObject;
 

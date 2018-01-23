@@ -35,7 +35,7 @@ import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener
 import com.touchmenotapps.marketplace.consumer.adapters.CategoriesAdapter;
 import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
-import com.touchmenotapps.marketplace.consumer.loaders.SearchLoaderTask;
+import com.touchmenotapps.marketplace.threads.loaders.SearchLoaderTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 

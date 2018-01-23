@@ -19,7 +19,8 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.common.adapters.OperationTimeBaseAdapter;
 import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
-import com.touchmenotapps.marketplace.common.threads.GetBusinessByIdTask;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
@@ -84,14 +85,17 @@ public class BusinessDetailFragment extends Fragment
         phoneList.setAdapter(phoneBaseAdapter);
         operationTime.setAdapter(operationTimeBaseAdapter);
         website.setPaintFlags(website.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
-        if (businessId != -1l) {
-            JSONObject id = new JSONObject();
-            id.put("id", String.valueOf(businessId));
-            new GetBusinessByIdTask(1, getActivity(), this)
-                    .execute(new JSONObject[]{id});
-        }
         return mViewHolder;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (businessId != -1l) {
+            BusinessTask businessTask = new BusinessTask(1, getActivity(), this);
+            businessTask.setBusinessDetails(businessId, RequestType.GET);
+            businessTask.execute(new JSONObject[]{});
+        }
     }
 
     @OnClick(R.id.business_website)

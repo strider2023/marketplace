@@ -23,7 +23,7 @@ import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.consumer.loaders.SearchLoaderTask;
+import com.touchmenotapps.marketplace.threads.loaders.SearchLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 
 import java.util.List;

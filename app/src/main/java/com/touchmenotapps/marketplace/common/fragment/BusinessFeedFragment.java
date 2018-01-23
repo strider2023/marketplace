@@ -20,7 +20,7 @@ import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
-import com.touchmenotapps.marketplace.common.loaders.BusinessFeedLoaderTask;
+import com.touchmenotapps.marketplace.threads.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.FeedDao;
 

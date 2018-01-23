@@ -22,7 +22,7 @@ import com.touchmenotapps.marketplace.business.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.business.loaders.BusinessLoaderTask;
+import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 

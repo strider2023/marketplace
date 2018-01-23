@@ -1,10 +1,9 @@
-package com.touchmenotapps.marketplace.common.threads;
+package com.touchmenotapps.marketplace.threads.asynctasks;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
@@ -12,28 +11,24 @@ import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by arindamnath on 07/01/18.
+ * Created by i7 on 16-10-2017.
  */
 
-public class BookmarksTask extends BaseAppTask {
+public class LoginTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
-    private BusinessDao businessDao;
 
-    public BookmarksTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public LoginTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        businessDao = new BusinessDao();
     }
 
     @Override
@@ -41,10 +36,8 @@ public class BookmarksTask extends BaseAppTask {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
                 JSONObject dato = (JSONObject) objects[0];
-                Map<String, String> data = new HashMap<>();
-                data.put("businessId", dato.get("id").toString());
-                String url = StrSubstitutor.replace(URLConstants.CONSUMER_ADD_BOOKMARK_URL, data);
-                return getServerResponse(url);
+                Log.i(AppConstants.APP_TAG, dato.toJSONString());
+                return getServerResponse(dato);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -62,7 +55,7 @@ public class BookmarksTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), businessDao);
+                getServerResponseListener().onSuccess(getId(), null);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -73,12 +66,13 @@ public class BookmarksTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(String url) throws Exception {
+    private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.POST);
-        httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
-        httppost.setRequestProperty("did", getDeviceId());
-
+                getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, RequestType.POST);
+        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+        out.writeBytes(object.toString());
+        out.flush();
+        out.close();
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
@@ -87,7 +81,12 @@ public class BookmarksTask extends BaseAppTask {
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
         JSONObject response = (JSONObject) getParser().parse(sb.toString());
+        getAppPreferences().setAuthResponse(
+                response.get("token").toString(),
+                response.get("expires").toString(),
+                response.get("accountType").toString()
+        );
+        getAppPreferences().setLoggedIn();
         return ServerEvents.SUCCESS;
     }
 }
-

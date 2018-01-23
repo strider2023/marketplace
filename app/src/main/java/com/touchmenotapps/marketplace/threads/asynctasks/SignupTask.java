@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.common.threads;
+package com.touchmenotapps.marketplace.threads.asynctasks;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,25 +11,23 @@ import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by i7 on 22-01-2018.
+ * Created by i7 on 22-12-2017.
  */
 
-public class DeleteFeedTask extends BaseAppTask {
+public class SignupTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public DeleteFeedTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public SignupTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -38,11 +36,8 @@ public class DeleteFeedTask extends BaseAppTask {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
                 JSONObject dato = (JSONObject) objects[0];
-                Map<String, String> data = new HashMap<>();
-                data.put("businessId", dato.get("id").toString());
-                data.put("feedId", dato.get("feedId").toString());
-                String url = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_FEED_URL, data);
-                return getServerResponse(url);
+                Log.i(AppConstants.APP_TAG, dato.toJSONString());
+                return getServerResponse(dato);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -71,12 +66,13 @@ public class DeleteFeedTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(String url) throws Exception {
+    private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.DELETE);
-        httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
-        httppost.setRequestProperty("did", getDeviceId());
-
+                getContext().getString(R.string.base_url) + URLConstants.REGISTER_URL, RequestType.POST);
+        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+        out.writeBytes(object.toString());
+        out.flush();
+        out.close();
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
@@ -84,6 +80,13 @@ public class DeleteFeedTask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
+        JSONObject response = (JSONObject) getParser().parse(sb.toString());
+        getAppPreferences().setAuthResponse(
+                response.get("token").toString(),
+                response.get("expires").toString(),
+                response.get("accountType").toString()
+        );
+        getAppPreferences().setLoggedIn();
         return ServerEvents.SUCCESS;
     }
 }

@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.common.threads;
+package com.touchmenotapps.marketplace.threads.asynctasks;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,15 +21,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by i7 on 03-01-2018.
+ * Created by i7 on 22-01-2018.
  */
 
-public class DeleteBusinessTask extends BaseAppTask {
+public class DeleteFeedTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
 
-    public DeleteBusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public DeleteFeedTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
     }
 
@@ -40,7 +40,8 @@ public class DeleteBusinessTask extends BaseAppTask {
                 JSONObject dato = (JSONObject) objects[0];
                 Map<String, String> data = new HashMap<>();
                 data.put("businessId", dato.get("id").toString());
-                String url = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_URL, data);
+                data.put("feedId", dato.get("feedId").toString());
+                String url = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_FEED_URL, data);
                 return getServerResponse(url);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.consumer.loaders;
+package com.touchmenotapps.marketplace.threads.loaders;
 
 import android.content.Context;
 import android.os.Bundle;
