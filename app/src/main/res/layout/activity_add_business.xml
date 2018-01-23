@@ -21,13 +21,13 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="?attr/actionBarSize"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:layout_marginTop="10dp"
@@ -51,6 +51,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:text="Save"
+                        android:textStyle="bold"
                         android:textColor="@android:color/white"
                         android:textAllCaps="true"/>
 
@@ -83,171 +84,33 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
         android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <include layout="@layout/view_business_basic_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/AddBusinessHintLabel">
+                android:layout_marginLeft="-10dp"
+                android:layout_marginRight="-10dp"/>
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="Phone Number*"
-                    android:inputType="phone"
-                    android:maxLength="10"
-                    android:maxLines="1" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <include layout="@layout/view_business_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/AddBusinessHintLabel">
+                android:layout_marginLeft="-10dp"
+                android:layout_marginRight="-10dp"
+                android:layout_marginTop="10dp"/>
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_website"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="Website"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1" />
-            </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <include layout="@layout/view_select_business_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/business_categories_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/business_sub_categories_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/lightGreen" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="ADDRESS"
-                    android:textColor="@color/lightGreen"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/lightGreen" />
-
-            </LinearLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/AddBusinessHintLabel">
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_address_line1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="Address"
-                    android:inputType="textPostalAddress|textCapWords"
-                    android:maxLines="1" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:theme="@style/AddBusinessHintLabel">
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/business_address_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="City"
-                    android:inputType="textPostalAddress|textCapWords"
-                    android:maxLines="1" />
-            </android.support.design.widget.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:theme="@style/AddBusinessHintLabel">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/business_address_state"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="State"
-                        android:inputType="textPostalAddress|textCapWords"
-                        android:maxLines="1" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:theme="@style/AddBusinessHintLabel">
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/business_address_zip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="Zip"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1" />
-                </android.support.design.widget.TextInputLayout>
-
-            </LinearLayout>
+                android:layout_marginLeft="-10dp"
+                android:layout_marginRight="-10dp"
+                android:layout_marginTop="10dp"/>
 
         </LinearLayout>
 

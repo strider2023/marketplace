@@ -1,14 +1,20 @@
 package com.touchmenotapps.marketplace.business;
 
+import android.app.TimePickerDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.AppCompatTextView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.DailyTimeInfoDao;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
@@ -21,8 +27,15 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 
 import org.json.simple.JSONObject;
 
+import java.sql.Time;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
@@ -49,6 +62,24 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     AppCompatSpinner categoriesSpinner;
     @BindView(R.id.business_sub_categories_spinner)
     AppCompatSpinner subCategoriesSpinner;
+    @BindView(R.id.business_start_time)
+    AppCompatTextView startTime;
+    @BindView(R.id.business_close_time)
+    AppCompatTextView closeTime;
+    @BindView(R.id.add_day_sunday)
+    AppCompatCheckBox sunday;
+    @BindView(R.id.add_day_monday)
+    AppCompatCheckBox monday;
+    @BindView(R.id.add_day_tuesday)
+    AppCompatCheckBox tuesday;
+    @BindView(R.id.add_day_wednesday)
+    AppCompatCheckBox wednesday;
+    @BindView(R.id.add_day_thursday)
+    AppCompatCheckBox thursday;
+    @BindView(R.id.add_day_friday)
+    AppCompatCheckBox friday;
+    @BindView(R.id.add_day_saturday)
+    AppCompatCheckBox saturday;
 
     private BusinessDao businessDao;
     private BusinessAddressDao businessAddressDao;
@@ -71,16 +102,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         new GetCategoriesTask(1, this, this)
                 .execute(new JSONObject[]{});
 
-        //Hard coded
         hoursOfOperationDao = new HoursOfOperationDao();
-        hoursOfOperationDao.addHoursMap("MON", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("TUE", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("WED", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("THUR", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("FRI", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("SAT", "10AM-10PM");
-        hoursOfOperationDao.addHoursMap("SUN", "10AM-10PM");
-
         categoryDao = new CategoryDao();
 
         categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
@@ -92,7 +114,6 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
         businessAddressDao = new BusinessAddressDao();
         businessDao = new BusinessDao();
-        businessDao.setHoursOfOperationDao(hoursOfOperationDao);
 
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
@@ -123,6 +144,16 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         selectedSubCategory = subCategories[position];
     }
 
+    @OnClick(R.id.business_start_time)
+    public void onSelectStartTime() {
+        showTimePicker(startTime);
+    }
+
+    @OnClick(R.id.business_close_time)
+    public void onSelectCloseTime() {
+        showTimePicker(closeTime);
+    }
+
     @OnClick(R.id.add_business_btn)
     public void addBusiness() {
         if(name.getEditableText().toString().trim().length() > 0
@@ -139,6 +170,9 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
             businessAddressDao.setState(state.getEditableText().toString().trim());
             businessAddressDao.setZip(zip.getEditableText().toString().trim());
             businessDao.setBusinessAddressDao(businessAddressDao);
+
+            addHoursOfOperation();
+            businessDao.setHoursOfOperationDao(hoursOfOperationDao);
 
             if(isEdit) {
                 //If edit then update
@@ -193,6 +227,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 city.setText(businessDao.getBusinessAddressDao().getCity());
                 state.setText(businessDao.getBusinessAddressDao().getState());
                 zip.setText(businessDao.getBusinessAddressDao().getZip());
+                setHoursOfOperation(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
                 break;
             case 4:
                 //Business updated. Close activity.
@@ -204,5 +239,62 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(name, object.toString(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private void showTimePicker(final AppCompatTextView textView) {
+        final Calendar c = Calendar.getInstance();
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Time tme = new Time(hourOfDay, minute, 0);//seconds by default set to zero
+                        Format formatter = new SimpleDateFormat("h:mm a");
+                        textView.setText(formatter.format(tme));
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+    }
+
+    private void setHoursOfOperation(List<DailyTimeInfoDao> data) {
+        String time = "";
+        for(DailyTimeInfoDao dao : data) {
+            if(!dao.getTime().contains("<b>") || !dao.getTime().equalsIgnoreCase("Closed")) {
+                time = dao.getTime();
+            }
+            setChecked(dao);
+        }
+        startTime.setText(time.split("-")[0].trim());
+        closeTime.setText(time.split("-")[1].trim());
+    }
+
+    private void setChecked(DailyTimeInfoDao info) {
+        if(info.getDay().equalsIgnoreCase("sun") && !info.getTime().equalsIgnoreCase("Closed"))
+            sunday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("mon") && !info.getTime().equalsIgnoreCase("Closed"))
+            monday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("tue") && !info.getTime().equalsIgnoreCase("Closed"))
+            tuesday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("wed") && !info.getTime().equalsIgnoreCase("Closed"))
+            wednesday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("thu") && !info.getTime().equalsIgnoreCase("Closed"))
+            thursday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("fri") && !info.getTime().equalsIgnoreCase("Closed"))
+            friday.setChecked(true);
+        if(info.getDay().equalsIgnoreCase("sat") && !info.getTime().equalsIgnoreCase("Closed"))
+            saturday.setChecked(true);
+    }
+
+    private void addHoursOfOperation() {
+        String time = startTime.getText().toString() + " - " + closeTime.getText().toString();
+        hoursOfOperationDao.addHoursMap("SUN", sunday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("MON", monday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("TUE", tuesday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("WED", wednesday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("THU", thursday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("FRI", friday.isChecked() ? time : "Closed");
+        hoursOfOperationDao.addHoursMap("SAT", saturday.isChecked() ? time : "Closed");
     }
 }

@@ -99,6 +99,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.edit_business_btn)
     public void onViewEdit() {
+        options.close(true);
         Intent intent = new Intent(this, BusinessAddActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         intent.putExtra(BUSINESS_NAME_TAG, getSupportActionBar().getTitle().toString());
@@ -107,6 +108,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.delete_business_btn)
     public void onViewDelete() {
+        options.close(true);
         deleteBusinessDailog.show();
     }
 
@@ -120,6 +122,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
+        options.close(true);
         Intent intent = new Intent(this, BusinessAddFeedActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
