@@ -140,6 +140,49 @@
 
         </android.support.v7.widget.CardView>
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-10dp"
+            android:layout_marginRight="-10dp"
+            android:layout_marginTop="10dp"
+            android:elevation="10dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="Images"
+                    android:drawablePadding="3dp"
+                    android:drawableLeft="@drawable/ic_image_green"
+                    android:textAllCaps="true"
+                    android:textColor="@color/lightGreen"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/business_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/business_no_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="128dp"
+                    android:text="No Images"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

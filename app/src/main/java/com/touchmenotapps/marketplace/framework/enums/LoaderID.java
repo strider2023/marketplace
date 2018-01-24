@@ -6,7 +6,10 @@ package com.touchmenotapps.marketplace.framework.enums;
 
 public enum LoaderID {
     FETCH_MY_BUSINESS(1),
-    FETCH_BUSINESS_FEED(2);
+    FETCH_BUSINESS_FEED(2),
+    FETCH_BUSINESS_IMAGES(3),
+    FETCH_BOOKMARKS(4),
+    FETCH_BUSINESS_SEARCH(5);
 
     private final int value;
     LoaderID (final int newValue) {

@@ -80,7 +80,7 @@ public class BookmarksFragment extends Fragment
         super.onResume();
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData,this).forceLoad();
+                .initLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
     }
 
     @Override

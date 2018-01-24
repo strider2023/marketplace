@@ -8,8 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +22,17 @@ import android.widget.ListView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.bo.BusinessImageDao;
+import com.touchmenotapps.marketplace.common.adapters.BusinessImageAdapter;
 import com.touchmenotapps.marketplace.common.adapters.OperationTimeBaseAdapter;
 import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
+import com.touchmenotapps.marketplace.common.interfaces.BusinessImageSelectedListener;
+import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
+import com.touchmenotapps.marketplace.threads.loaders.ImagesLoaderTask;
 
 import org.json.simple.JSONObject;
 
@@ -40,7 +50,8 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
  */
 
 public class BusinessDetailFragment extends Fragment
-        implements ServerResponseListener {
+        implements ServerResponseListener, BusinessImageSelectedListener,
+        LoaderManager.LoaderCallbacks<List<BusinessImageDao>> {
 
     @BindView(R.id.business_website)
     AppCompatTextView website;
@@ -50,12 +61,18 @@ public class BusinessDetailFragment extends Fragment
     ListView operationTime;
     @BindView(R.id.business_phone_list)
     ListView phoneList;
+    @BindView(R.id.business_images)
+    RecyclerView imagesList;
+    @BindView(R.id.business_no_images)
+    AppCompatTextView noImages;
 
     private View mViewHolder;
     private Long businessId;
     private BusinessDao businessDao;
     private PhoneBaseAdapter phoneBaseAdapter;
+    private BusinessImageAdapter businessImageAdapter;
     private OperationTimeBaseAdapter operationTimeBaseAdapter;
+    private Bundle queryData;
 
     public static BusinessDetailFragment newInstance(long businessId) {
         BusinessDetailFragment fragment = new BusinessDetailFragment();
@@ -85,6 +102,11 @@ public class BusinessDetailFragment extends Fragment
         phoneList.setAdapter(phoneBaseAdapter);
         operationTime.setAdapter(operationTimeBaseAdapter);
         website.setPaintFlags(website.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        businessImageAdapter = new BusinessImageAdapter(this);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL);
+        imagesList.setLayoutManager(staggeredGridLayoutManager);
+        imagesList.setAdapter(businessImageAdapter);
         return mViewHolder;
     }
 
@@ -95,6 +117,11 @@ public class BusinessDetailFragment extends Fragment
             BusinessTask businessTask = new BusinessTask(1, getActivity(), this);
             businessTask.setBusinessDetails(businessId, RequestType.GET);
             businessTask.execute(new JSONObject[]{});
+
+            queryData = new Bundle();
+            queryData.putLong(BUSINESS_ID_TAG, businessId);
+            getActivity().getSupportLoaderManager()
+                    .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessDetailFragment.this).forceLoad();
         }
     }
 
@@ -131,5 +158,32 @@ public class BusinessDetailFragment extends Fragment
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(website, object.toString(), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onImageClicked(BusinessImageDao businessImageDao) {
+
+    }
+
+    @Override
+    public Loader<List<BusinessImageDao>> onCreateLoader(int id, Bundle args) {
+        return new ImagesLoaderTask(getActivity(), args);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<BusinessImageDao>> loader, List<BusinessImageDao> data) {
+        if(data.size() > 0) {
+            noImages.setVisibility(View.GONE);
+            imagesList.setVisibility(View.VISIBLE);
+            businessImageAdapter.setData(data);
+        } else {
+            noImages.setVisibility(View.VISIBLE);
+            imagesList.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<BusinessImageDao>> loader) {
+
     }
 }

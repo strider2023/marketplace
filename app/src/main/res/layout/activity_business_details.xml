@@ -120,6 +120,17 @@
         app:menu_fab_size="normal">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/add_business_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_image_yellow"
+            app:fab_colorNormal="@color/lightGreen"
+            app:fab_colorPressed="@color/lightGreen"
+            app:fab_colorRipple="@color/lightGreen"
+            app:fab_label="Add Image"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/edit_business_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

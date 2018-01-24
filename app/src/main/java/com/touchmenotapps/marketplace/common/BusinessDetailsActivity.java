@@ -1,6 +1,9 @@
 package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -13,6 +16,7 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.bo.ViewPagerDao;
 import com.touchmenotapps.marketplace.business.BusinessAddActivity;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
@@ -21,14 +25,19 @@ import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
+import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
+import com.touchmenotapps.marketplace.threads.asynctasks.AddImageTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
+import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 
 import org.json.simple.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +49,9 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 public class BusinessDetailsActivity extends AppCompatActivity
-        implements ServerResponseListener, BusinessDeleteListener {
+        implements ServerResponseListener, BusinessDeleteListener, ImageEndcoderListener {
+
+    private final int SELECT_PHOTO = 1;
 
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -56,6 +67,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     private long businessId = -1l;
     private AppPreferences appPreferences;
     private ViewPagerAdapter viewPagerAdapter;
+    private Bitmap selectedImage;
     private List<ViewPagerDao> fragments = new ArrayList<>();
     private DeleteBusinessDailog deleteBusinessDailog;
 
@@ -95,6 +107,14 @@ public class BusinessDetailsActivity extends AppCompatActivity
         if(businessId != -1l) {
             deleteBusinessDailog = new DeleteBusinessDailog(this, businessId, this);
         }
+    }
+
+    @OnClick(R.id.add_business_image_button)
+    public void onAddImage() {
+        options.close(true);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
 
     @OnClick(R.id.edit_business_btn)
@@ -150,11 +170,54 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        Snackbar.make(options, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
+        switch (threadId) {
+            case 2:
+                Snackbar.make(options, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
+                break;
+            case 4:
+                Snackbar.make(options, "Image Added", Snackbar.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(options, object.toString(), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = imageReturnedIntent.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                selectedImage = BitmapFactory.decodeStream(imageStream);
+                new GetEncodedImageTask(1, this)
+                        .execute(new Bitmap[]{selectedImage});
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onImageEncoded(int id, Bitmap bitmap, String base64String) {
+        BusinessImageDao businessImageDao = new BusinessImageDao();
+        businessImageDao.setData(base64String);
+        businessImageDao.setName("Image.jpg");
+        businessImageDao.setCaption("Image");
+        new AddImageTask(4, this, this, businessId)
+                .execute(new JSONObject[]{businessImageDao.toJSON()});
+    }
+
+    @Override
+    public void onImageDecoded(int id, Bitmap bitmap) {
+
+    }
+
+    @Override
+    public void onImageProcessFailed(int id) {
+
     }
 }
