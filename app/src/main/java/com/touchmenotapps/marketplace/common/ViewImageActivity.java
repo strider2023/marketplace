@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.touchmenotapps.marketplace.R;
 
 import butterknife.BindView;
@@ -37,7 +40,19 @@ public class ViewImageActivity extends AppCompatActivity {
                     .load(getIntent().getStringExtra(IMAGE_URL_TAG))
                     .error(R.drawable.ic_shop)
                     .placeholder(R.drawable.ic_shop)
-                    .centerCrop()
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            photoAttacher= new PhotoViewAttacher(image);
+                            photoAttacher.update();
+                            return false;
+                        }
+                    })
                     .into(image);
         }
 
@@ -46,9 +61,6 @@ public class ViewImageActivity extends AppCompatActivity {
         } else {
             caption.setVisibility(View.GONE);
         }
-
-        photoAttacher= new PhotoViewAttacher(image);
-        photoAttacher.update();
     }
 
     @OnClick(R.id.close_view)
