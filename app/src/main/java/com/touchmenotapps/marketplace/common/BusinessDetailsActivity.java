@@ -49,9 +49,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
 public class BusinessDetailsActivity extends AppCompatActivity
-        implements ServerResponseListener, BusinessDeleteListener, ImageEndcoderListener {
-
-    private final int SELECT_PHOTO = 1;
+        implements ServerResponseListener, BusinessDeleteListener {
 
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -67,7 +65,6 @@ public class BusinessDetailsActivity extends AppCompatActivity
     private long businessId = -1l;
     private AppPreferences appPreferences;
     private ViewPagerAdapter viewPagerAdapter;
-    private Bitmap selectedImage;
     private List<ViewPagerDao> fragments = new ArrayList<>();
     private DeleteBusinessDailog deleteBusinessDailog;
 
@@ -112,9 +109,9 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.add_business_image_button)
     public void onAddImage() {
         options.close(true);
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        Intent intent = new Intent(this, UploadBusinessImageActivity.class);
+        intent.putExtra(BUSINESS_ID_TAG, businessId);
+        startActivity(intent);
     }
 
     @OnClick(R.id.edit_business_btn)
@@ -170,54 +167,11 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        switch (threadId) {
-            case 2:
-                Snackbar.make(options, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
-                break;
-            case 4:
-                Snackbar.make(options, "Image Added", Snackbar.LENGTH_LONG).show();
-                break;
-        }
+        Snackbar.make(options, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(options, object.toString(), Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = imageReturnedIntent.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                selectedImage = BitmapFactory.decodeStream(imageStream);
-                new GetEncodedImageTask(1, this)
-                        .execute(new Bitmap[]{selectedImage});
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void onImageEncoded(int id, Bitmap bitmap, String base64String) {
-        BusinessImageDao businessImageDao = new BusinessImageDao();
-        businessImageDao.setData(base64String);
-        businessImageDao.setName("Image.jpg");
-        businessImageDao.setCaption("Image");
-        new AddImageTask(4, this, this, businessId)
-                .execute(new JSONObject[]{businessImageDao.toJSON()});
-    }
-
-    @Override
-    public void onImageDecoded(int id, Bitmap bitmap) {
-
-    }
-
-    @Override
-    public void onImageProcessFailed(int id) {
-
     }
 }

@@ -73,7 +73,13 @@
         <activity android:name=".common.CaptureImageActivity" />
         <activity
             android:name=".common.FeedDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".common.UploadBusinessImageActivity"
+            android:label="Upload Image" />
+        <activity
+            android:name=".common.ViewImageActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

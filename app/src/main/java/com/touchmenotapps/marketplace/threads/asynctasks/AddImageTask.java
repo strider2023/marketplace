@@ -57,6 +57,22 @@ public class AddImageTask extends BaseAppTask {
         }
     }
 
+    @Override
+    protected void onPostExecute(ServerEvents serverEvents) {
+        super.onPostExecute(serverEvents);
+        switch (serverEvents) {
+            case SUCCESS:
+                getServerResponseListener().onSuccess(getId(), null);
+                break;
+            case FAILURE:
+                getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
+                break;
+            case NO_NETWORK:
+                getServerResponseListener().onFaliure(ServerEvents.NO_NETWORK, errorMessage);
+                break;
+        }
+    }
+
     private ServerEvents getServerResponse(JSONObject object) throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
                 getContext().getString(R.string.base_url) + url, RequestType.POST);

@@ -23,6 +23,7 @@ import android.widget.ListView;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
+import com.touchmenotapps.marketplace.common.ViewImageActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessImageAdapter;
 import com.touchmenotapps.marketplace.common.adapters.OperationTimeBaseAdapter;
 import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
@@ -44,6 +45,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_CAPTION_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_URL_TAG;
 
 /**
  * Created by arindamnath on 16/01/18.
@@ -162,7 +165,10 @@ public class BusinessDetailFragment extends Fragment
 
     @Override
     public void onImageClicked(BusinessImageDao businessImageDao) {
-
+        Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+        intent.putExtra(IMAGE_URL_TAG, businessImageDao.getFile());
+        intent.putExtra(IMAGE_CAPTION_TAG, businessImageDao.getCaption());
+        startActivity(intent);
     }
 
     @Override
