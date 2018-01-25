@@ -27,6 +27,7 @@ public class BusinessDao extends BaseDao {
     private CategoryDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
     private BusinessAddressDao businessAddressDao;
+    private float singleScoreRating;
 
     public BusinessDao() {
         ratingsDao = new RatingsDao();
@@ -111,6 +112,14 @@ public class BusinessDao extends BaseDao {
         this.businessAddressDao = businessAddressDao;
     }
 
+    public float getSingleScoreRating() {
+        return singleScoreRating;
+    }
+
+    public void setSingleScoreRating(float singleScoreRating) {
+        this.singleScoreRating = singleScoreRating;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if (jsonObject.containsKey("id")) {
@@ -142,6 +151,9 @@ public class BusinessDao extends BaseDao {
             businessAddressDao.parse(jsonParser,
                     (JSONObject) jsonParser.parse(jsonObject.get("address").toString()));
             setBusinessAddressDao(businessAddressDao);
+        }
+        if(jsonObject.containsKey("singleScoreRating")) {
+            setSingleScoreRating(Float.parseFloat(jsonObject.get("singleScoreRating").toString()));
         }
     }
 

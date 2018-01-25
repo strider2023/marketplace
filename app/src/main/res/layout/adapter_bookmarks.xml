@@ -4,8 +4,8 @@
     android:id="@+id/bookmark_base_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="4dp"
-    app:cardCornerRadius="3dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="5dp"
     app:cardUseCompatPadding="true"
     app:contentPadding="5dp">
 
@@ -62,55 +62,6 @@
                 android:textColor="#886252"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="@android:color/darker_gray"
-                android:visibility="gone"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_grade_black_24dp"
-                    android:tint="@color/lightGreen" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/bookmark_shop_rating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4.4"
-                    android:textSize="14sp" />
-
-                <android.support.v4.widget.Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_location_black_24dp"
-                    android:tint="@color/lightGreen" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/bookmark_shop_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0.4 Kms"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

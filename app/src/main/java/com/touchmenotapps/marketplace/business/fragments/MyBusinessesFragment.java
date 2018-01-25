@@ -34,6 +34,7 @@ import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
 /**
  * Created by arindamnath on 30/12/17.
@@ -135,6 +136,7 @@ public class MyBusinessesFragment extends Fragment
         Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
         startActivity(intent);
     }
 }

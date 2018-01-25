@@ -1,8 +1,5 @@
 package com.touchmenotapps.marketplace.bo;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * Created by i7 on 22-01-2018.
  */
@@ -11,18 +8,8 @@ public class DailyTimeInfoDao {
 
     private String day;
     private String time;
-    private String today;
 
-    public DailyTimeInfoDao() {
-        Date now = new Date();
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("E"); // the day of the week abbreviated
-        today  = simpleDateformat.format(now);
-    }
-
-    public DailyTimeInfoDao(String day, String time) {
-        Date now = new Date();
-        SimpleDateFormat simpleDateformat = new SimpleDateFormat("E"); // the day of the week abbreviated
-        today  = simpleDateformat.format(now);
+    public DailyTimeInfoDao(String today, String day, String time) {
         if(day.equalsIgnoreCase(today)) {
             this.day = "<b>" + day + "</b>";
             this.time = "<b>" + time + "</b>";

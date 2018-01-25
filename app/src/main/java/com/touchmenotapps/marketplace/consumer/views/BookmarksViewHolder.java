@@ -28,10 +28,6 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
     AppCompatTextView shopCategory;
     @BindView(R.id.bookmark_shop_offers)
     AppCompatTextView shopOffers;
-    @BindView(R.id.bookmark_shop_rating)
-    AppCompatTextView shopRating;
-    @BindView(R.id.bookmark_shop_distance)
-    AppCompatTextView shopDistance;
 
     private BusinessDao businessDao;
     private BookmarkSelectionListener bookmarkSelectionListener;

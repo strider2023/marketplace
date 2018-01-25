@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
 public class BusinessDetailsActivity extends AppCompatActivity
         implements ServerResponseListener, BusinessDeleteListener {
@@ -61,6 +63,8 @@ public class BusinessDetailsActivity extends AppCompatActivity
     Toolbar toolbar;
     @BindView(R.id.business_options)
     FloatingActionMenu options;
+    @BindView(R.id.business_rating)
+    AppCompatTextView rating;
 
     private long businessId = -1l;
     private AppPreferences appPreferences;
@@ -81,9 +85,8 @@ public class BusinessDetailsActivity extends AppCompatActivity
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
-            businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
-        }
+        businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
+        rating.setText(String.valueOf(getIntent().getFloatExtra(BUSINESS_RATING_TAG, 0.0f)));
 
         if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
             getSupportActionBar().setTitle(getIntent().getStringExtra(BUSINESS_NAME_TAG));

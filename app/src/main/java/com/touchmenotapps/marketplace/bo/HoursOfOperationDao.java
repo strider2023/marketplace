@@ -8,7 +8,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,15 +25,13 @@ public class HoursOfOperationDao extends BaseDao {
 
     private Map<String, Set<String>> hoursMap = new HashMap<>();
     private List<DailyTimeInfoDao> dailyTimeInfoList = new ArrayList<>();
+    private String today;
+    private String currentDayStatus = "Closed";
 
     public HoursOfOperationDao() {
-        /*hoursMap.put("MON", "10AM-10PM");
-        hoursMap.put("TUE", "10AM-10PM");
-        hoursMap.put("WED", "10AM-10PM");
-        hoursMap.put("THUR", "10AM-10PM");
-        hoursMap.put("FRI", "10AM-10PM");
-        hoursMap.put("SAT", "10AM-10PM");
-        hoursMap.put("SUN", "10AM-10PM");*/
+        Date now = new Date();
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("E");
+        today  = simpleDateformat.format(now);
     }
 
     public Map<String, Set<String>> getHoursMap() {
@@ -48,6 +48,10 @@ public class HoursOfOperationDao extends BaseDao {
         this.hoursMap.put(day, timeSet);
     }
 
+    public String getCurrentDayStatus() {
+        return currentDayStatus;
+    }
+
     public void setHoursMap(Map<String, Set<String>> hoursMap) {
         this.hoursMap = hoursMap;
     }
@@ -59,7 +63,10 @@ public class HoursOfOperationDao extends BaseDao {
             Set<String> timeSet = new HashSet<>();
             timeSet.add(timeArray.get(0).toString());
             hoursMap.put(key.toString(), timeSet);
-            dailyTimeInfoList.add(new DailyTimeInfoDao(key.toString(), timeArray.get(0).toString()));
+            if(key.toString().equalsIgnoreCase(today)) {
+                currentDayStatus = timeArray.get(0).toString();
+            }
+            dailyTimeInfoList.add(new DailyTimeInfoDao(today, key.toString(), timeArray.get(0).toString()));
         }
     }
 

@@ -50,10 +50,10 @@
     </style>
 
     <style name="BottomNavigation">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="itemBackground">@drawable/selector_bottom_tab</item>
-        <item name="itemIconTint">@android:color/white</item>
-        <item name="itemTextColor">@android:color/white</item>
+        <item name="android:background">@color/dark_grey</item>
+        <item name="itemBackground">@color/dark_grey</item>
+        <item name="itemIconTint">@drawable/selector_bottom_nav_btn</item>
+        <item name="itemTextColor">@drawable/selector_bottom_nav_text</item>
         <item name="paddingStart">0dp</item>
         <item name="paddingEnd">0dp</item>
     </style>

@@ -9,7 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="237dp"
-        android:background="@color/lightGreen"
+        android:background="@color/dark_orange"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/lightGreen"
+            app:contentScrim="@color/dark_orange"
             app:expandedTitleMarginTop="5dp"
             app:expandedTitleMarginBottom="60dp"
             app:expandedTitleMarginStart="30dp"
@@ -48,6 +48,7 @@
                         android:src="@drawable/ic_star_black_24dp"/>
 
                     <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/business_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -160,7 +161,7 @@
             app:fab_colorNormal="@color/lightGreen"
             app:fab_colorPressed="@color/lightGreen"
             app:fab_colorRipple="@color/lightGreen"
-            app:fab_label="Add Feed"
+            app:fab_label="Add Offer"
             app:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>

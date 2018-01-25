@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.common.views;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -25,12 +26,12 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
     AppCompatTextView name;
     @BindView(R.id.business_category)
     AppCompatTextView category;
-    @BindView(R.id.business_feed_count)
-    AppCompatTextView feedCount;
+    @BindView(R.id.business_location)
+    AppCompatTextView location;
     @BindView(R.id.business_rating)
     AppCompatTextView rating;
-    @BindView(R.id.business_distance)
-    AppCompatTextView distance;
+    @BindView(R.id.business_time)
+    AppCompatTextView time;
 
     private BusinessDao businessDao;
     private BusinessSelectedListener businessSelectedListener;
@@ -38,6 +39,8 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
     public BusinessViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        Typeface myTypeface = Typeface.createFromAsset(itemView.getContext().getAssets(), "fonts/font.ttf");
+        name.setTypeface(myTypeface);
     }
 
     @OnClick(R.id.business_base_container)
@@ -57,5 +60,11 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
         for(String categoryName : businessDao.getCategoryDao().getCategoriesMap().keySet()) {
             this.category.setText(categoryName);
         }
+        this.location.setText(businessDao.getBusinessAddressDao().getAddress() + ", " +
+                businessDao.getBusinessAddressDao().getCity() + ", " +
+                businessDao.getBusinessAddressDao().getState() + " - " +
+                businessDao.getBusinessAddressDao().getZip());
+        this.time.setText(businessDao.getHoursOfOperationDao().getCurrentDayStatus());
+        this.rating.setText(String.valueOf(businessDao.getSingleScoreRating()));
     }
 }

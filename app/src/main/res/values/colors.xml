@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4e43f9</color>
-    <color name="colorPrimaryDark">#3F51B5</color>
+    <color name="colorPrimary">#525252</color>
+    <color name="colorPrimaryDark">#424244</color>
     <color name="colorAccent">#0d9681</color>
 
     <color name="lightPrimary">#7c98fd</color>
@@ -10,4 +10,9 @@
 
     <color name="fragmentBackground">#CCC</color>
     <color name="lightGreen">#0d9681</color>
+    <color name="dark_grey">#424244</color>
+    <color name="dark_orange">#e55e4b</color>
+    <color name="steel_grey_dark">#17232c</color>
+    <color name="steel_grey_light">#324957</color>
+    <color name="dark_brown">#886252</color>
 </resources>

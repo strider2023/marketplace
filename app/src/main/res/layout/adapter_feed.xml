@@ -4,7 +4,8 @@
     android:id="@+id/business_feed_base_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="3dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="5dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -12,13 +13,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/feed_image"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@color/lightGreen"
-            android:src="@drawable/ic_camera"
-            android:scaleType="centerCrop"/>
+            android:layout_height="120dp">
+
+            <ImageView
+                android:id="@+id/feed_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lightGreen"
+                android:src="@drawable/ic_shop"
+                android:scaleType="centerCrop"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.5"
+                android:background="@color/steel_grey_dark"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_coupon_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Use Coupon"
+                android:layout_above="@+id/feed_coupon"
+                android:textColor="@color/yellow"
+                android:layout_marginLeft="10dp"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Description"
+                android:layout_alignParentBottom="true"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="@color/yellow"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/feed_description"
@@ -26,23 +61,16 @@
             android:layout_height="wrap_content"
             android:text="Description"
             android:textSize="16sp"
-            android:layout_margin="10dp"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/feed_coupon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Description"
-            android:textStyle="bold"
-            android:textColor="@color/lightGreen"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/feed_start_date"
@@ -51,7 +79,8 @@
                 android:fontFamily="sans-serif-condensed"
                 android:layout_weight="1"
                 android:text="Description"
-                android:layout_margin="10dp"/>
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/feed_end_date"
@@ -60,7 +89,8 @@
                 android:fontFamily="sans-serif-condensed"
                 android:text="Description"
                 android:layout_weight="1"
-                android:layout_margin="10dp"/>
+                android:textStyle="bold"
+                android:layout_marginRight="10dp"/>
         </LinearLayout>
 
     </LinearLayout>

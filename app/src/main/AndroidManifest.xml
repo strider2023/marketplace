@@ -66,7 +66,9 @@
         <activity
             android:name=".business.BusinessAddActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".business.BusinessAddFeedActivity" />
+        <activity
+            android:name=".business.BusinessAddFeedActivity"
+            android:label="Add Offer"/>
         <activity
             android:name=".common.BusinessDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
