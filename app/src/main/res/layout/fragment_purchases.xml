@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey">
 
     <LinearLayout
         android:id="@+id/purchase_empty"
@@ -47,6 +48,7 @@
             android:gravity="center"
             android:layout_margin="15dp"
             android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/white"
             android:text="Looks barren. Why not start browsing through our amazing offers!"
             android:textSize="20sp"/>
     </LinearLayout>

@@ -68,7 +68,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".business.BusinessAddFeedActivity"
-            android:label="Add Offer"/>
+            android:label="Add Offer" />
         <activity
             android:name=".common.BusinessDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -81,6 +81,9 @@
             android:label="Upload Image" />
         <activity
             android:name=".common.ViewImageActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".consumer.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

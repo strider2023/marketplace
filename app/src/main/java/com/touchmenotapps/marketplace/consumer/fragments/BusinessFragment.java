@@ -47,6 +47,7 @@ import butterknife.ButterKnife;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
 /**
  * Created by i7 on 17-10-2017.
@@ -182,6 +183,7 @@ public class BusinessFragment extends Fragment
         Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
         startActivity(intent);
     }
 

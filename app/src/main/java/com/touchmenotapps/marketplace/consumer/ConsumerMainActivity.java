@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.consumer;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -15,7 +18,6 @@ import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BusinessFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.FeedFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.SearchFragment;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 
@@ -58,6 +60,23 @@ public class ConsumerMainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.consumer_main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_search:
+                startActivity(new Intent(this, SearchActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (requestCode == AppConstants.REQUEST_ACCESS_LOCATION) {
@@ -79,11 +98,6 @@ public class ConsumerMainActivity extends AppCompatActivity {
                 case R.id.navigation_offers:
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.content, BusinessFragment.newInstance())
-                            .commit();
-                    return true;
-                case R.id.navigation_search:
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content, SearchFragment.newInstance())
                             .commit();
                     return true;
                 case R.id.navigation_purchases:

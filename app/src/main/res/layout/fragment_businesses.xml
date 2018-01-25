@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:background="@color/dark_grey"
     android:gravity="center">
     
     <!-- TODO change it to a grid view for dynamic content -->
@@ -41,6 +42,7 @@
             android:gravity="center"
             android:layout_margin="15dp"
             android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/white"
             android:text="We need access to your location to get nearby offers."
             android:textSize="20sp"/>
 
@@ -49,8 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="Retry"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/cardview_dark_background"
+            android:textColor="@color/dark_grey"
+            android:backgroundTint="@color/yellow"
             android:elevation="5dp"/>
 
     </LinearLayout>

@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.consumer.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 import com.touchmenotapps.marketplace.threads.loaders.BookmarkLoaderTask;
@@ -24,6 +26,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
 /**
  * Created by i7 on 18-10-2017.
@@ -72,7 +78,11 @@ public class BookmarksFragment extends Fragment
 
     @Override
     public void onBookmarkSelected(BusinessDao businessDao) {
-
+        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
+        intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
+        intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
+        startActivity(intent);
     }
 
     @Override

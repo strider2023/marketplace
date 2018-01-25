@@ -1,21 +1,17 @@
-package com.touchmenotapps.marketplace.consumer.fragments;
+package com.touchmenotapps.marketplace.consumer;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
@@ -23,8 +19,8 @@ import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
-import com.touchmenotapps.marketplace.threads.loaders.SearchLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
+import com.touchmenotapps.marketplace.threads.loaders.SearchLoaderTask;
 
 import java.util.List;
 
@@ -34,20 +30,13 @@ import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
-/**
- * Created by i7 on 18-10-2017.
- */
-
-public class SearchFragment extends Fragment
+public class SearchActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<List<BusinessDao>>, BusinessSelectedListener {
-
-    private View mViewHolder;
 
     @BindView(R.id.search_edittext)
     AppCompatEditText searchText;
-    @BindView(R.id.search_clear_input)
-    ImageView clearInput;
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.details_list)
@@ -59,16 +48,11 @@ public class SearchFragment extends Fragment
     private BusinessAdapter businessAdapter;
     private LinearLayoutManager linearLayoutManager;
 
-    public static SearchFragment newInstance() {
-        SearchFragment fragment = new SearchFragment();
-        return fragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mViewHolder = inflater.inflate(R.layout.fragment_search, container, false);
-        ButterKnife.bind(this, mViewHolder);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
 
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,23 +61,20 @@ public class SearchFragment extends Fragment
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.toString().length() > 0) {
-                    clearInput.setVisibility(View.VISIBLE);
                     queryData = new Bundle();
                     queryData.putDouble("lat", 0);
                     queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getActivity().getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
-                } else {
-                    clearInput.setVisibility(View.GONE);
+                    getSupportLoaderManager()
+                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
                 }
                 if(charSequence.toString().length() > 3) {
                     queryData = new Bundle();
                     queryData.putDouble("lat", 0);
                     queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getActivity().getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
+                    getSupportLoaderManager()
+                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
                 }
             }
 
@@ -103,7 +84,7 @@ public class SearchFragment extends Fragment
 
         refreshLayout.setRefreshing(false);
         businessAdapter = new BusinessAdapter(this);
-        linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(this);
         detailsList.setLayoutManager(linearLayoutManager);
         detailsList.setAdapter(businessAdapter);
 
@@ -115,23 +96,27 @@ public class SearchFragment extends Fragment
                     queryData.putDouble("lat", 0);
                     queryData.putDouble("lng", 0);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getActivity().getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, SearchFragment.this).forceLoad();
+                    getSupportLoaderManager()
+                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
                 }
             }
         });
-        return mViewHolder;
     }
 
-    @OnClick(R.id.search_clear_input)
-    public void onClearSearchField() {
-        searchText.setText("");
+    @OnClick(R.id.filter_business_btn)
+    public void onFilterSelected() {
+
+    }
+
+    @OnClick(R.id.close_search_btn)
+    public void onSearchClose() {
+        finish();
     }
 
     @Override
     public Loader<List<BusinessDao>> onCreateLoader(int id, Bundle args) {
         refreshLayout.setRefreshing(true);
-        return new SearchLoaderTask(getActivity(), args);
+        return new SearchLoaderTask(this, args);
     }
 
     @Override
@@ -154,9 +139,10 @@ public class SearchFragment extends Fragment
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
+        Intent intent = new Intent(this, BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
         startActivity(intent);
     }
 }

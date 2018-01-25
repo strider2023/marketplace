@@ -26,8 +26,8 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
     AppCompatTextView shopName;
     @BindView(R.id.bookmark_shop_category)
     AppCompatTextView shopCategory;
-    @BindView(R.id.bookmark_shop_offers)
-    AppCompatTextView shopOffers;
+    @BindView(R.id.bookmark_shop_rating)
+    AppCompatTextView rating;
 
     private BusinessDao businessDao;
     private BookmarkSelectionListener bookmarkSelectionListener;
@@ -51,5 +51,6 @@ public class BookmarksViewHolder extends RecyclerView.ViewHolder {
     public void setData(BusinessDao businessDao) {
         this.businessDao = businessDao;
         shopName.setText(businessDao.getName());
+        rating.setText(String.valueOf(businessDao.getSingleScoreRating()));
     }
 }
