@@ -20,18 +20,19 @@ public class BusinessDao extends BaseDao {
     private String name;
     private String website;
     private Set<String> phoneNumber = new HashSet<>();
-    private int businessPhotosCount;
-    private int businessFeedCount;
+    private long businessPhotosCount;
+    private long businessFeedCount;
+    private String businessProfileImage = "";
 
     private RatingsDao ratingsDao;
-    private CategoryDao categoryDao;
+    private CategoryListDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
     private BusinessAddressDao businessAddressDao;
     private float singleScoreRating;
 
     public BusinessDao() {
         ratingsDao = new RatingsDao();
-        categoryDao = new CategoryDao();
+        categoryDao = new CategoryListDao();
         hoursOfOperationDao = new HoursOfOperationDao();
         businessAddressDao = new BusinessAddressDao();
     }
@@ -64,19 +65,19 @@ public class BusinessDao extends BaseDao {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getBusinessPhotosCount() {
+    public long getBusinessPhotosCount() {
         return businessPhotosCount;
     }
 
-    public void setBusinessPhotosCount(int businessPhotosCount) {
+    public void setBusinessPhotosCount(long businessPhotosCount) {
         this.businessPhotosCount = businessPhotosCount;
     }
 
-    public int getBusinessFeedCount() {
+    public long getBusinessFeedCount() {
         return businessFeedCount;
     }
 
-    public void setBusinessFeedCount(int businessFeedCount) {
+    public void setBusinessFeedCount(long businessFeedCount) {
         this.businessFeedCount = businessFeedCount;
     }
 
@@ -88,11 +89,11 @@ public class BusinessDao extends BaseDao {
         this.ratingsDao = ratingsDao;
     }
 
-    public CategoryDao getCategoryDao() {
+    public CategoryListDao getCategoryDao() {
         return categoryDao;
     }
 
-    public void setCategoryDao(CategoryDao categoryDao) {
+    public void setCategoryDao(CategoryListDao categoryDao) {
         this.categoryDao = categoryDao;
     }
 
@@ -120,6 +121,14 @@ public class BusinessDao extends BaseDao {
         this.singleScoreRating = singleScoreRating;
     }
 
+    public String getBusinessProfileImage() {
+        return businessProfileImage;
+    }
+
+    public void setBusinessProfileImage(String businessProfileImage) {
+        this.businessProfileImage = businessProfileImage;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if (jsonObject.containsKey("id")) {
@@ -142,11 +151,11 @@ public class BusinessDao extends BaseDao {
                     (JSONObject) jsonParser.parse(jsonObject.get("hrsOfOperation").toString()));
             setHoursOfOperationDao(hoursOfOperationDao);
         }
-        if (jsonObject.containsKey("category")) {
+        /*if (jsonObject.containsKey("category")) {
             categoryDao.parse(jsonParser,
                     (JSONObject) jsonParser.parse(jsonObject.get("category").toString()));
             setCategoryDao(categoryDao);
-        }
+        }*/
         if (jsonObject.containsKey("address")) {
             businessAddressDao.parse(jsonParser,
                     (JSONObject) jsonParser.parse(jsonObject.get("address").toString()));
@@ -154,6 +163,15 @@ public class BusinessDao extends BaseDao {
         }
         if(jsonObject.containsKey("singleScoreRating")) {
             setSingleScoreRating(Float.parseFloat(jsonObject.get("singleScoreRating").toString()));
+        }
+        if(jsonObject.containsKey("businessProfileImage")) {
+            setBusinessProfileImage(jsonObject.get("businessProfileImage").toString());
+        }
+        if(jsonObject.containsKey("businessPhotosCount")) {
+            setBusinessPhotosCount(Long.parseLong(jsonObject.get("businessPhotosCount").toString()));
+        }
+        if(jsonObject.containsKey("businessFeedCount")) {
+            setBusinessFeedCount(Long.parseLong(jsonObject.get("businessFeedCount").toString()));
         }
     }
 
@@ -167,9 +185,7 @@ public class BusinessDao extends BaseDao {
         for (String phone : phoneNumber) {
             phoneNumbers.add(phone);
         }
-        //timeArray.add(categoriesMap.get(key));
         jsonObject.put("phs", phoneNumbers);
-        //jsonObject.put("phs", phoneNumber);
         jsonObject.put("category", categoryDao.toJSON());
         return jsonObject;
     }

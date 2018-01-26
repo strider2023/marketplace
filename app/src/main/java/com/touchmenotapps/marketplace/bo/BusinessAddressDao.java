@@ -15,6 +15,8 @@ public class BusinessAddressDao extends BaseDao {
     private String city;
     private String state;
     private String zip;
+    private String country = "India";
+    private String landmark = "";
 
     public BusinessAddressDao() {
 
@@ -52,6 +54,22 @@ public class BusinessAddressDao extends BaseDao {
         this.zip = zip;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) {
         if (jsonObject.containsKey("line1")) {
@@ -66,6 +84,12 @@ public class BusinessAddressDao extends BaseDao {
         if (jsonObject.containsKey("zip")) {
             setZip(jsonObject.get("zip").toString());
         }
+        if (jsonObject.containsKey("country")) {
+            setCountry(jsonObject.get("country").toString());
+        }
+        if (jsonObject.containsKey("landmark")) {
+            setLandmark(jsonObject.get("landmark").toString());
+        }
     }
 
     public JSONObject toJSON() {
@@ -74,6 +98,8 @@ public class BusinessAddressDao extends BaseDao {
         jsonObject.put("city", city);
         jsonObject.put("state", state);
         jsonObject.put("zip", zip);
+        jsonObject.put("country", country);
+        jsonObject.put("landmark", landmark);
         return jsonObject;
     }
 }

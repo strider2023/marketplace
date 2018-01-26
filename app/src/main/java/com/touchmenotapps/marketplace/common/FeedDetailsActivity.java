@@ -20,6 +20,7 @@ import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteFeedDialog;
 import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
@@ -32,14 +33,20 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FE
 public class FeedDetailsActivity extends AppCompatActivity
     implements ServerResponseListener, FeedDeleteListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.feed_image)
     ImageView image;
     @BindView(R.id.feed_caption)
     AppCompatTextView caption;
     @BindView(R.id.feed_coupon)
     AppCompatTextView code;
+    @BindView(R.id.feed_kpi_today)
+    AppCompatTextView today;
+    @BindView(R.id.feed_kpi_week)
+    AppCompatTextView week;
+    @BindView(R.id.feed_kpi_month)
+    AppCompatTextView month;
+    @BindView(R.id.feed_kpi_total)
+    AppCompatTextView total;
 
     private FeedDao feedDao;
     private DeleteFeedDialog feedDialog;
@@ -50,7 +57,6 @@ public class FeedDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_details);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         appPreferences = new AppPreferences(this);
@@ -66,6 +72,14 @@ public class FeedDetailsActivity extends AppCompatActivity
                     .placeholder(R.drawable.ic_shop)
                     .centerCrop()
                     .into(image);
+            if(appPreferences.getUserType() == UserType.BUSINESS) {
+                today.setText(String.valueOf(feedDao.getToday()));
+                week.setText(String.valueOf(feedDao.getLastWeek()));
+                month.setText(String.valueOf(feedDao.getLastMonth()));
+                total.setText(String.valueOf(feedDao.getTotal()));
+            } else {
+                findViewById(R.id.kpi_contianer).setVisibility(View.GONE);
+            }
         }
     }
 

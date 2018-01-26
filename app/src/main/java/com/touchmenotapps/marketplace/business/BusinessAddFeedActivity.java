@@ -1,9 +1,12 @@
 package com.touchmenotapps.marketplace.business;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -21,8 +24,9 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
-import com.touchmenotapps.marketplace.threads.asynctasks.AddFeedTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.FeedTask;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
@@ -32,6 +36,7 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 
 import org.json.simple.JSONObject;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -49,9 +54,10 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FE
 
 public class BusinessAddFeedActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,
-        LoaderManager.LoaderCallbacks<List<BusinessDao>>{
+        LoaderManager.LoaderCallbacks<List<BusinessDao>> {
 
     private final int SELECT_PHOTO = 1;
+    private final int TAKE_PICTURE = 2;
 
     @BindView(R.id.feed_image)
     ImageView feedImage;
@@ -73,6 +79,10 @@ public class BusinessAddFeedActivity extends AppCompatActivity
     private Bundle queryData;
     private ArrayAdapter<String> businessAdapter;
     private List<BusinessDao> businessDaoList = new ArrayList<>();
+    private FeedTask feedTask;
+    private boolean isUpdate;
+    private File photo;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +99,15 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         if (getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             findViewById(R.id.business_selector_container).setVisibility(View.GONE);
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
-        } else if(getIntent().getParcelableExtra(FEED_TAG) != null) {
+        } else if (getIntent().getParcelableExtra(FEED_TAG) != null) {
             findViewById(R.id.business_selector_container).setVisibility(View.GONE);
-            findViewById(R.id.feed_image_btn).setClickable(false);
+            findViewById(R.id.image_btn_holder).setVisibility(View.GONE);
+            findViewById(R.id.create_container).setVisibility(View.GONE);
+            startDate.setClickable(false);
+            endDate.setClickable(false);
             addButton.setText("Update Feed");
             isImageAdded = true;
+            isUpdate = true;
 
             feedDao = getIntent().getParcelableExtra(FEED_TAG);
             businessId = feedDao.getBusinessId();
@@ -111,8 +125,17 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         }
     }
 
-    @OnClick(R.id.feed_image_btn)
-    public void onFeedImageSelect() {
+    @OnClick(R.id.take_image)
+    public void onTakeImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photo = new File(Environment.getExternalStorageDirectory(), "Hyfi_" + String.valueOf(System.currentTimeMillis())+ ".jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, TAKE_PICTURE);
+    }
+
+    @OnClick(R.id.select_image)
+    public void onSelectImage() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -127,10 +150,10 @@ public class BusinessAddFeedActivity extends AppCompatActivity
     public void startDateSelected(Spinner spinner, int position) {
         switch (position) {
             case 0:
-                feedDao.setStartDateFromToday(1l);
+                feedDao.setStartDateFromToday(0l);
                 break;
             case 1:
-                feedDao.setStartDateFromToday(2l);
+                feedDao.setStartDateFromToday(1l);
                 break;
             case 2:
                 feedDao.setStartDateFromToday(7l);
@@ -158,11 +181,13 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         if (description.getEditableText().toString().trim().length() > 0
                 && isImageAdded) {
             feedDao.setCaption(description.getEditableText().toString().trim());
-
-            JSONObject id = new JSONObject();
-            id.put("id", String.valueOf(businessId));
-            new AddFeedTask(1, this, this)
-                    .execute(new JSONObject[]{id, feedDao.toJSON()});
+            feedTask = new FeedTask(1, this, this);
+            if (isUpdate) {
+                feedTask.setFeedDetails(businessId, feedDao.getId(), RequestType.PUT);
+            } else {
+                feedTask.setFeedDetails(businessId, -1l, RequestType.POST);
+            }
+            feedTask.execute(new JSONObject[]{feedDao.toJSON()});
         } else {
             Snackbar.make(description, "Description and image fields cannot be empty.", Snackbar.LENGTH_LONG).show();
         }
@@ -192,17 +217,35 @@ public class BusinessAddFeedActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = imageReturnedIntent.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                selectedImage = BitmapFactory.decodeStream(imageStream);
-                feedImage.setImageBitmap(selectedImage);
-                new GetEncodedImageTask(1, this)
-                        .execute(new Bitmap[]{selectedImage});
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        final Uri imageUri = imageReturnedIntent.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        selectedImage = BitmapFactory.decodeStream(imageStream);
+                        feedImage.setImageBitmap(selectedImage);
+                        new GetEncodedImageTask(1, this)
+                                .execute(new Bitmap[]{selectedImage});
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case TAKE_PICTURE:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        getContentResolver().notifyChange(imageUri, null);
+                        ContentResolver cr = getContentResolver();
+                        selectedImage = android.provider.MediaStore.Images.Media.getBitmap(cr, imageUri);
+                        feedImage.setImageBitmap(selectedImage);
+                        new GetEncodedImageTask(1, this)
+                                .execute(new Bitmap[]{selectedImage});
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
         }
     }
 
@@ -230,13 +273,13 @@ public class BusinessAddFeedActivity extends AppCompatActivity
 
     @Override
     public void onLoadFinished(Loader<List<BusinessDao>> loader, List<BusinessDao> data) {
-        if(data.size() > 0) {
+        if (data.size() > 0) {
             businessDaoList.clear();
             businessDaoList.addAll(data);
             businessId = businessDaoList.get(0).getId();
 
             Set<String> names = new HashSet<>();
-            for(BusinessDao businessDao:businessDaoList) {
+            for (BusinessDao businessDao : businessDaoList) {
                 names.add(businessDao.getName());
             }
             String[] businesses = names.toArray(new String[names.size()]);

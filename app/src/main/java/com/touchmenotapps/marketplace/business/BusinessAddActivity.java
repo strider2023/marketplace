@@ -8,13 +8,17 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.bo.DailyTimeInfoDao;
+import com.touchmenotapps.marketplace.common.adapters.CategoriesArrayAdapter;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
@@ -30,6 +34,7 @@ import org.json.simple.JSONObject;
 import java.sql.Time;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -48,10 +53,16 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     AppCompatEditText name;
     @BindView(R.id.business_website)
     AppCompatEditText website;
-    @BindView(R.id.business_phone)
+    @BindView(R.id.business_phone_1)
     AppCompatEditText phone;
+    @BindView(R.id.business_phone_2)
+    AppCompatEditText phone2;
+    @BindView(R.id.business_phone_3)
+    AppCompatEditText phone3;
     @BindView(R.id.business_address_line1)
     AppCompatEditText line1;
+    @BindView(R.id.business_address_landmark)
+    AppCompatEditText landmark;
     @BindView(R.id.business_address_city)
     AppCompatEditText city;
     @BindView(R.id.business_address_state)
@@ -83,15 +94,16 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
     private BusinessDao businessDao;
     private BusinessAddressDao businessAddressDao;
-    private CategoryDao categoryDao;
+    private CategoryListDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
-    private ArrayAdapter<String> categoriesAdapter, subCategoriesAdapter;
+    private ArrayAdapter<CategoryDao> categoriesAdapter, subCategoriesAdapter;
     private String selectedCategory, selectedSubCategory;
-    private CategoryDao allCategoryDao;
-    private String[] categories, subCategories;
+    private CategoryListDao allCategoryDao;
+    private List<CategoryDao> categories, subCategories;
     private long businessId = -1l;
     private boolean isEdit = false;
     private BusinessTask businessTask;
+    private int currentPhoneCount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,14 +115,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 .execute(new JSONObject[]{});
 
         hoursOfOperationDao = new HoursOfOperationDao();
-        categoryDao = new CategoryDao();
-
-        categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
-        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoriesSpinner.setAdapter(categoriesAdapter);
-        subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new String[]{});
-        subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
+        categoryDao = new CategoryListDao();
 
         businessAddressDao = new BusinessAddressDao();
         businessDao = new BusinessDao();
@@ -129,19 +134,32 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         }
     }
 
+    @OnClick(R.id.add_new_number)
+    public void addNewNumber() {
+        if(currentPhoneCount < 3) {
+            currentPhoneCount++;
+            if(currentPhoneCount == 2) {
+                findViewById(R.id.phone_2).setVisibility(View.VISIBLE);
+            }
+            if(currentPhoneCount == 3) {
+                findViewById(R.id.phone_3).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     @OnItemSelected(R.id.business_categories_spinner)
     public void categorySelected(Spinner spinner, int position) {
-        selectedCategory = categories[position];
-        subCategories = allCategoryDao.getCategoriesMap().get(selectedCategory).toArray(
-                new String[allCategoryDao.getCategoriesMap().get(selectedCategory).size()]);
-        subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
+        selectedCategory = categories.get(position).getEnumText();
+        subCategories = Arrays.asList(allCategoryDao.getCategoriesMap().get(categories.get(0)).toArray(
+                new CategoryDao[allCategoryDao.getCategoriesMap().get(categories.get(0)).size()]));
+        subCategoriesAdapter = new CategoriesArrayAdapter(this, subCategories);
         subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         subCategoriesSpinner.setAdapter(subCategoriesAdapter);
     }
 
     @OnItemSelected(R.id.business_sub_categories_spinner)
     public void subCategorySelected(Spinner spinner, int position) {
-        selectedSubCategory = subCategories[position];
+        selectedSubCategory = subCategories.get(position).getEnumText();
     }
 
     @OnClick(R.id.business_start_time)
@@ -163,12 +181,19 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
             businessDao.setName(name.getEditableText().toString().trim());
             businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
+            if(currentPhoneCount == 2) {
+                businessDao.addPhoneNumber(phone2.getEditableText().toString().trim());
+            }
+            if(currentPhoneCount == 3) {
+                businessDao.addPhoneNumber(phone3.getEditableText().toString().trim());
+            }
             businessDao.setWebsite(website.getEditableText().toString().trim());
 
             businessAddressDao.setAddress(line1.getEditableText().toString().trim());
             businessAddressDao.setCity(city.getEditableText().toString().trim());
             businessAddressDao.setState(state.getEditableText().toString().trim());
             businessAddressDao.setZip(zip.getEditableText().toString().trim());
+            businessAddressDao.setLandmark(landmark.getEditableText().toString().trim());
             businessDao.setBusinessAddressDao(businessAddressDao);
 
             addHoursOfOperation();
@@ -199,16 +224,16 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         switch (threadId) {
             case 1:
                 //Set categories and sub-categories
-                allCategoryDao = (CategoryDao) object;
-                categories = allCategoryDao.getCategoriesMap().keySet().toArray(
-                        new String[allCategoryDao.getCategoriesMap().keySet().size()]);
-                categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categories);
+                allCategoryDao = (CategoryListDao) object;
+                categories = Arrays.asList(allCategoryDao.getCategoriesMap().keySet().toArray(
+                        new CategoryDao[allCategoryDao.getCategoriesMap().keySet().size()]));
+                categoriesAdapter = new CategoriesArrayAdapter(this, categories);
                 categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 categoriesSpinner.setAdapter(categoriesAdapter);
 
-                subCategories = allCategoryDao.getCategoriesMap().get(categories[0]).toArray(
-                        new String[allCategoryDao.getCategoriesMap().get(categories[0]).size()]);
-                subCategoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subCategories);
+                subCategories = Arrays.asList(allCategoryDao.getCategoriesMap().get(categories.get(0)).toArray(
+                        new CategoryDao[allCategoryDao.getCategoriesMap().get(categories.get(0)).size()]));
+                subCategoriesAdapter = new CategoriesArrayAdapter(this, subCategories);
                 subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 subCategoriesSpinner.setAdapter(subCategoriesAdapter);
                 break;
@@ -220,7 +245,17 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 //Map Business data
                 businessDao = (BusinessDao) object;
                 for(String number : businessDao.getPhoneNumber()) {
-                    phone.setText(number);
+                    if(currentPhoneCount == 1)
+                        phone.setText(number);
+                    if(currentPhoneCount == 2) {
+                        phone2.setText(number);
+                        findViewById(R.id.phone_2).setVisibility(View.VISIBLE);
+                    }
+                    if(currentPhoneCount == 3) {
+                        phone3.setText(number);
+                        findViewById(R.id.phone_3).setVisibility(View.VISIBLE);
+                    }
+                    currentPhoneCount++;
                 }
                 website.setText(businessDao.getWebsite());
                 line1.setText(businessDao.getBusinessAddressDao().getAddress());
@@ -261,7 +296,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private void setHoursOfOperation(List<DailyTimeInfoDao> data) {
         String time = "";
         for(DailyTimeInfoDao dao : data) {
-            if(!dao.getTime().contains("<b>") || !dao.getTime().equalsIgnoreCase("Closed")) {
+            if (!dao.getTime().contains("<b>") && !dao.getTime().equalsIgnoreCase("Closed")) {
                 time = dao.getTime();
             }
             setChecked(dao);
@@ -271,19 +306,19 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     }
 
     private void setChecked(DailyTimeInfoDao info) {
-        if(info.getDay().equalsIgnoreCase("sun") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("sun") && !info.getTime().equalsIgnoreCase("Closed"))
             sunday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("mon") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("mon") && !info.getTime().equalsIgnoreCase("Closed"))
             monday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("tue") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("tue") && !info.getTime().equalsIgnoreCase("Closed"))
             tuesday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("wed") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("wed") && !info.getTime().equalsIgnoreCase("Closed"))
             wednesday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("thu") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("thu") && !info.getTime().equalsIgnoreCase("Closed"))
             thursday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("fri") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("fri") && !info.getTime().equalsIgnoreCase("Closed"))
             friday.setChecked(true);
-        if(info.getDay().equalsIgnoreCase("sat") && !info.getTime().equalsIgnoreCase("Closed"))
+        if(info.getDay().toLowerCase().contains("sat") && !info.getTime().equalsIgnoreCase("Closed"))
             saturday.setChecked(true);
     }
 

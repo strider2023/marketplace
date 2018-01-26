@@ -11,12 +11,14 @@ import android.support.v7.widget.AppCompatEditText;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
+import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
-import com.touchmenotapps.marketplace.threads.asynctasks.AddImageTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.ImageTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 
 import org.json.simple.JSONObject;
@@ -29,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
 
 public class UploadBusinessImageActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener {
@@ -44,6 +47,8 @@ public class UploadBusinessImageActivity extends AppCompatActivity
     private boolean isImageSelected;
     private Bitmap selectedImage;
     private BusinessImageDao businessImageDao;
+    private ImageTask imageTask;
+    private boolean isUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +62,19 @@ public class UploadBusinessImageActivity extends AppCompatActivity
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
         }
-
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        if(getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG) != null) {
+            businessImageDao = getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG);
+            isUpdate = true;
+            Glide.with(this)
+                    .load(businessImageDao.getFile())
+                    .error(R.drawable.ic_shop)
+                    .placeholder(R.drawable.ic_shop)
+                    .into(image);
+        } else {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        }
     }
 
     @Override
@@ -76,12 +90,20 @@ public class UploadBusinessImageActivity extends AppCompatActivity
     @OnClick(R.id.upload_image)
     public void onUploadSelected() {
         String input = caption.getEditableText().toString().trim();
-        if(isImageSelected && input.length() > 0) {
-            businessImageDao.setCaption("Image");
-            new AddImageTask(4, this, this, businessId)
-                    .execute(new JSONObject[]{businessImageDao.toJSON()});
+        if(isUpdate) {
+            businessImageDao.setCaption(input);
+            imageTask = new ImageTask(2, this, this);
+            imageTask.setImageDetails(businessId, businessImageDao.getId(), RequestType.PUT);
+            imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
         } else {
-            Snackbar.make(image, "Invalid Input", Snackbar.LENGTH_LONG).show();
+            if (isImageSelected) {
+                businessImageDao.setCaption(input);
+                imageTask = new ImageTask(1, this, this);
+                imageTask.setImageDetails(businessId, -1l, RequestType.POST);
+                imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
+            } else {
+                Snackbar.make(image, "Please select image.", Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 

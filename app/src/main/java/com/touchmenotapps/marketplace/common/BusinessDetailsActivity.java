@@ -1,9 +1,6 @@
 package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -17,7 +14,6 @@ import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.bo.ViewPagerDao;
 import com.touchmenotapps.marketplace.business.BusinessAddActivity;
 import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
@@ -25,20 +21,16 @@ import com.touchmenotapps.marketplace.common.adapters.ViewPagerAdapter;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessInsightsFragment;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
-import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
-import com.touchmenotapps.marketplace.threads.asynctasks.AddImageTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
-import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 
 import org.json.simple.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +92,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
         }
 
         fragments.add(new ViewPagerDao("Offers", BusinessFeedFragment.newInstance(businessId)));
+        fragments.add(new ViewPagerDao("Insights", BusinessInsightsFragment.newInstance(businessId)));
         fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);

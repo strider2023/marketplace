@@ -9,37 +9,38 @@ import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.FeedTask;
+import com.touchmenotapps.marketplace.threads.asynctasks.ImageTask;
 
 import org.json.simple.JSONObject;
 
 /**
- * Created by i7 on 22-01-2018.
+ * Created by arindamnath on 26/01/18.
  */
 
-public class DeleteFeedDialog implements ServerResponseListener {
+public class DeleteImageDialog implements ServerResponseListener {
 
     private Activity activity;
-    private long businessId, feedId;
+    private long businessId, photoId;
     private AlertDialog dialog;
     private FeedDeleteListener feedDeleteListener;
-    private FeedTask feedTask;
+    private ImageTask imageTask;
 
-    public DeleteFeedDialog(Activity activity, long businessId, long feedId, FeedDeleteListener feedDeleteListener) {
+    public DeleteImageDialog(Activity activity, long businessId, long photoId, FeedDeleteListener feedDeleteListener) {
         this.activity = activity;
         this.businessId = businessId;
-        this.feedId = feedId;
+        this.photoId = photoId;
         this.feedDeleteListener = feedDeleteListener;
         createDialog();
     }
 
     private void createDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage("Delete this feed?");
+        builder.setMessage("Delete this image?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                feedTask = new FeedTask(1, activity, DeleteFeedDialog.this);
-                feedTask.setFeedDetails(businessId, feedId, RequestType.DELETE);
-                feedTask.execute(new JSONObject[]{});
+                imageTask = new ImageTask(1, activity, DeleteImageDialog.this);
+                imageTask.setImageDetails(businessId, photoId, RequestType.DELETE);
+                imageTask.execute(new JSONObject[]{});
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

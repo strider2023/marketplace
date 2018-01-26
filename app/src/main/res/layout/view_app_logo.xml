@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/splash_app_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/splash_image"
+            android:layout_height="@dimen/splash_image"
             android:src="@drawable/ic_shop"
             android:transitionName="splash" />
 
@@ -29,10 +29,10 @@
             android:id="@+id/splash_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/splash_margin"
             android:text="@string/app_name"
             android:textColor="@android:color/white"
-            android:textSize="48sp"
+            android:textSize="@dimen/splash_text"
             android:transitionName="splash" />
 
     </LinearLayout>

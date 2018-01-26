@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
@@ -12,6 +13,7 @@ import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,11 +28,11 @@ public class GetCategoriesTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
-    private CategoryDao categoryDao;
+    private CategoryListDao categoryDao;
 
     public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
-        categoryDao = new CategoryDao();
+        categoryDao = new CategoryListDao();
     }
 
     @Override
@@ -79,8 +81,10 @@ public class GetCategoriesTask extends BaseAppTask {
                 sb.append(decodedString);
             in.close();
             Log.i(AppConstants.APP_TAG, sb.toString());
-            JSONObject response = (JSONObject) getParser().parse(sb.toString());
-            categoryDao.parse(getParser(), response);
+            JSONArray response = (JSONArray) getParser().parse(sb.toString());
+            for(int i = 0; i < response.size(); i++) {
+                categoryDao.parse(getParser(), (JSONObject) response.get(i));
+            }
             getAppPreferences().setCategories(sb.toString());
         /*} else {
             //TODO improve logic to check with server timestamp

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
@@ -12,40 +13,55 @@ import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_ADDRESS;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_FEED;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_PHONE;
+
 /**
- * Created by i7 on 03-01-2018.
+ * Created by arindamnath on 26/01/18.
  */
 
-public class AddFeedTask extends BaseAppTask {
+public class UserKPITask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
+    private CategoryListDao categoryDao;
+    private long businessId = -1l;
+    private long feedId = -1l;
+    private int type;
+    private HttpURLConnection httppost;
 
-    public AddFeedTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public UserKPITask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
+        categoryDao = new CategoryListDao();
+    }
+
+    public void setBusinessId(long businessId) {
+        this.businessId = businessId;
+    }
+
+    public void setFeedId(long feedId) {
+        this.feedId = feedId;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
     protected ServerEvents doInBackground(Object... objects) {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
-                JSONObject dato = (JSONObject) objects[0];
-                Map<String, String> data = new HashMap<>();
-                data.put("businessId", dato.get("id").toString());
-                String url = StrSubstitutor.replace(URLConstants.CREATE_BUSINESS_FEED_URL, data);
-
-                JSONObject dato1 = (JSONObject) objects[1];
-                Log.i(AppConstants.APP_TAG, dato1.toJSONString());
-                return getServerResponse(url, dato1);
+                return getServerResponse();
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -63,7 +79,7 @@ public class AddFeedTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), null);
+                getServerResponseListener().onSuccess(getId(), categoryDao);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -74,24 +90,37 @@ public class AddFeedTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(String url, JSONObject object) throws Exception {
-        HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.POST);
+    private ServerEvents getServerResponse() throws Exception {
+        String url = "";
+        Map<String, String> data = new HashMap<>();
+        data.put("businessId", String.valueOf(businessId));
+        if(feedId != -1l) {
+            data.put("feedId", String.valueOf(feedId));
+        }
+        switch (type) {
+            case KPI_PHONE:
+                url = StrSubstitutor.replace(URLConstants.KPI_PHONE, data);
+                break;
+            case KPI_ADDRESS:
+                url = StrSubstitutor.replace(URLConstants.KPI_ADDRESS, data);
+                break;
+            case KPI_FEED:
+                url = StrSubstitutor.replace(URLConstants.KPI_FEED, data);
+                break;
+        }
+        httppost = getNetworkUtils().getHttpURLConInstance(
+                getContext().getString(R.string.base_url) + url, RequestType.GET);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 
-        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
-        out.writeBytes(object.toString());
-        out.flush();
-        out.close();
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
         while ((decodedString = in.readLine()) != null)
             sb.append(decodedString);
         in.close();
-        int statusCode = httppost.getResponseCode();
-        Log.i(AppConstants.APP_TAG, String.valueOf(statusCode));
+        Log.i(AppConstants.APP_TAG, sb.toString());
+        JSONObject response = (JSONObject) getParser().parse(sb.toString());
         return ServerEvents.SUCCESS;
     }
 }

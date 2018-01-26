@@ -30,9 +30,12 @@ import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessImageSelectedListener;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
+import com.touchmenotapps.marketplace.threads.asynctasks.UserKPITask;
 import com.touchmenotapps.marketplace.threads.loaders.ImagesLoaderTask;
 
 import org.json.simple.JSONObject;
@@ -45,8 +48,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_CAPTION_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_URL_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_ADDRESS;
 
 /**
  * Created by arindamnath on 16/01/18.
@@ -76,6 +81,8 @@ public class BusinessDetailFragment extends Fragment
     private BusinessImageAdapter businessImageAdapter;
     private OperationTimeBaseAdapter operationTimeBaseAdapter;
     private Bundle queryData;
+    private AppPreferences appPreferences;
+    private UserKPITask userKPITask;
 
     public static BusinessDetailFragment newInstance(long businessId) {
         BusinessDetailFragment fragment = new BusinessDetailFragment();
@@ -100,6 +107,7 @@ public class BusinessDetailFragment extends Fragment
         mViewHolder = inflater.inflate(R.layout.fragment_business_details, container, false);
         ButterKnife.bind(this, mViewHolder);
 
+        appPreferences = new AppPreferences(getActivity());
         phoneBaseAdapter = new PhoneBaseAdapter(getActivity());
         operationTimeBaseAdapter = new OperationTimeBaseAdapter(getContext());
         phoneList.setAdapter(phoneBaseAdapter);
@@ -128,34 +136,60 @@ public class BusinessDetailFragment extends Fragment
         }
     }
 
+    @OnClick(R.id.business_address)
+    public void onLocationSelected() {
+        if(appPreferences.getUserType() == UserType.CONSUMER) {
+            userKPITask = new UserKPITask(2, getActivity(), this);
+            userKPITask.setBusinessId(businessId);
+            userKPITask.setType(KPI_ADDRESS);
+            userKPITask.execute(new JSONObject[]{});
+        }
+    }
+
     @OnClick(R.id.business_website)
     public void onWebisteView() {
         try {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             builder.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(getActivity(), Uri.parse(website.getText().toString()));
+            customTabsIntent.launchUrl(getActivity(), Uri.parse("http://" + website.getText().toString()));
         } catch (Exception e) {
+            e.printStackTrace();
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(website.getText().toString()));
+            intent.setData(Uri.parse("http://" + website.getText().toString()));
             startActivity(intent);
         }
     }
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        businessDao = (BusinessDao) object;
-        List<String> phoneNumbers = new ArrayList<>();
-        for (String number : businessDao.getPhoneNumber()) {
-            phoneNumbers.add(number);
+        switch (threadId) {
+            case 1:
+                businessDao = (BusinessDao) object;
+                List<String> phoneNumbers = new ArrayList<>();
+                for (String number : businessDao.getPhoneNumber()) {
+                    phoneNumbers.add(number);
+                }
+                phoneBaseAdapter.setData(phoneNumbers);
+                website.setText(businessDao.getWebsite());
+                address.setText(businessDao.getBusinessAddressDao().getAddress() + "\n" +
+                        businessDao.getBusinessAddressDao().getCity() + "\n" +
+                        businessDao.getBusinessAddressDao().getState() + "\n" +
+                        businessDao.getBusinessAddressDao().getZip());
+                operationTimeBaseAdapter.setData(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
+                break;
+            case 2:
+                String url = "http://maps.google.com/maps?daddr=" +
+                        businessDao.getBusinessAddressDao().getAddress() + "," +
+                        businessDao.getBusinessAddressDao().getCity() + "," +
+                        businessDao.getBusinessAddressDao().getState() + "," +
+                        businessDao.getBusinessAddressDao().getZip();
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+                break;
+            case 3:
+                break;
         }
-        phoneBaseAdapter.setData(phoneNumbers);
-        website.setText(businessDao.getWebsite());
-        address.setText(businessDao.getBusinessAddressDao().getAddress() + "\n" +
-                businessDao.getBusinessAddressDao().getCity() + "\n" +
-                businessDao.getBusinessAddressDao().getState() + "\n" +
-                businessDao.getBusinessAddressDao().getZip());
-        operationTimeBaseAdapter.setData(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
     }
 
     @Override
@@ -166,8 +200,8 @@ public class BusinessDetailFragment extends Fragment
     @Override
     public void onImageClicked(BusinessImageDao businessImageDao) {
         Intent intent = new Intent(getActivity(), ViewImageActivity.class);
-        intent.putExtra(IMAGE_URL_TAG, businessImageDao.getFile());
-        intent.putExtra(IMAGE_CAPTION_TAG, businessImageDao.getCaption());
+        intent.putExtra(BUSINESS_ID_TAG, businessId);
+        intent.putExtra(BUSINESS_IMAGE_TAG, businessImageDao);
         startActivity(intent);
     }
 

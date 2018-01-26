@@ -50,8 +50,8 @@
     </style>
 
     <style name="BottomNavigation">
-        <item name="android:background">@color/dark_grey</item>
-        <item name="itemBackground">@color/dark_grey</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="itemBackground">@color/colorPrimary</item>
         <item name="itemIconTint">@drawable/selector_bottom_nav_btn</item>
         <item name="itemTextColor">@drawable/selector_bottom_nav_text</item>
         <item name="paddingStart">0dp</item>

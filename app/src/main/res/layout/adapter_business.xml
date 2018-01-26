@@ -29,7 +29,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#70000000" />
+                android:alpha="0.3"
+                android:background="@android:color/black" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -83,6 +84,37 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:src="@drawable/ic_image_green" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/image_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:text="4.4" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_offers_black_24dp"
+                android:tint="@color/dark_orange" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/feed_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:text="4.4" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
                 android:src="@drawable/ic_grade_black_24dp"
                 android:tint="@color/lightPrimary" />
 

@@ -16,12 +16,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="Address"
             android:drawableLeft="@drawable/ic_location_green"
             android:drawablePadding="3dp"
+            android:text="Address"
             android:textAllCaps="true"
             android:textColor="@color/lightGreen"
             android:textStyle="bold" />
+
+        <!--<android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/address_country_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/address_state_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/address_city_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone" />-->
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -96,6 +116,23 @@
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:theme="@style/AddBusinessHintLabel"
+            android:visibility="gone">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/business_address_landmark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Landmark*"
+                android:inputType="textPostalAddress|textCapWords"
+                android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

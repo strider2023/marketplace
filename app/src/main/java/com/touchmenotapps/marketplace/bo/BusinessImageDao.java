@@ -14,9 +14,9 @@ import org.json.simple.parser.JSONParser;
 
 public class BusinessImageDao extends BaseDao implements Parcelable {
 
-    private String data;
-    private String name;
-    private String caption;
+    private String data = "";
+    private String name = "";
+    private String caption = "";
     private String file;
     private boolean canDelete;
 

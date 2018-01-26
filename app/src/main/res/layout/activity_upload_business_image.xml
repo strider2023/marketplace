@@ -10,43 +10,49 @@
         android:id="@+id/business_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"/>
+        android:background="@android:color/black" />
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="10dp"
+        app:cardUseCompatPadding="true"
         android:layout_alignParentBottom="true"
-        android:background="#80000000">
+        app:cardCornerRadius="5dp"
+        app:contentPadding="10dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:theme="@style/LoginEdittextCard">
+            android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/image_caption"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:textColor="@android:color/white"
-                android:hint="Enter Image caption"
-                android:inputType="textPostalAddress|textCapWords"
-                android:maxLines="1" />
-        </android.support.design.widget.TextInputLayout>
+                android:gravity="center"
+                android:theme="@style/AddBusinessHintLabel">
 
-        <ImageView
-            android:id="@+id/upload_image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:tint="@color/yellow"
-            android:src="@drawable/ic_file_upload_black_24dp"
-            android:layout_marginLeft="10dp"/>
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/image_caption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="Enter Image caption"
+                    android:inputType="textPostalAddress|textCapWords"
+                    android:maxLines="1" />
+            </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/upload_image"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:backgroundTint="@color/dark_orange"
+                android:elevation="5dp"
+                android:text="Upload Image"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>
