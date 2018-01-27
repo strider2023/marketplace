@@ -12,6 +12,7 @@ import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -53,12 +54,12 @@ public class ImagesLoaderTask extends AsyncTaskLoader<List<BusinessImageDao>> {
 
     @Override
     public List<BusinessImageDao> loadInBackground() {
-        if(networkUtil.isNetworkAvailable()) {
+        if (networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
                 JSONArray response = getServerResponse(args.getLong(BUSINESS_ID_TAG, -1l));
-                if(response != null) {
-                    if(response.size() > 0) {
+                if (response != null) {
+                    if (response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
                             BusinessImageDao businessImageDao = new BusinessImageDao();
                             businessImageDao.parse(jsonParser, (JSONObject) response.get(i));
@@ -77,13 +78,17 @@ public class ImagesLoaderTask extends AsyncTaskLoader<List<BusinessImageDao>> {
 
     private JSONArray getServerResponse(long businessId) throws Exception {
         HttpURLConnection httppost;
-        if(businessId == -1l) {
-            httppost = networkUtil.getHttpURLConInstance(
-                    getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_FEED_URL, RequestType.GET);
-        } else {
+        if (appPreferences.getUserType() == UserType.BUSINESS) {
             Map<String, String> data = new HashMap<>();
             data.put("businessId", String.valueOf(businessId));
             String url = StrSubstitutor.replace(URLConstants.GET_ALL_BUSINESS_PHOTOS_URL, data);
+            httppost = networkUtil.getHttpURLConInstance(
+                    getContext().getString(R.string.base_url) + url, RequestType.GET);
+
+        } else {
+            Map<String, String> data = new HashMap<>();
+            data.put("businessId", String.valueOf(businessId));
+            String url = StrSubstitutor.replace(URLConstants.CONSUMER_GET_BUSINESS_PHOTO_URL, data);
             httppost = networkUtil.getHttpURLConInstance(
                     getContext().getString(R.string.base_url) + url, RequestType.GET);
         }

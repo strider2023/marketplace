@@ -74,6 +74,9 @@ public class SearchLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
         String url = URLConstants.CONSUMER_SEARCH_URL;
         if(args != null) {
             url += "?lat=" + String.valueOf(args.getDouble("lat")) + "&lng=" + String.valueOf(args.getDouble("lng"));
+            if(args.getInt("toprated", 0) == 1) {
+                url += "&toprated=y";
+            }
             if(args.getString("categories") != null) {
                 url += "&categories=" + args.getString("categories");
             }

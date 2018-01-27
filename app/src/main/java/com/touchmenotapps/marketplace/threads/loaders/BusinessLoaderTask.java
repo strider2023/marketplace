@@ -12,6 +12,7 @@ import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.json.simple.JSONArray;
@@ -34,6 +35,7 @@ public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
     private NetworkUtils networkUtil;
     private JSONParser jsonParser;
     private Bundle args;
+    private HttpURLConnection httppost;
 
     private List<BusinessDao> data = new ArrayList<>();
     private String decodedString;
@@ -48,12 +50,12 @@ public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
 
     @Override
     public List<BusinessDao> loadInBackground() {
-        if(networkUtil.isNetworkAvailable()) {
+        if (networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
                 JSONArray response = getServerResponse();
-                if(response != null) {
-                    if(response.size() > 0) {
+                if (response != null) {
+                    if (response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
                             BusinessDao businessDao = new BusinessDao();
                             businessDao.parse(jsonParser, (JSONObject) response.get(i));
@@ -71,7 +73,7 @@ public class BusinessLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
     }
 
     private JSONArray getServerResponse() throws Exception {
-        HttpURLConnection httppost = networkUtil.getHttpURLConInstance(
+        httppost = networkUtil.getHttpURLConInstance(
                 getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_URL, RequestType.GET);
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());
         httppost.setRequestProperty("did", getDeviceId());

@@ -12,6 +12,7 @@ import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.bo.FeedDao;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -39,6 +40,7 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
     private NetworkUtils networkUtil;
     private JSONParser jsonParser;
     private Bundle args;
+    private HttpURLConnection httppost;
 
     private List<FeedDao> data = new ArrayList<>();
     private String decodedString;
@@ -76,16 +78,28 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
     }
 
     private JSONArray getServerResponse(long businessId) throws Exception {
-        HttpURLConnection httppost;
-        if(businessId == -1l) {
-            httppost = networkUtil.getHttpURLConInstance(
-                    getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_FEED_URL, RequestType.GET);
+        if(appPreferences.getUserType() == UserType.BUSINESS) {
+            if (businessId == -1l) {
+                httppost = networkUtil.getHttpURLConInstance(
+                        getContext().getString(R.string.base_url) + URLConstants.GET_ALL_BUSINESS_FEED_URL, RequestType.GET);
+            } else {
+                Map<String, String> data = new HashMap<>();
+                data.put("businessId", String.valueOf(businessId));
+                String url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_FEED_URL, data);
+                httppost = networkUtil.getHttpURLConInstance(
+                        getContext().getString(R.string.base_url) + url, RequestType.GET);
+            }
         } else {
-            Map<String, String> data = new HashMap<>();
-            data.put("businessId", String.valueOf(businessId));
-            String url = StrSubstitutor.replace(URLConstants.GET_BUSINESS_FEED_URL, data);
-            httppost = networkUtil.getHttpURLConInstance(
-                    getContext().getString(R.string.base_url) + url, RequestType.GET);
+            if (businessId == -1l) {
+                httppost = networkUtil.getHttpURLConInstance(
+                        getContext().getString(R.string.base_url) + URLConstants.GET_ALL_CONSUMER_FEEDS_URL, RequestType.GET);
+            } else {
+                Map<String, String> data = new HashMap<>();
+                data.put("businessId", String.valueOf(businessId));
+                String url = StrSubstitutor.replace(URLConstants.CONSUMER_GET_BUSINESS_FEED_URL, data);
+                httppost = networkUtil.getHttpURLConInstance(
+                        getContext().getString(R.string.base_url) + url, RequestType.GET);
+            }
         }
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());
         httppost.setRequestProperty("did", getDeviceId());

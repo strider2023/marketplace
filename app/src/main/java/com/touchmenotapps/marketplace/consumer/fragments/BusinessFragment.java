@@ -246,7 +246,8 @@ public class BusinessFragment extends Fragment
         queryData = new Bundle();
         queryData.putDouble("lat", lat);
         queryData.putDouble("lng", lng);
-        queryData.putString("categories", category);
+        queryData.putInt("toprated", 1);
+        //queryData.putString("categories", category);
         getActivity().getSupportLoaderManager()
                 .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();
     }

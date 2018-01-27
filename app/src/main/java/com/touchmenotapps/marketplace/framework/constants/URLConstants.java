@@ -40,6 +40,9 @@ public class URLConstants {
     public static final String CONSUMER_ADD_BOOKMARK_URL = "cb/consumer/bookmark/${businessId}";
     public static final String CONSUMER_GET_BOOKMARKS_URL = "cb/consumer/bookmark";
     public static final String CONSUMER_DELETE_BOOKMARK_URL = "cb/consumer/bookmark/${bookmarkid}";
+    public static final String CONSUMER_FEEDS_COUNT_URL = "cb/consumer/notification/bookmark/feeds";
+    public static final String GET_ALL_CONSUMER_FEEDS_URL = "cb/consumer/entity/feeds";
+    public static final String CONSUMER_ADD_BUSINESS_URL = "cb/consumer/entity";
 
     public static final String KPI_PHONE = "cb/metric/consumer/${businessId}?type=phv";
     public static final String KPI_ADDRESS = "cb/metric/consumer/${businessId}?type=adv";

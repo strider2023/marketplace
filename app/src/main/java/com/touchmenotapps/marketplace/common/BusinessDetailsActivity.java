@@ -92,7 +92,9 @@ public class BusinessDetailsActivity extends AppCompatActivity
         }
 
         fragments.add(new ViewPagerDao("Offers", BusinessFeedFragment.newInstance(businessId)));
-        fragments.add(new ViewPagerDao("Insights", BusinessInsightsFragment.newInstance(businessId)));
+        if(appPreferences.getUserType() == UserType.BUSINESS) {
+            fragments.add(new ViewPagerDao("Insights", BusinessInsightsFragment.newInstance(businessId)));
+        }
         fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);

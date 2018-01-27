@@ -11,6 +11,7 @@ import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -96,13 +97,25 @@ public class ImageTask extends BaseAppTask {
         }
         switch (requestType) {
             case PUT:
-                serverURL = StrSubstitutor.replace(URLConstants.UDPATE_BUSINESS_PHOTO_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.UDPATE_BUSINESS_PHOTO_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_DELETE_BUSINESS_PHOTO_URL, data);
+                }
                 break;
             case POST:
-                serverURL = StrSubstitutor.replace(URLConstants.UPLOAD_BUSINESS_PHOTO_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.UPLOAD_BUSINESS_PHOTO_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_UPLOAD_BUSINESS_PHOTO_URL, data);
+                }
                 break;
             case DELETE:
-                serverURL = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_PHOTOS_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_PHOTOS_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_DELETE_BUSINESS_PHOTO_URL, data);
+                }
                 break;
         }
         httppost = getNetworkUtils().getHttpURLConInstance(

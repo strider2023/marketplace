@@ -101,7 +101,11 @@ public class BusinessTask extends BaseAppTask {
                 serverURL = StrSubstitutor.replace(URLConstants.UPDATE_BUSINESS_URL, data);
                 break;
             case POST:
-                serverURL = URLConstants.ADD_BUSINESS_URL;
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = URLConstants.ADD_BUSINESS_URL;
+                } else {
+                    serverURL = URLConstants.CONSUMER_ADD_BUSINESS_URL;
+                }
                 break;
             case DELETE:
                 serverURL = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_URL, data);
