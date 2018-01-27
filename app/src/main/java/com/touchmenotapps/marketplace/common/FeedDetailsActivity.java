@@ -73,10 +73,10 @@ public class FeedDetailsActivity extends AppCompatActivity
                     .centerCrop()
                     .into(image);
             if(appPreferences.getUserType() == UserType.BUSINESS) {
-                today.setText(String.valueOf(feedDao.getToday()));
-                week.setText(String.valueOf(feedDao.getLastWeek()));
-                month.setText(String.valueOf(feedDao.getLastMonth()));
-                total.setText(String.valueOf(feedDao.getTotal()));
+                today.setText(String.valueOf(feedDao.getAnalyticsDao().getToday()));
+                week.setText(String.valueOf(feedDao.getAnalyticsDao().getLastWeek()));
+                month.setText(String.valueOf(feedDao.getAnalyticsDao().getLastMonth()));
+                total.setText(String.valueOf(feedDao.getAnalyticsDao().getTotal()));
             } else {
                 findViewById(R.id.kpi_contianer).setVisibility(View.GONE);
             }

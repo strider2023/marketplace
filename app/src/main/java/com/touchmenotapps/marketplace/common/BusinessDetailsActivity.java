@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
@@ -57,6 +58,8 @@ public class BusinessDetailsActivity extends AppCompatActivity
     FloatingActionMenu options;
     @BindView(R.id.business_rating)
     AppCompatTextView rating;
+    @BindView(R.id.business_category)
+    AppCompatTextView category;
 
     private long businessId = -1l;
     private AppPreferences appPreferences;
@@ -82,6 +85,9 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
         if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
             getSupportActionBar().setTitle(getIntent().getStringExtra(BUSINESS_NAME_TAG));
+        }
+        if(getIntent().getStringExtra(BUSINESS_CATEGORY_TAG) != null) {
+            category.setText(getIntent().getStringExtra(BUSINESS_CATEGORY_TAG));
         }
 
         if(appPreferences.getUserType() != UserType.BUSINESS) {

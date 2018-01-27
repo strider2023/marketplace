@@ -19,6 +19,7 @@ import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.consumer.fragments.FilterFragment;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.threads.loaders.SearchLoaderTask;
 
@@ -28,12 +29,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
 public class SearchActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<List<BusinessDao>>, BusinessSelectedListener {
+        implements LoaderManager.LoaderCallbacks<List<BusinessDao>>, BusinessSelectedListener, FilterFragment.FilterListener {
 
     @BindView(R.id.search_edittext)
     AppCompatEditText searchText;
@@ -47,6 +49,7 @@ public class SearchActivity extends AppCompatActivity
     private Bundle queryData;
     private BusinessAdapter businessAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private String category, subCategory, filterBy, filterOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +108,9 @@ public class SearchActivity extends AppCompatActivity
 
     @OnClick(R.id.filter_business_btn)
     public void onFilterSelected() {
-
+        FilterFragment bottomSheetFragment = FilterFragment.newInstance();
+        //bottomSheetFragment.setCancelable(false);
+        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
     }
 
     @OnClick(R.id.close_search_btn)
@@ -142,7 +147,16 @@ public class SearchActivity extends AppCompatActivity
         Intent intent = new Intent(this, BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
         intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
         startActivity(intent);
+    }
+
+    @Override
+    public void onFilterSelected(String category, String subcategory, String filterBy, String filterOrder) {
+        this.category = category;
+        this.subCategory = subcategory;
+        this.filterBy = filterBy;
+        this.filterOrder = filterOrder;
     }
 }

@@ -53,8 +53,8 @@
                 android:id="@+id/business_address_line1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="Address*"
+                android:padding="10dp"
                 android:inputType="textPostalAddress|textCapWords"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
@@ -69,8 +69,8 @@
                 android:id="@+id/business_address_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="City*"
+                android:padding="10dp"
                 android:inputType="textPostalAddress|textCapWords"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
@@ -91,8 +91,8 @@
                     android:id="@+id/business_address_state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:hint="State*"
+                    android:padding="10dp"
                     android:inputType="textPostalAddress|textCapWords"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
@@ -108,8 +108,8 @@
                     android:id="@+id/business_address_zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:hint="Zip*"
+                    android:padding="10dp"
                     android:inputType="number"
                     android:maxLength="6"
                     android:maxLines="1" />
@@ -128,7 +128,6 @@
                 android:id="@+id/business_address_landmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="Landmark*"
                 android:inputType="textPostalAddress|textCapWords"
                 android:maxLines="1" />

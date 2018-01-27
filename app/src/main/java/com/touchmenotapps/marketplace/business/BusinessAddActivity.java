@@ -8,17 +8,15 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.bo.DailyTimeInfoDao;
-import com.touchmenotapps.marketplace.common.adapters.CategoriesArrayAdapter;
+import com.touchmenotapps.marketplace.common.adapters.CategoriesAdapter;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
@@ -40,7 +38,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
@@ -96,7 +93,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private BusinessAddressDao businessAddressDao;
     private CategoryListDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
-    private ArrayAdapter<CategoryDao> categoriesAdapter, subCategoriesAdapter;
+    private CategoriesAdapter categoriesAdapter, subCategoriesAdapter;
     private String selectedCategory, selectedSubCategory;
     private CategoryListDao allCategoryDao;
     private List<CategoryDao> categories, subCategories;
@@ -119,6 +116,11 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
         businessAddressDao = new BusinessAddressDao();
         businessDao = new BusinessDao();
+        categoriesAdapter = new CategoriesAdapter(this);
+        subCategoriesAdapter = new CategoriesAdapter(this);
+
+        categoriesSpinner.setAdapter(categoriesAdapter);
+        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
 
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
@@ -150,11 +152,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @OnItemSelected(R.id.business_categories_spinner)
     public void categorySelected(Spinner spinner, int position) {
         selectedCategory = categories.get(position).getEnumText();
-        subCategories = Arrays.asList(allCategoryDao.getCategoriesMap().get(categories.get(0)).toArray(
-                new CategoryDao[allCategoryDao.getCategoriesMap().get(categories.get(0)).size()]));
-        subCategoriesAdapter = new CategoriesArrayAdapter(this, subCategories);
-        subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
+        subCategories = allCategoryDao.getCategoriesMap().get(categories.get(position));
+        subCategoriesAdapter.setData(subCategories);
     }
 
     @OnItemSelected(R.id.business_sub_categories_spinner)
@@ -227,15 +226,11 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 allCategoryDao = (CategoryListDao) object;
                 categories = Arrays.asList(allCategoryDao.getCategoriesMap().keySet().toArray(
                         new CategoryDao[allCategoryDao.getCategoriesMap().keySet().size()]));
-                categoriesAdapter = new CategoriesArrayAdapter(this, categories);
-                categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                categoriesSpinner.setAdapter(categoriesAdapter);
+                categoriesAdapter.setData(categories);
 
                 subCategories = Arrays.asList(allCategoryDao.getCategoriesMap().get(categories.get(0)).toArray(
                         new CategoryDao[allCategoryDao.getCategoriesMap().get(categories.get(0)).size()]));
-                subCategoriesAdapter = new CategoriesArrayAdapter(this, subCategories);
-                subCategoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                subCategoriesSpinner.setAdapter(subCategoriesAdapter);
+                subCategoriesAdapter.setData(subCategories);
                 break;
             case 2:
                 //New business added. Close activity.

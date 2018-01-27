@@ -25,6 +25,7 @@ import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.common.ViewImageActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessImageAdapter;
+import com.touchmenotapps.marketplace.common.adapters.BusinessRatingAdapter;
 import com.touchmenotapps.marketplace.common.adapters.OperationTimeBaseAdapter;
 import com.touchmenotapps.marketplace.common.adapters.PhoneBaseAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessImageSelectedListener;
@@ -69,6 +70,8 @@ public class BusinessDetailFragment extends Fragment
     ListView operationTime;
     @BindView(R.id.business_phone_list)
     ListView phoneList;
+    @BindView(R.id.business_ratings_list)
+    ListView ratingsList;
     @BindView(R.id.business_images)
     RecyclerView imagesList;
     @BindView(R.id.business_no_images)
@@ -79,6 +82,7 @@ public class BusinessDetailFragment extends Fragment
     private BusinessDao businessDao;
     private PhoneBaseAdapter phoneBaseAdapter;
     private BusinessImageAdapter businessImageAdapter;
+    private BusinessRatingAdapter businessRatingAdapter;
     private OperationTimeBaseAdapter operationTimeBaseAdapter;
     private Bundle queryData;
     private AppPreferences appPreferences;
@@ -110,6 +114,9 @@ public class BusinessDetailFragment extends Fragment
         appPreferences = new AppPreferences(getActivity());
         phoneBaseAdapter = new PhoneBaseAdapter(getActivity());
         operationTimeBaseAdapter = new OperationTimeBaseAdapter(getContext());
+        businessRatingAdapter = new BusinessRatingAdapter(getContext());
+
+        ratingsList.setAdapter(businessRatingAdapter);
         phoneList.setAdapter(phoneBaseAdapter);
         operationTime.setAdapter(operationTimeBaseAdapter);
         website.setPaintFlags(website.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -118,6 +125,10 @@ public class BusinessDetailFragment extends Fragment
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL);
         imagesList.setLayoutManager(staggeredGridLayoutManager);
         imagesList.setAdapter(businessImageAdapter);
+
+        if(appPreferences.getUserType() == UserType.BUSINESS) {
+            mViewHolder.findViewById(R.id.rating_container).setVisibility(View.GONE);
+        }
         return mViewHolder;
     }
 
@@ -177,6 +188,7 @@ public class BusinessDetailFragment extends Fragment
                         businessDao.getBusinessAddressDao().getState() + "\n" +
                         businessDao.getBusinessAddressDao().getZip());
                 operationTimeBaseAdapter.setData(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
+                businessRatingAdapter.setData(businessDao.getRatingsDao());
                 break;
             case 2:
                 String url = "http://maps.google.com/maps?daddr=" +

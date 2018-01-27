@@ -29,8 +29,8 @@
                     android:id="@+id/business_phone_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
                     android:hint="Phone Number*"
+                    android:padding="10dp"
                     android:inputType="phone"
                     android:maxLength="10"
                     android:maxLines="1" />
@@ -57,8 +57,8 @@
                 android:id="@+id/business_phone_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="Phone Second Number*"
+                android:padding="10dp"
                 android:inputType="phone"
                 android:maxLength="10"
                 android:maxLines="1" />
@@ -76,8 +76,8 @@
                 android:id="@+id/business_phone_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="Phone Third Number*"
+                android:padding="10dp"
                 android:inputType="phone"
                 android:maxLength="10"
                 android:maxLines="1" />
@@ -93,8 +93,8 @@
                 android:id="@+id/business_website"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:hint="Website"
+                android:padding="10dp"
                 android:inputType="textNoSuggestions"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>

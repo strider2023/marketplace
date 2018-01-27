@@ -20,7 +20,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="@color/dark_orange"
             app:expandedTitleMarginTop="5dp"
-            app:expandedTitleMarginBottom="60dp"
+            app:expandedTitleMarginBottom="75dp"
             app:expandedTitleMarginStart="30dp"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -32,6 +32,15 @@
                 android:gravity="bottom"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/business_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="30dp"
+                    android:text="Category"
+                    android:textSize="12sp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"

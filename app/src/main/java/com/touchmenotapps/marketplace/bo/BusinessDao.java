@@ -8,7 +8,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,16 +24,18 @@ public class BusinessDao extends BaseDao {
     private Set<String> phoneNumber = new HashSet<>();
     private long businessPhotosCount;
     private long businessFeedCount;
+    private boolean bookmarked;
     private String businessProfileImage = "";
 
-    private RatingsDao ratingsDao;
+    private List<RatingsDao> ratingsDao = new ArrayList<>();
+    private List<AnalyticsDao> analyticsDao = new ArrayList<>();
     private CategoryListDao categoryDao;
+    private String category, subCategory;
     private HoursOfOperationDao hoursOfOperationDao;
     private BusinessAddressDao businessAddressDao;
     private float singleScoreRating;
 
     public BusinessDao() {
-        ratingsDao = new RatingsDao();
         categoryDao = new CategoryListDao();
         hoursOfOperationDao = new HoursOfOperationDao();
         businessAddressDao = new BusinessAddressDao();
@@ -81,11 +85,11 @@ public class BusinessDao extends BaseDao {
         this.businessFeedCount = businessFeedCount;
     }
 
-    public RatingsDao getRatingsDao() {
+    public List<RatingsDao> getRatingsDao() {
         return ratingsDao;
     }
 
-    public void setRatingsDao(RatingsDao ratingsDao) {
+    public void setRatingsDao(List<RatingsDao> ratingsDao) {
         this.ratingsDao = ratingsDao;
     }
 
@@ -129,6 +133,30 @@ public class BusinessDao extends BaseDao {
         this.businessProfileImage = businessProfileImage;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public List<AnalyticsDao> getAnalyticsDao() {
+        return analyticsDao;
+    }
+
+    public void setAnalyticsDao(List<AnalyticsDao> analyticsDao) {
+        this.analyticsDao = analyticsDao;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if (jsonObject.containsKey("id")) {
@@ -151,11 +179,10 @@ public class BusinessDao extends BaseDao {
                     (JSONObject) jsonParser.parse(jsonObject.get("hrsOfOperation").toString()));
             setHoursOfOperationDao(hoursOfOperationDao);
         }
-        /*if (jsonObject.containsKey("category")) {
-            categoryDao.parse(jsonParser,
-                    (JSONObject) jsonParser.parse(jsonObject.get("category").toString()));
-            setCategoryDao(categoryDao);
-        }*/
+        if (jsonObject.containsKey("category")) {
+            JSONObject cat = (JSONObject) jsonParser.parse(jsonObject.get("category").toString());
+            setCategory(cat.keySet().iterator().next().toString());
+        }
         if (jsonObject.containsKey("address")) {
             businessAddressDao.parse(jsonParser,
                     (JSONObject) jsonParser.parse(jsonObject.get("address").toString()));
@@ -172,6 +199,24 @@ public class BusinessDao extends BaseDao {
         }
         if(jsonObject.containsKey("businessFeedCount")) {
             setBusinessFeedCount(Long.parseLong(jsonObject.get("businessFeedCount").toString()));
+        }
+        if(jsonObject.containsKey("ratings")) {
+            JSONObject ratings = (JSONObject) jsonParser.parse(jsonObject.get("ratings").toString());
+            for(Object type : ratings.keySet()) {
+                RatingsDao rating = new RatingsDao();
+                rating.setType(type.toString());
+                rating.parse(jsonParser, (JSONObject) jsonParser.parse(ratings.get(type).toString()));
+                ratingsDao.add(rating);
+            }
+        }
+        if(jsonObject.containsKey("kpi")) {
+            JSONObject kpi = (JSONObject) jsonParser.parse(jsonObject.get("kpi").toString());
+            for(Object type : kpi.keySet()) {
+                AnalyticsDao analytics = new AnalyticsDao();
+                analytics.setType(type.toString());
+                analytics.parse(jsonParser, (JSONObject) jsonParser.parse(kpi.get(type).toString()));
+                analyticsDao.add(analytics);
+            }
         }
     }
 

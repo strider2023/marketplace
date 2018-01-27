@@ -45,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
@@ -114,7 +115,7 @@ public class BusinessFragment extends Fragment
             @Override
             public void onRefresh() {
                 //TODO change to current lat and lng
-                fetchData(0, 0, "HEALTHCARE");
+                fetchData(0, 0, null);
             }
         });
 
@@ -136,8 +137,7 @@ public class BusinessFragment extends Fragment
     public void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
-        //TODO Remove
-        fetchData(0, 0, "HEALTHCARE");
+        fetchData(0, 0, null);
     }
 
     @Override
@@ -151,13 +151,14 @@ public class BusinessFragment extends Fragment
 
     @Override
     public void onCategorySelected(CategoryDAO categoryDAO) {
+        Log.d("Test", "onCategorySelected: " + categoryDAO.getKeyword());
         fetchData(currentLatitude, currentLongitude, categoryDAO.getKeyword());
     }
 
     @Override
     public Loader<List<BusinessDao>> onCreateLoader(int id, Bundle args) {
         refreshLayout.setRefreshing(true);
-        return new SearchLoaderTask(getActivity(), args);
+        return new SearchLoaderTask(getActivity(), queryData);
     }
 
     @Override
@@ -183,6 +184,7 @@ public class BusinessFragment extends Fragment
         Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
         intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
         startActivity(intent);
     }
@@ -246,9 +248,12 @@ public class BusinessFragment extends Fragment
         queryData = new Bundle();
         queryData.putDouble("lat", lat);
         queryData.putDouble("lng", lng);
-        queryData.putInt("toprated", 1);
-        //queryData.putString("categories", category);
+        if(category != null) {
+            queryData.putString("categories", category);
+        } else {
+            queryData.putInt("toprated", 1);
+        }
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();
+                .restartLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, this).forceLoad();
     }
 }

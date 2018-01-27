@@ -84,6 +84,7 @@ public class SearchLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
                 url += "&name=" + args.getString("name");
             }
         }
+        Log.i("URL", url);
         HttpURLConnection httppost = networkUtil.getHttpURLConInstance(
                 getContext().getString(R.string.base_url) + url, RequestType.GET);
         httppost.setRequestProperty("uuid", appPreferences.getUserToken());

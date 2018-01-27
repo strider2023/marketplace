@@ -1,6 +1,5 @@
 package com.touchmenotapps.marketplace.bo;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -22,17 +21,15 @@ public class FeedDao extends BaseDao implements Parcelable {
     private String startDate;
     private String endDate;
     private String imageURL;
-    private long total = 0;
-    private long lastMonth = 0;
-    private long lastWeek = 0;
-    private long today = 0;
+    private String businessName;
+    private AnalyticsDao analyticsDao;
     private boolean canDelete;
     private long businessId = -1l;
     private long startDateFromToday;
     private long endDateFromToday;
 
     public FeedDao() {
-
+        analyticsDao = new AnalyticsDao();
     }
 
     @Override
@@ -61,20 +58,13 @@ public class FeedDao extends BaseDao implements Parcelable {
         if(jsonObject.containsKey("businessId")) {
             setBusinessId(Long.parseLong(jsonObject.get("businessId").toString()));
         }
+        if(jsonObject.containsKey("businessName")) {
+            setBusinessName(jsonObject.get("businessName").toString());
+        }
         if(jsonObject.containsKey("kpi")) {
             JSONObject kpi = (JSONObject) jsonParser.parse(jsonObject.get("kpi").toString());
-            if(kpi.containsKey("total")) {
-                setTotal(Long.parseLong(kpi.get("total").toString()));
-            }
-            if(kpi.containsKey("lastMonth")) {
-                setLastMonth(Long.parseLong(kpi.get("lastMonth").toString()));
-            }
-            if(kpi.containsKey("lastWeek")) {
-                setLastWeek(Long.parseLong(kpi.get("lastWeek").toString()));
-            }
-            if(kpi.containsKey("today")) {
-                setToday(Long.parseLong(kpi.get("today").toString()));
-            }
+            analyticsDao.setType("KPI");
+            analyticsDao.parse(jsonParser, kpi);
         }
     }
 
@@ -166,36 +156,20 @@ public class FeedDao extends BaseDao implements Parcelable {
         this.businessId = businessId;
     }
 
-    public long getTotal() {
-        return total;
+    public AnalyticsDao getAnalyticsDao() {
+        return analyticsDao;
     }
 
-    public void setTotal(long total) {
-        this.total = total;
+    public void setAnalyticsDao(AnalyticsDao analyticsDao) {
+        this.analyticsDao = analyticsDao;
     }
 
-    public long getLastMonth() {
-        return lastMonth;
+    public String getBusinessName() {
+        return businessName;
     }
 
-    public void setLastMonth(long lastMonth) {
-        this.lastMonth = lastMonth;
-    }
-
-    public long getLastWeek() {
-        return lastWeek;
-    }
-
-    public void setLastWeek(long lastWeek) {
-        this.lastWeek = lastWeek;
-    }
-
-    public long getToday() {
-        return today;
-    }
-
-    public void setToday(long today) {
-        this.today = today;
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
     }
 
     public JSONObject toJSON() {
@@ -219,10 +193,8 @@ public class FeedDao extends BaseDao implements Parcelable {
         this.endDate =  in.readString();
         this.imageURL =  in.readString();
         this.canDelete = in.readByte() != 0;
-        this.total = in.readLong();
-        this.lastMonth = in.readLong();
-        this.lastWeek = in.readLong();
-        this.today = in.readLong();
+        this.businessName = in.readString();
+        this.analyticsDao = in.readParcelable(AnalyticsDao.class.getClassLoader());
     }
 
     @Override
@@ -240,10 +212,8 @@ public class FeedDao extends BaseDao implements Parcelable {
         dest.writeString(endDate);
         dest.writeString(imageURL);
         dest.writeByte((byte) (canDelete ? 1 : 0));
-        dest.writeLong(total);
-        dest.writeLong(lastMonth);
-        dest.writeLong(lastWeek);
-        dest.writeLong(today);
+        dest.writeString(businessName);
+        dest.writeParcelable(analyticsDao, flags);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

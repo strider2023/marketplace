@@ -31,6 +31,8 @@ public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
     AppCompatTextView startsOn;
     @BindView(R.id.feed_end_date)
     AppCompatTextView endsOn;
+    @BindView(R.id.feed_business_name)
+    AppCompatTextView businessName;
 
     private BusinessFeedSelectedListener businessFeedSelectedListener;
     private FeedDao feedDao;
@@ -59,6 +61,7 @@ public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
         this.startsOn.setText(feedDao.getStartDate());
         this.endsOn.setText(feedDao.getEndDate());
         this.coupon.setText(feedDao.getRedeeemCode());
+        this.businessName.setText(feedDao.getBusinessName());
         Glide.with(context)
                 .load(feedDao.getImageURL())
                 .error(R.drawable.ic_shop)

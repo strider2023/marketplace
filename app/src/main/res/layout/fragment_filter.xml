@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <AutoCompleteTextView
+        android:id="@+id/filter_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="Enter Category"/>
+
+    <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+        android:id="@+id/filter_subcategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="Enter Sub-Category"/>
+
+    <RadioGroup
+        android:id="@+id/filter_by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/filter_by_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Distance"/>
+
+        <RadioButton
+            android:id="@+id/filter_by_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rating"/>
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/filter_sort_by"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/filter_sort_ascend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ascending"/>
+
+        <RadioButton
+            android:id="@+id/filter_sort_descend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descending"/>
+    </RadioGroup>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/filter_submit"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:backgroundTint="@color/dark_orange"
+        android:elevation="5dp"
+        android:text="Filter"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

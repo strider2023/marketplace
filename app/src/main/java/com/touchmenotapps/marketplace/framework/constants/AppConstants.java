@@ -15,6 +15,7 @@ public class AppConstants {
     public static final String BUSINESS_ID_TAG = "businessId";
     public static final String BUSINESS_NAME_TAG = "businessName";
     public static final String BUSINESS_RATING_TAG = "businessRating";
+    public static final String BUSINESS_CATEGORY_TAG = "businessCategory";
     public static final String BUSINESS_IMAGE_TAG = "image";
     public static final String FEED_TAG = "feedId";
     public static final String IMAGE_URL_TAG = "imageURL";

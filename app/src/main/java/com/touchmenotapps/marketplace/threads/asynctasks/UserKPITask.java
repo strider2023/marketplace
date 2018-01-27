@@ -109,7 +109,7 @@ public class UserKPITask extends BaseAppTask {
                 break;
         }
         httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + url, RequestType.GET);
+                getContext().getString(R.string.base_url) + url, RequestType.POST);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
 

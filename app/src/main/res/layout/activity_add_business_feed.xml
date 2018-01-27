@@ -94,7 +94,13 @@
                         android:fontFamily="sans-serif-condensed"
                         android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        android:text="Take Image" />
+                        android:text="Camera" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white"
+                        android:layout_margin="5dp"/>
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/select_image"
@@ -105,7 +111,7 @@
                         android:fontFamily="sans-serif-condensed"
                         android:textColor="@android:color/white"
                         android:textStyle="bold"
-                        android:text="Select Image" />
+                        android:text="Gallery" />
 
                 </LinearLayout>
 

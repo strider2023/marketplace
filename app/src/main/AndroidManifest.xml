@@ -73,7 +73,6 @@
         <activity
             android:name=".common.BusinessDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".common.CaptureImageActivity" />
         <activity
             android:name=".common.FeedDetailsActivity"
             android:label="Offer Details" />

@@ -20,6 +20,8 @@ import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.FeedDao;
@@ -52,6 +54,7 @@ public class BusinessFeedFragment extends Fragment
     private long businessId = -1l;
     private Bundle queryData;
     private BusinessFeedAdapter businessFeedAdapter;
+    private AppPreferences appPreferences;
 
     public static BusinessFeedFragment newInstance(long businessId) {
         BusinessFeedFragment fragment = new BusinessFeedFragment();
@@ -75,11 +78,16 @@ public class BusinessFeedFragment extends Fragment
         ButterKnife.bind(this, mViewHolder);
 
         businessFeedAdapter = new BusinessFeedAdapter(this);
+        appPreferences = new AppPreferences(getContext());
         refreshLayout.setRefreshing(false);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(businessFeedAdapter);
 
         if(businessId != -1l) {
+            mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+        }
+
+        if(appPreferences.getUserType() == UserType.BUSINESS) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
         }
 

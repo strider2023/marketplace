@@ -9,6 +9,7 @@ import android.util.Log;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.bo.GeoDao;
+import com.touchmenotapps.marketplace.bo.LocationDao;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
@@ -36,14 +37,14 @@ import static com.touchmenotapps.marketplace.framework.constants.URLConstants.GE
  * Created by arindamnath on 26/01/18.
  */
 
-public class GeoLoaderTask extends AsyncTaskLoader<List<GeoDao>> {
+public class GeoLoaderTask extends AsyncTaskLoader<List<LocationDao>> {
 
     private AppPreferences appPreferences;
     private NetworkUtils networkUtil;
     private JSONParser jsonParser;
     private Bundle args;
 
-    private List<GeoDao> data = new ArrayList<>();
+    private List<LocationDao> data = new ArrayList<>();
     private String decodedString;
     private HttpURLConnection httppost;
 
@@ -56,7 +57,7 @@ public class GeoLoaderTask extends AsyncTaskLoader<List<GeoDao>> {
     }
 
     @Override
-    public List<GeoDao> loadInBackground() {
+    public List<LocationDao> loadInBackground() {
         if (networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
@@ -64,7 +65,7 @@ public class GeoLoaderTask extends AsyncTaskLoader<List<GeoDao>> {
                 if (response != null) {
                     if (response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
-                            GeoDao geoDao = new GeoDao();
+                            LocationDao geoDao = new LocationDao();
                             geoDao.parse(jsonParser, (JSONObject) response.get(i));
                             data.add(geoDao);
                         }
@@ -81,7 +82,7 @@ public class GeoLoaderTask extends AsyncTaskLoader<List<GeoDao>> {
 
     private JSONArray getServerResponse() throws Exception {
         String url = "";
-        switch (args.getInt(GEO_TAG, COUNTRY)) {
+        /*switch (args.getInt(GEO_TAG, COUNTRY)) {
             case COUNTRY:
                 url = GET_COUNTRIES;
                 break;
@@ -91,6 +92,9 @@ public class GeoLoaderTask extends AsyncTaskLoader<List<GeoDao>> {
             case CITY:
                 url = GET_GEO + "?country="  + args.getString("country") + "&state=" + args.getString("state");
                 break;
+        }*/
+        if(args.getString("city") != null) {
+            url = "cb/common/geo/latlong?country=india&city=" + args.getString("city");
         }
         httppost = networkUtil.getHttpURLConInstance(
                 getContext().getString(R.string.base_url) + url, RequestType.GET);
