@@ -32,10 +32,6 @@ public class LoginDao extends BaseDao {
         return deviceId;
     }
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
     @Override
     protected void parse(JSONParser jsonParser, JSONObject jsonObject) {
 

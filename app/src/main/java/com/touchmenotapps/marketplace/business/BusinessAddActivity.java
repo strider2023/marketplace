@@ -1,6 +1,7 @@
 package com.touchmenotapps.marketplace.business;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -50,12 +53,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     AppCompatEditText name;
     @BindView(R.id.business_website)
     AppCompatEditText website;
-    @BindView(R.id.business_phone_1)
-    AppCompatEditText phone;
-    @BindView(R.id.business_phone_2)
-    AppCompatEditText phone2;
-    @BindView(R.id.business_phone_3)
-    AppCompatEditText phone3;
+    @BindView(R.id.business_phone_container)
+    LinearLayout phoneContainer;
     @BindView(R.id.business_address_line1)
     AppCompatEditText line1;
     @BindView(R.id.business_address_landmark)
@@ -138,15 +137,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
     @OnClick(R.id.add_new_number)
     public void addNewNumber() {
-        if(currentPhoneCount < 3) {
-            currentPhoneCount++;
-            if(currentPhoneCount == 2) {
-                findViewById(R.id.phone_2).setVisibility(View.VISIBLE);
-            }
-            if(currentPhoneCount == 3) {
-                findViewById(R.id.phone_3).setVisibility(View.VISIBLE);
-            }
-        }
+        addPhoneView();
+        currentPhoneCount++;
     }
 
     @OnItemSelected(R.id.business_categories_spinner)
@@ -173,18 +165,14 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
     @OnClick(R.id.add_business_btn)
     public void addBusiness() {
-        if(name.getEditableText().toString().trim().length() > 0
-                && phone.getEditableText().toString().trim().length() > 0) {
+        if(name.getEditableText().toString().trim().length() > 0) {
             categoryDao.addCategory(selectedCategory,selectedSubCategory);
             businessDao.setCategoryDao(categoryDao);
 
             businessDao.setName(name.getEditableText().toString().trim());
-            businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
-            if(currentPhoneCount == 2) {
-                businessDao.addPhoneNumber(phone2.getEditableText().toString().trim());
-            }
-            if(currentPhoneCount == 3) {
-                businessDao.addPhoneNumber(phone3.getEditableText().toString().trim());
+            for(int i = 0; i < currentPhoneCount; i++) {
+                EditText phone = (EditText) phoneContainer.getChildAt(i).findViewById(R.id.business_phone) ;
+                businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
             }
             businessDao.setWebsite(website.getEditableText().toString().trim());
 
@@ -239,18 +227,14 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
             case 3:
                 //Map Business data
                 businessDao = (BusinessDao) object;
-                for(String number : businessDao.getPhoneNumber()) {
-                    if(currentPhoneCount == 1)
-                        phone.setText(number);
-                    if(currentPhoneCount == 2) {
-                        phone2.setText(number);
-                        findViewById(R.id.phone_2).setVisibility(View.VISIBLE);
+                currentPhoneCount = businessDao.getPhoneNumber().size();
+                String[] phones = businessDao.getPhoneNumber().toArray(new String[businessDao.getPhoneNumber().size()]);
+                for(int i = 0; i < currentPhoneCount; i++) {
+                    if(i > 0) {
+                        addPhoneView();
                     }
-                    if(currentPhoneCount == 3) {
-                        phone3.setText(number);
-                        findViewById(R.id.phone_3).setVisibility(View.VISIBLE);
-                    }
-                    currentPhoneCount++;
+                    EditText phone = (EditText) phoneContainer.getChildAt(i).findViewById(R.id.business_phone);
+                    phone.setText(phones[i]);
                 }
                 website.setText(businessDao.getWebsite());
                 line1.setText(businessDao.getBusinessAddressDao().getAddress());
@@ -326,5 +310,18 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         hoursOfOperationDao.addHoursMap("THU", thursday.isChecked() ? time : "Closed");
         hoursOfOperationDao.addHoursMap("FRI", friday.isChecked() ? time : "Closed");
         hoursOfOperationDao.addHoursMap("SAT", saturday.isChecked() ? time : "Closed");
+    }
+
+    private void addPhoneView() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View rowView = inflater.inflate(R.layout.view_business_phone, null);
+        phoneContainer.addView(rowView);
+        rowView.findViewById(R.id.delete_number).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneContainer.removeViewAt(phoneContainer.getChildCount() - 1);
+                currentPhoneCount--;
+            }
+        });
     }
 }

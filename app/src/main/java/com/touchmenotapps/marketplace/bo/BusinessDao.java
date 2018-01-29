@@ -157,6 +157,14 @@ public class BusinessDao extends BaseDao {
         this.analyticsDao = analyticsDao;
     }
 
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if (jsonObject.containsKey("id")) {
@@ -217,6 +225,9 @@ public class BusinessDao extends BaseDao {
                 analytics.parse(jsonParser, (JSONObject) jsonParser.parse(kpi.get(type).toString()));
                 analyticsDao.add(analytics);
             }
+        }
+        if(jsonObject.containsKey(bookmarked)) {
+            setBookmarked(Boolean.parseBoolean(jsonObject.get("bookmarked").toString()));
         }
     }
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
-import com.touchmenotapps.marketplace.business.fragments.MyBusinessProfileFragment;
+import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 
 import butterknife.BindView;
@@ -68,7 +68,7 @@ public class BusinessMainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_profile:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.business_content, MyBusinessProfileFragment.newInstance())
+                            .replace(R.id.business_content, ProfileFragment.newInstance())
                             .commit();
                     return true;
             }

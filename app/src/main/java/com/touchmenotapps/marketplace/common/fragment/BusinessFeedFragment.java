@@ -143,7 +143,6 @@ public class BusinessFeedFragment extends Fragment
 
     @Override
     public void onBusinessFeedSelected(FeedDao feedDao) {
-        Log.i(APP_TAG, "Called");
         Intent intent = new Intent(getActivity(), FeedDetailsActivity.class);
         intent.putExtra(FEED_TAG, feedDao);
         getActivity().startActivity(intent);

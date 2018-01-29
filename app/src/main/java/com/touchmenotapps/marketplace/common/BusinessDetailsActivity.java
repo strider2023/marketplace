@@ -22,6 +22,7 @@ import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessInsightsFragment;
+import com.touchmenotapps.marketplace.common.fragment.PhotosFragment;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -38,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARKED_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
@@ -60,12 +62,15 @@ public class BusinessDetailsActivity extends AppCompatActivity
     AppCompatTextView rating;
     @BindView(R.id.business_category)
     AppCompatTextView category;
+    @BindView(R.id.bookmark_business_button)
+    AppCompatTextView bookmark;
 
     private long businessId = -1l;
     private AppPreferences appPreferences;
     private ViewPagerAdapter viewPagerAdapter;
     private List<ViewPagerDao> fragments = new ArrayList<>();
     private DeleteBusinessDailog deleteBusinessDailog;
+    private BookmarksTask bookmarksTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,9 @@ public class BusinessDetailsActivity extends AppCompatActivity
         businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
         rating.setText(String.valueOf(getIntent().getFloatExtra(BUSINESS_RATING_TAG, 0.0f)));
 
+        if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
+            bookmark.setText("Unfollow");
+        }
         if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
             getSupportActionBar().setTitle(getIntent().getStringExtra(BUSINESS_NAME_TAG));
         }
@@ -91,16 +99,15 @@ public class BusinessDetailsActivity extends AppCompatActivity
         }
 
         if(appPreferences.getUserType() != UserType.BUSINESS) {
-            findViewById(R.id.delete_business_btn).setVisibility(View.GONE);
-            findViewById(R.id.edit_business_btn).setVisibility(View.GONE);
             options.setVisibility(View.GONE);
-            findViewById(R.id.bookmark_business_feed_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.bookmark_business_button).setVisibility(View.VISIBLE);
         }
 
         fragments.add(new ViewPagerDao("Offers", BusinessFeedFragment.newInstance(businessId)));
         if(appPreferences.getUserType() == UserType.BUSINESS) {
             fragments.add(new ViewPagerDao("Insights", BusinessInsightsFragment.newInstance(businessId)));
         }
+        fragments.add(new ViewPagerDao("Photos", PhotosFragment.newInstance(businessId)));
         fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);
@@ -108,6 +115,38 @@ public class BusinessDetailsActivity extends AppCompatActivity
         if(businessId != -1l) {
             deleteBusinessDailog = new DeleteBusinessDailog(this, businessId, this);
         }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getText().toString().equalsIgnoreCase("Offers")) {
+                    findViewById(R.id.add_business_feed_button).setVisibility(View.VISIBLE);
+                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+                    options.setVisibility(View.GONE);
+                }
+                if(tab.getText().toString().equalsIgnoreCase("Insights")) {
+                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+                    options.setVisibility(View.GONE);
+                }
+                if(tab.getText().toString().equalsIgnoreCase("Photos")) {
+                    findViewById(R.id.add_business_image_button).setVisibility(View.VISIBLE);
+                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+                    options.setVisibility(View.GONE);
+                }
+                if(tab.getText().toString().equalsIgnoreCase("About")) {
+                    options.setVisibility(View.VISIBLE);
+                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
+        });
     }
 
     @OnClick(R.id.add_business_image_button)
@@ -133,12 +172,17 @@ public class BusinessDetailsActivity extends AppCompatActivity
         deleteBusinessDailog.show();
     }
 
-    @OnClick(R.id.bookmark_business_feed_button)
+    @OnClick(R.id.bookmark_business_button)
     public void onBusinessBookmark() {
-        JSONObject id = new JSONObject();
-        id.put("id", String.valueOf(businessId));
-        new BookmarksTask(2, this, this)
-                .execute(new JSONObject[]{id});
+        if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
+            bookmarksTask = new BookmarksTask(1, this, this);
+            bookmarksTask.setBookmarkId(businessId);
+            bookmarksTask.execute(new JSONObject[]{});
+        } else {
+            bookmarksTask = new BookmarksTask(2, this, this);
+            bookmarksTask.setBusinessId(businessId);
+            bookmarksTask.execute(new JSONObject[]{});
+        }
     }
 
     @OnClick(R.id.add_business_feed_button)
@@ -171,7 +215,14 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @Override
     public void onSuccess(int threadId, Object object) {
-        Snackbar.make(options, "Bookmark Saved", Snackbar.LENGTH_LONG).show();
+        switch (threadId) {
+            case 1:
+                Snackbar.make(options, "Bookmark removed.", Snackbar.LENGTH_LONG).show();
+                break;
+            case 2:
+                Snackbar.make(options, "Bookmark saved.", Snackbar.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override

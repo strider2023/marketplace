@@ -15,9 +15,9 @@ import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BusinessFragment;
-import com.touchmenotapps.marketplace.consumer.fragments.ProfileFragment;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 

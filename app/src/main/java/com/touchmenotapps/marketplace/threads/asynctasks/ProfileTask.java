@@ -4,56 +4,56 @@ import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.ProfileDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
+import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by arindamnath on 07/01/18.
+ * Created by i7 on 29-01-2018.
  */
 
-public class BookmarksTask extends BaseAppTask {
+public class ProfileTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
-    private long businessId = -1l;
-    private long bookmarkId = -1l;
-    private RequestType requestType = RequestType.POST;
+    private RequestType requestType = RequestType.GET;
+    private ProfileDao profileDao;
     private HttpURLConnection httppost;
-    private String serverURL = "";
 
-    public BookmarksTask(int id, Context context, ServerResponseListener serverResponseListener) {
+    public ProfileTask(int id, Context context, ServerResponseListener serverResponseListener) {
         super(id, context, serverResponseListener);
+        profileDao = new ProfileDao();
     }
 
-    public void setBusinessId(long businessId) {
-        this.businessId = businessId;
-        requestType = RequestType.POST;
-    }
-
-    public void setBookmarkId(long bookmarkId) {
-        this.bookmarkId = bookmarkId;
-        requestType = RequestType.DELETE;
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
     }
 
     @Override
     protected ServerEvents doInBackground(Object... objects) {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
+                JSONObject dato = new JSONObject();
+                if(objects.length > 0) {
+                    dato = (JSONObject) objects[0];
+                    Log.i(AppConstants.APP_TAG, dato.toJSONString());
+                }
                 configureHTTPConnection();
-                return getServerResponse();
+                return getServerResponse(dato);
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -71,7 +71,7 @@ public class BookmarksTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), null);
+                getServerResponseListener().onSuccess(getId(), profileDao);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -83,28 +83,19 @@ public class BookmarksTask extends BaseAppTask {
     }
 
     private void configureHTTPConnection() throws Exception {
-        Map<String, String> data = new HashMap<>();
-        if(businessId != -1l) {
-            data.put("businessId", String.valueOf(businessId));
-        }
-        if(bookmarkId != -1l) {
-            data.put("feedId", String.valueOf(bookmarkId));
-        }
-        switch (requestType) {
-            case POST:
-                serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_ADD_BOOKMARK_URL, data);
-                break;
-            case DELETE:
-                serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_DELETE_BOOKMARK_URL, data);
-                break;
-        }
         httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + serverURL, requestType);
+                getContext().getString(R.string.base_url) + URLConstants.ACCOUNT_URL, requestType);
         httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
         httppost.setRequestProperty("did", getDeviceId());
     }
 
-    private ServerEvents getServerResponse() throws Exception {
+    private ServerEvents getServerResponse(JSONObject object) throws Exception {
+        if(requestType == RequestType.PUT) {
+            DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+            out.writeBytes(object.toString());
+            out.flush();
+            out.close();
+        }
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
@@ -112,7 +103,10 @@ public class BookmarksTask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
+        if(requestType == RequestType.GET) {
+            JSONObject response = (JSONObject) getParser().parse(sb.toString());
+            profileDao.parse(getParser(), response);
+        }
         return ServerEvents.SUCCESS;
     }
 }
-

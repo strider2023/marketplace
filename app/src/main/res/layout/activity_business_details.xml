@@ -2,72 +2,87 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="237dp"
         android:background="@color/dark_orange"
-        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
-            android:fitsSystemWindows="true"
             app:contentScrim="@color/dark_orange"
-            app:expandedTitleMarginTop="5dp"
             app:expandedTitleMarginBottom="75dp"
             app:expandedTitleMarginStart="30dp"
+            app:expandedTitleMarginTop="5dp"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                app:layout_collapseMode="parallax">
+                android:layout_height="match_parent">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/business_category"
+                <TextView
+                    android:id="@+id/bookmark_business_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:layout_marginLeft="30dp"
-                    android:text="Category"
-                    android:textSize="12sp"/>
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/shape_bookmark_button"
+                    android:padding="10dp"
+                    android:text="Follow"
+                    android:textAllCaps="true"
+                    android:visibility="gone"
+                    android:textColor="@android:color/white" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:tint="@color/yellow"
-                        android:alpha="0.7"
-                        android:src="@drawable/ic_star_black_24dp"/>
+                    android:layout_alignParentBottom="true"
+                    android:fitsSystemWindows="true"
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/business_rating"
+                        android:id="@+id/business_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:text="Category"
                         android:textColor="@android:color/white"
-                        android:text="4.5"
-                        android:alpha="0.7"
-                        android:textSize="36sp" />
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:alpha="0.7"
+                            android:src="@drawable/ic_star_black_24dp"
+                            android:tint="@color/yellow" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/business_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.7"
+                            android:text="4.5"
+                            android:textColor="@android:color/white"
+                            android:textSize="36sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -98,15 +113,25 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/bookmark_business_feed_button"
+        android:id="@+id/add_business_feed_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:src="@drawable/ic_bookmark_black_24dp"
-        android:tint="@color/yellow"
+        android:src="@drawable/ic_message_black_24dp"
+        android:visibility="visible"
+        app:backgroundTint="@color/lightGreen"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/business_deatils_viewpager"
+        app:layout_anchorGravity="bottom|right|end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_business_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_image_yellow"
         android:visibility="gone"
         app:backgroundTint="@color/lightGreen"
         app:fabSize="normal"
@@ -117,39 +142,16 @@
         android:id="@+id/business_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:src="@drawable/ic_add_black_24dp"
+        android:visibility="gone"
         app:layout_anchor="@+id/business_deatils_viewpager"
         app:layout_anchorGravity="bottom|right|end"
         app:menu_colorNormal="@color/lightGreen"
         app:menu_colorPressed="@color/lightGreen"
         app:menu_colorRipple="@color/lightGreen"
         app:menu_fab_size="normal">
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_business_image_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_image_yellow"
-            app:fab_colorNormal="@color/lightGreen"
-            app:fab_colorPressed="@color/lightGreen"
-            app:fab_colorRipple="@color/lightGreen"
-            app:fab_label="Add Image"
-            app:fab_size="mini" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/edit_business_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_black_24dp"
-            app:fab_colorNormal="@color/lightGreen"
-            app:fab_colorPressed="@color/lightGreen"
-            app:fab_colorRipple="@color/lightGreen"
-            app:fab_label="Edit"
-            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/delete_business_btn"
@@ -163,14 +165,14 @@
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/add_business_feed_button"
+            android:id="@+id/edit_business_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_message_black_24dp"
+            android:src="@drawable/ic_edit_black_24dp"
             app:fab_colorNormal="@color/lightGreen"
             app:fab_colorPressed="@color/lightGreen"
             app:fab_colorRipple="@color/lightGreen"
-            app:fab_label="Add Offer"
+            app:fab_label="Edit"
             app:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>

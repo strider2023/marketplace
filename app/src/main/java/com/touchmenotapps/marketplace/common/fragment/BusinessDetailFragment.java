@@ -59,8 +59,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KP
  */
 
 public class BusinessDetailFragment extends Fragment
-        implements ServerResponseListener, BusinessImageSelectedListener,
-        LoaderManager.LoaderCallbacks<List<BusinessImageDao>> {
+        implements ServerResponseListener {
 
     @BindView(R.id.business_website)
     AppCompatTextView website;
@@ -72,19 +71,13 @@ public class BusinessDetailFragment extends Fragment
     ListView phoneList;
     @BindView(R.id.business_ratings_list)
     ListView ratingsList;
-    @BindView(R.id.business_images)
-    RecyclerView imagesList;
-    @BindView(R.id.business_no_images)
-    AppCompatTextView noImages;
 
     private View mViewHolder;
     private Long businessId;
     private BusinessDao businessDao;
     private PhoneBaseAdapter phoneBaseAdapter;
-    private BusinessImageAdapter businessImageAdapter;
     private BusinessRatingAdapter businessRatingAdapter;
     private OperationTimeBaseAdapter operationTimeBaseAdapter;
-    private Bundle queryData;
     private AppPreferences appPreferences;
     private UserKPITask userKPITask;
 
@@ -121,11 +114,6 @@ public class BusinessDetailFragment extends Fragment
         operationTime.setAdapter(operationTimeBaseAdapter);
         website.setPaintFlags(website.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        businessImageAdapter = new BusinessImageAdapter(this);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, LinearLayoutManager.HORIZONTAL);
-        imagesList.setLayoutManager(staggeredGridLayoutManager);
-        imagesList.setAdapter(businessImageAdapter);
-
         if(appPreferences.getUserType() == UserType.BUSINESS) {
             mViewHolder.findViewById(R.id.rating_container).setVisibility(View.GONE);
         }
@@ -139,11 +127,6 @@ public class BusinessDetailFragment extends Fragment
             BusinessTask businessTask = new BusinessTask(1, getActivity(), this);
             businessTask.setBusinessDetails(businessId, RequestType.GET);
             businessTask.execute(new JSONObject[]{});
-
-            queryData = new Bundle();
-            queryData.putLong(BUSINESS_ID_TAG, businessId);
-            getActivity().getSupportLoaderManager()
-                    .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessDetailFragment.this).forceLoad();
         }
     }
 
@@ -207,35 +190,5 @@ public class BusinessDetailFragment extends Fragment
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(website, object.toString(), Snackbar.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onImageClicked(BusinessImageDao businessImageDao) {
-        Intent intent = new Intent(getActivity(), ViewImageActivity.class);
-        intent.putExtra(BUSINESS_ID_TAG, businessId);
-        intent.putExtra(BUSINESS_IMAGE_TAG, businessImageDao);
-        startActivity(intent);
-    }
-
-    @Override
-    public Loader<List<BusinessImageDao>> onCreateLoader(int id, Bundle args) {
-        return new ImagesLoaderTask(getActivity(), args);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<BusinessImageDao>> loader, List<BusinessImageDao> data) {
-        if(data.size() > 0) {
-            noImages.setVisibility(View.GONE);
-            imagesList.setVisibility(View.VISIBLE);
-            businessImageAdapter.setData(data);
-        } else {
-            noImages.setVisibility(View.VISIBLE);
-            imagesList.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<BusinessImageDao>> loader) {
-
     }
 }

@@ -39,7 +39,7 @@ public class URLConstants {
     public static final String CONSUMER_DELETE_BUSINESS_FEED_URL = "cb/consumer/entity/feeds/${businessId}/${feedId}";
     public static final String CONSUMER_ADD_BOOKMARK_URL = "cb/consumer/bookmark/${businessId}";
     public static final String CONSUMER_GET_BOOKMARKS_URL = "cb/consumer/bookmark";
-    public static final String CONSUMER_DELETE_BOOKMARK_URL = "cb/consumer/bookmark/${bookmarkid}";
+    public static final String CONSUMER_DELETE_BOOKMARK_URL = "cb/consumer/bookmark/${bookmarkId}";
     public static final String CONSUMER_FEEDS_COUNT_URL = "cb/consumer/notification/bookmark/feeds";
     public static final String GET_ALL_CONSUMER_FEEDS_URL = "cb/consumer/entity/feeds";
     public static final String CONSUMER_ADD_BUSINESS_URL = "cb/consumer/entity";
@@ -48,4 +48,6 @@ public class URLConstants {
     public static final String KPI_ADDRESS = "cb/metric/consumer/${businessId}?type=adv";
     public static final String KPI_WEBSITE = "cb/common/geo";
     public static final String KPI_FEED = "cb/metric/consumer/${businessId}?type=feedv&feedid={$feedId}";
+
+    public static final String ACCOUNT_URL = "cb/account/settings";
 }
