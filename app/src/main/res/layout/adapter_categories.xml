@@ -13,7 +13,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/ic_disco"
-        android:background="@drawable/shape_oval_categories"/>
+        android:background="@drawable/shape_oval_primary"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/categories_name"
