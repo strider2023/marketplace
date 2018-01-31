@@ -11,23 +11,21 @@ import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
-import org.json.simple.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
- * Created by i7 on 16-10-2017.
+ * Created by i7 on 31-01-2018.
  */
 
-public class LoginTask extends BaseAppTask {
+public class FeedCountTask extends BaseAppTask {
 
     private String decodedString;
     private String errorMessage;
+    private String count;
 
-    public LoginTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+    public FeedCountTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
         super(id, context, serverResponseListener, showLoader);
     }
 
@@ -35,9 +33,7 @@ public class LoginTask extends BaseAppTask {
     protected ServerEvents doInBackground(Object... objects) {
         if(getNetworkUtils().isNetworkAvailable()) {
             try {
-                JSONObject dato = (JSONObject) objects[0];
-                Log.i(AppConstants.APP_TAG, dato.toJSONString());
-                return getServerResponse(dato);
+                return getServerResponse();
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
@@ -55,7 +51,7 @@ public class LoginTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), null);
+                getServerResponseListener().onSuccess(getId(), count);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -66,13 +62,12 @@ public class LoginTask extends BaseAppTask {
         }
     }
 
-    private ServerEvents getServerResponse(JSONObject object) throws Exception {
+    private ServerEvents getServerResponse() throws Exception {
         HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, RequestType.POST);
-        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
-        out.writeBytes(object.toString());
-        out.flush();
-        out.close();
+                getContext().getString(R.string.base_url) + URLConstants.CONSUMER_FEEDS_COUNT_URL, RequestType.GET);
+        httppost.setRequestProperty("uuid", getAppPreferences().getUserToken());
+        httppost.setRequestProperty("did", getDeviceId());
+
         StringBuilder sb = new StringBuilder();
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 httppost.getInputStream()));
@@ -80,13 +75,7 @@ public class LoginTask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
-        JSONObject response = (JSONObject) getParser().parse(sb.toString());
-        getAppPreferences().setAuthResponse(
-                response.get("token").toString(),
-                response.get("expires").toString(),
-                response.get("accountType").toString()
-        );
-        getAppPreferences().setLoggedIn();
+        count = sb.toString();
         return ServerEvents.SUCCESS;
     }
 }

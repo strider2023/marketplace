@@ -114,13 +114,13 @@ public class UploadBusinessImageActivity extends AppCompatActivity
         String input = caption.getEditableText().toString().trim();
         if(isUpdate) {
             businessImageDao.setCaption(input);
-            imageTask = new ImageTask(2, this, this);
+            imageTask = new ImageTask(2, this, this, true);
             imageTask.setImageDetails(businessId, businessImageDao.getId(), RequestType.PUT);
             imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
         } else {
             if (isImageSelected) {
                 businessImageDao.setCaption(input);
-                imageTask = new ImageTask(1, this, this);
+                imageTask = new ImageTask(1, this, this, true);
                 imageTask.setImageDetails(businessId, -1l, RequestType.POST);
                 imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
             } else {

@@ -37,8 +37,8 @@ public class BusinessTask extends BaseAppTask {
     private String serverURL = "";
     private HttpURLConnection httppost;
 
-    public BusinessTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public BusinessTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         businessDao = new BusinessDao();
     }
 

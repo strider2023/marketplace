@@ -38,7 +38,7 @@ public class DeleteImageDialog implements ServerResponseListener {
         builder.setMessage("Delete this image?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                imageTask = new ImageTask(1, activity, DeleteImageDialog.this);
+                imageTask = new ImageTask(1, activity, DeleteImageDialog.this, false);
                 imageTask.setImageDetails(businessId, photoId, RequestType.DELETE);
                 imageTask.execute(new JSONObject[]{});
             }

@@ -4,17 +4,17 @@ package com.touchmenotapps.marketplace.consumer.dao;
  * Created by i7 on 20-10-2017.
  */
 
-public class CategoryDAO {
+public class HomeCategoryDao {
 
     private int categoryIcon;
     private String categoryName;
     private String keyword;
 
-    public CategoryDAO() {
+    public HomeCategoryDao() {
 
     }
 
-    public CategoryDAO(int categoryIcon, String categoryName, String keyword) {
+    public HomeCategoryDao(int categoryIcon, String categoryName, String keyword) {
         this.categoryIcon = categoryIcon;
         this.categoryName = categoryName;
         this.keyword = keyword;

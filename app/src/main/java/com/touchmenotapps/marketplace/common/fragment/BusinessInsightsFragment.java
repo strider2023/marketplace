@@ -81,7 +81,7 @@ public class BusinessInsightsFragment extends Fragment
     public void onResume() {
         super.onResume();
         if (businessId != -1l) {
-            BusinessTask businessTask = new BusinessTask(1, getActivity(), this);
+            BusinessTask businessTask = new BusinessTask(1, getActivity(), this, false);
             businessTask.setBusinessDetails(businessId, RequestType.GET);
             businessTask.execute(new JSONObject[]{});
         }

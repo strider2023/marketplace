@@ -60,7 +60,7 @@ public class RegistrationOTPActivity extends AppCompatActivity implements Server
                 //916286
                 if(editable.toString().trim().length() == 6) {
                     otpDao.setUserOTP(editable.toString().trim());
-                    new OTPTask(1, RegistrationOTPActivity.this, RegistrationOTPActivity.this)
+                    new OTPTask(1, RegistrationOTPActivity.this, RegistrationOTPActivity.this, true)
                             .execute(new JSONObject[]{otpDao.toJSON()});
                 }
             }

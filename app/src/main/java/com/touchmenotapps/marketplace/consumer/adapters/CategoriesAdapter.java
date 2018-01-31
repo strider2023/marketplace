@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
+import com.touchmenotapps.marketplace.consumer.dao.HomeCategoryDao;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 import com.touchmenotapps.marketplace.consumer.views.CategoryViewHolder;
 
@@ -19,15 +19,15 @@ import java.util.List;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
 
-    private List<CategoryDAO> categoryDAOList = new ArrayList<>();
+    private List<HomeCategoryDao> homeCategoryDaoList = new ArrayList<>();
     private CategorySelectionListener categorySelectionListener;
 
     public CategoriesAdapter(CategorySelectionListener categorySelectionListener) {
         this.categorySelectionListener = categorySelectionListener;
     }
 
-    public void setData(List<CategoryDAO> categoryDAOList) {
-        this.categoryDAOList = categoryDAOList;
+    public void setData(List<HomeCategoryDao> homeCategoryDaoList) {
+        this.homeCategoryDaoList = homeCategoryDaoList;
         notifyDataSetChanged();
     }
 
@@ -41,11 +41,11 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoryViewHolder> 
     @Override
     public void onBindViewHolder(CategoryViewHolder holder, int position) {
         holder.setCategorySelectionListener(categorySelectionListener);
-        holder.setData(categoryDAOList.get(position));
+        holder.setData(homeCategoryDaoList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return categoryDAOList.size();
+        return homeCategoryDaoList.size();
     }
 }

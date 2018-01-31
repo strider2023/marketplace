@@ -30,8 +30,8 @@ public class GetCategoriesTask extends BaseAppTask {
     private String errorMessage;
     private CategoryListDao categoryDao;
 
-    public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public GetCategoriesTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         categoryDao = new CategoryListDao();
     }
 

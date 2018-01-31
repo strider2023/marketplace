@@ -27,8 +27,8 @@ public class OTPTask extends BaseAppTask {
     private String decodedString;
     private String errorMessage;
 
-    public OTPTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public OTPTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
     }
 
     @Override

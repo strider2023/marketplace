@@ -36,7 +36,7 @@ public class DeleteBusinessDailog implements ServerResponseListener {
         builder.setMessage("Delete this business?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                businessTask = new BusinessTask(3, activity, DeleteBusinessDailog.this);
+                businessTask = new BusinessTask(3, activity, DeleteBusinessDailog.this, false);
                 businessTask.setBusinessDetails(businessId, RequestType.DELETE);
                 businessTask.execute(new JSONObject[]{});
             }

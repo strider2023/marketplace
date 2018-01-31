@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.business;
+package com.touchmenotapps.marketplace.common;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -52,7 +52,7 @@ import butterknife.OnItemSelected;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
-public class BusinessAddFeedActivity extends AppCompatActivity
+public class AddOfferActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,
         LoaderManager.LoaderCallbacks<List<BusinessDao>> {
 
@@ -181,7 +181,7 @@ public class BusinessAddFeedActivity extends AppCompatActivity
         if (description.getEditableText().toString().trim().length() > 0
                 && isImageAdded) {
             feedDao.setCaption(description.getEditableText().toString().trim());
-            feedTask = new FeedTask(1, this, this);
+            feedTask = new FeedTask(1, this, this, true);
             if (isUpdate) {
                 feedTask.setFeedDetails(businessId, feedDao.getId(), RequestType.PUT);
             } else {

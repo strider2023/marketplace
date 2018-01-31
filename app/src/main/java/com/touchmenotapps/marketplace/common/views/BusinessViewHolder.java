@@ -2,7 +2,6 @@ package com.touchmenotapps.marketplace.common.views;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.AppCompatTextView;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
@@ -65,8 +63,6 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
             callBtn.setVisibility(View.GONE);
             locationBtn.setVisibility(View.GONE);
         }
-        Typeface myTypeface = Typeface.createFromAsset(context.getAssets(), "fonts/font.ttf");
-        //name.setTypeface(myTypeface);
     }
 
     @OnClick(R.id.business_base_container)
@@ -106,10 +102,6 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
             fav.setVisibility(View.VISIBLE);
         }
         if(appPreferences.getUserType() == UserType.CONSUMER) {
-            /*this.location.setText(businessDao.getBusinessAddressDao().getAddress() + ", " +
-                    businessDao.getBusinessAddressDao().getCity() + ", " +
-                    businessDao.getBusinessAddressDao().getState() + " - " +
-                    businessDao.getBusinessAddressDao().getZip());*/
             this.time.setText(businessDao.getHoursOfOperationDao().getCurrentDayStatus());
         }
         this.rating.setText(String.valueOf(businessDao.getSingleScoreRating()));

@@ -17,9 +17,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
@@ -68,7 +68,7 @@
             android:name=".business.BusinessAddActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".business.BusinessAddFeedActivity"
+            android:name=".common.AddOfferActivity"
             android:label="Add Offer" />
         <activity
             android:name=".common.BusinessDetailsActivity"
@@ -84,6 +84,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".consumer.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".consumer.SearchLocationActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

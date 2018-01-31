@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryDao;
@@ -29,6 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 
 /**
  * Created by arindamnath on 27/01/18.
@@ -38,7 +41,7 @@ public class FilterFragment extends BottomSheetDialogFragment
         implements ServerResponseListener {
 
     @BindView(R.id.filter_category)
-    AutoCompleteTextView category;
+    AppCompatSpinner category;
     @BindView(R.id.filter_subcategory)
     AppCompatMultiAutoCompleteTextView subCategory;
     @BindView(R.id.filter_by)
@@ -65,7 +68,7 @@ public class FilterFragment extends BottomSheetDialogFragment
             filterListener = (FilterListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement LogoutUser");
+                    + " must implement FilterListener");
         }
     }
 
@@ -88,17 +91,6 @@ public class FilterFragment extends BottomSheetDialogFragment
         subCategory.setAdapter(subCategoriesAdapter);
         subCategory.setTokenizer(new AppCompatMultiAutoCompleteTextView.CommaTokenizer());
 
-        category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedSubCategories = null;
-                selectedCategory = categories.get(position);
-                subCategories = allCategoryDao.getCategoriesMap().get(selectedCategory);
-                subCategoriesAdapter.setData(subCategories);
-                subCategory.setText("");
-            }
-        });
-
         subCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -112,10 +104,19 @@ public class FilterFragment extends BottomSheetDialogFragment
         return mViewHolder;
     }
 
+    @OnItemSelected(R.id.filter_category)
+    public void categorySelected(Spinner spinner, int position) {
+        selectedSubCategories = null;
+        selectedCategory = categories.get(position);
+        subCategories = allCategoryDao.getCategoriesMap().get(selectedCategory);
+        subCategoriesAdapter.setData(subCategories);
+        subCategory.setText("");
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        new GetCategoriesTask(1, getContext(), this)
+        new GetCategoriesTask(1, getContext(), this, true)
                 .execute(new JSONObject[]{});
     }
 

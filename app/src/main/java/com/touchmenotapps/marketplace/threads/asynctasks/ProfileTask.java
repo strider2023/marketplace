@@ -34,8 +34,8 @@ public class ProfileTask extends BaseAppTask {
     private ProfileDao profileDao;
     private HttpURLConnection httppost;
 
-    public ProfileTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public ProfileTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         profileDao = new ProfileDao();
     }
 

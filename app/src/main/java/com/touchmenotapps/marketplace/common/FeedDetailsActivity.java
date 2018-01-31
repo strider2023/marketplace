@@ -2,11 +2,8 @@ package com.touchmenotapps.marketplace.common;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +13,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.FeedDao;
-import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteFeedDialog;
 import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -87,7 +83,7 @@ public class FeedDetailsActivity extends AppCompatActivity
     public void onFeedEditClicked() {
         switch (appPreferences.getUserType()) {
             case BUSINESS:
-                Intent intent = new Intent(this, BusinessAddFeedActivity.class);
+                Intent intent = new Intent(this, AddOfferActivity.class);
                 intent.putExtra(FEED_TAG, feedDao);
                 startActivity(intent);
                 break;

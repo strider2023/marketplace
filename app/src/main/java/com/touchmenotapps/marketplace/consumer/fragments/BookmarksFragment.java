@@ -27,6 +27,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARKED_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARK_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
@@ -84,6 +86,8 @@ public class BookmarksFragment extends Fragment
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
         intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
+        intent.putExtra(BUSINESS_BOOKMARKED_TAG, businessDao.isBookmarked());
+        intent.putExtra(BUSINESS_BOOKMARK_ID_TAG, businessDao.getBookmarkId());
         startActivity(intent);
     }
 

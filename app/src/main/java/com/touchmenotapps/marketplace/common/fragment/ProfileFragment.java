@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        profileTask = new ProfileTask(1, getContext(), this);
+        profileTask = new ProfileTask(1, getContext(), this, false);
         profileTask.setRequestType(RequestType.GET);
         profileTask.execute(new JSONObject[]{});
     }
@@ -89,7 +89,7 @@ public class ProfileFragment extends Fragment
         if(isEdit) {
             if(nameEdit.getEditableText().toString().trim().length() > 0) {
                 profileDao.setName(nameEdit.getEditableText().toString().trim());
-                profileTask = new ProfileTask(2, getContext(), this);
+                profileTask = new ProfileTask(2, getContext(), this, false);
                 profileTask.setRequestType(RequestType.PUT);
                 profileTask.execute(new JSONObject[]{profileDao.toJSON()});
             } else {

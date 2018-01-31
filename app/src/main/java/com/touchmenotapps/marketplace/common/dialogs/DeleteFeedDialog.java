@@ -37,7 +37,7 @@ public class DeleteFeedDialog implements ServerResponseListener {
         builder.setMessage("Delete this feed?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                feedTask = new FeedTask(1, activity, DeleteFeedDialog.this);
+                feedTask = new FeedTask(1, activity, DeleteFeedDialog.this, false);
                 feedTask.setFeedDetails(businessId, feedId, RequestType.DELETE);
                 feedTask.execute(new JSONObject[]{});
             }

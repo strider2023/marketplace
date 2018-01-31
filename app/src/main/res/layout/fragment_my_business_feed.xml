@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey">
+    android:background="@color/fragmentBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                 android:gravity="center"
                 android:text="Your feed is empty! Start by adding something new to your feed."
                 android:textSize="20sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/dark_grey"/>
         </LinearLayout>
 
     </LinearLayout>

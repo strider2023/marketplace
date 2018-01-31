@@ -83,7 +83,7 @@ public class SignupActivity extends AppCompatActivity implements ServerResponseL
         if(phone.length() > 0 && Patterns.PHONE.matcher(phone).matches()) {
             signupDao.setPhoneNumber(phoneNumber.getEditableText().toString().trim());
             signupDao.setEmailId(email.getEditableText().toString().trim());
-            new SignupTask(1, this, this)
+            new SignupTask(1, this, this, true)
                     .execute(new JSONObject[]{signupDao.toJSON()});
         } else {
             Snackbar.make(splashText, R.string.error_phone, Snackbar.LENGTH_LONG).show();

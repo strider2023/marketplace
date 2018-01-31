@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements ServerResponseLi
         String phone = userMail.getEditableText().toString().trim();
         if(phone.length() == 10 && Patterns.PHONE.matcher(phone).matches()) {
             loginDao.setUserMailPhone(phone);
-            new LoginTask(1, this, this)
+            new LoginTask(1, this, this, true)
                     .execute(new JSONObject[]{loginDao.toJSON()});
         } else {
             Snackbar.make(userMail, R.string.error_phone, Snackbar.LENGTH_LONG).show();

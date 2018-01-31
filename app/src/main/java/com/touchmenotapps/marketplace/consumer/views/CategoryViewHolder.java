@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.consumer.dao.CategoryDAO;
+import com.touchmenotapps.marketplace.consumer.dao.HomeCategoryDao;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 
 import butterknife.BindView;
@@ -24,7 +24,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.categories_name)
     AppCompatTextView categoryName;
 
-    private CategoryDAO categoryDAO;
+    private HomeCategoryDao homeCategoryDao;
     private CategorySelectionListener categorySelectionListener;
 
     public CategoryViewHolder(View itemView) {
@@ -39,13 +39,13 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     @OnClick(R.id.categories_base_container)
     public void onCategorySelected() {
         if(this.categorySelectionListener != null) {
-            this.categorySelectionListener.onCategorySelected(categoryDAO);
+            this.categorySelectionListener.onCategorySelected(homeCategoryDao);
         }
     }
 
-    public void setData(CategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-        categoryIcon.setImageResource(categoryDAO.getCategoryIcon());
-        categoryName.setText(categoryDAO.getCategoryName());
+    public void setData(HomeCategoryDao homeCategoryDao) {
+        this.homeCategoryDao = homeCategoryDao;
+        categoryIcon.setImageResource(homeCategoryDao.getCategoryIcon());
+        categoryName.setText(homeCategoryDao.getCategoryName());
     }
 }

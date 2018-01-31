@@ -9,14 +9,13 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
+import com.touchmenotapps.marketplace.common.AddOfferActivity;
 import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
@@ -32,7 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.touchmenotapps.marketplace.framework.constants.AppConstants.APP_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
@@ -87,7 +85,7 @@ public class BusinessFeedFragment extends Fragment
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
         }
 
-        if(appPreferences.getUserType() == UserType.BUSINESS) {
+        if(appPreferences.getUserType() == UserType.CONSUMER) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
         }
 
@@ -114,7 +112,7 @@ public class BusinessFeedFragment extends Fragment
 
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
-        startActivity(new Intent(getActivity(), BusinessAddFeedActivity.class));
+        startActivity(new Intent(getActivity(), AddOfferActivity.class));
     }
 
     @Override

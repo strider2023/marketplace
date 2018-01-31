@@ -34,8 +34,8 @@ public class BookmarksTask extends BaseAppTask {
     private HttpURLConnection httppost;
     private String serverURL = "";
 
-    public BookmarksTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public BookmarksTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
     }
 
     public void setBusinessId(long businessId) {

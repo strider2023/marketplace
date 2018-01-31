@@ -39,8 +39,8 @@ public class ImageTask extends BaseAppTask {
     private String serverURL = "";
     private HttpURLConnection httppost;
 
-    public ImageTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public ImageTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         businessImageDao = new BusinessImageDao();
     }
 

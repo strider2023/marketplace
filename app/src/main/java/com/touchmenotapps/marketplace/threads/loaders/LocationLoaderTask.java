@@ -37,7 +37,7 @@ import static com.touchmenotapps.marketplace.framework.constants.URLConstants.GE
  * Created by arindamnath on 26/01/18.
  */
 
-public class GeoLoaderTask extends AsyncTaskLoader<List<LocationDao>> {
+public class LocationLoaderTask extends AsyncTaskLoader<List<LocationDao>> {
 
     private AppPreferences appPreferences;
     private NetworkUtils networkUtil;
@@ -48,7 +48,7 @@ public class GeoLoaderTask extends AsyncTaskLoader<List<LocationDao>> {
     private String decodedString;
     private HttpURLConnection httppost;
 
-    public GeoLoaderTask(Context context, Bundle args) {
+    public LocationLoaderTask(Context context, Bundle args) {
         super(context);
         networkUtil = new NetworkUtils(context);
         jsonParser = new JSONParser();

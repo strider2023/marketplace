@@ -38,8 +38,8 @@ public class FeedTask extends BaseAppTask {
     private String serverURL = "";
     private HttpURLConnection httppost;
 
-    public FeedTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public FeedTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         feedDao = new FeedDao();
     }
 
@@ -96,13 +96,25 @@ public class FeedTask extends BaseAppTask {
         }
         switch (requestType) {
             case PUT:
-                serverURL = StrSubstitutor.replace(URLConstants.UPDATE_BUSINESS_FEED_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.UPDATE_BUSINESS_FEED_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_EDIT_BUSINESS_FEED_URL, data);
+                }
                 break;
             case POST:
-                serverURL = StrSubstitutor.replace(URLConstants.CREATE_BUSINESS_FEED_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.CREATE_BUSINESS_FEED_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_UPLOAD_BUSINESS_FEED_URL, data);
+                }
                 break;
             case DELETE:
-                serverURL = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_FEED_URL, data);
+                if(getAppPreferences().getUserType() == UserType.BUSINESS) {
+                    serverURL = StrSubstitutor.replace(URLConstants.DELETE_BUSINESS_FEED_URL, data);
+                } else {
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_DELETE_BUSINESS_FEED_URL, data);
+                }
                 break;
         }
         httppost = getNetworkUtils().getHttpURLConInstance(

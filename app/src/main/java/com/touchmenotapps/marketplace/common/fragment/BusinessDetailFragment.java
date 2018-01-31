@@ -124,7 +124,7 @@ public class BusinessDetailFragment extends Fragment
     public void onResume() {
         super.onResume();
         if (businessId != -1l) {
-            BusinessTask businessTask = new BusinessTask(1, getActivity(), this);
+            BusinessTask businessTask = new BusinessTask(1, getActivity(), this, false);
             businessTask.setBusinessDetails(businessId, RequestType.GET);
             businessTask.execute(new JSONObject[]{});
         }
@@ -133,7 +133,7 @@ public class BusinessDetailFragment extends Fragment
     @OnClick(R.id.business_address)
     public void onLocationSelected() {
         if(appPreferences.getUserType() == UserType.CONSUMER) {
-            userKPITask = new UserKPITask(2, getActivity(), this);
+            userKPITask = new UserKPITask(2, getActivity(), this, false);
             userKPITask.setBusinessId(businessId);
             userKPITask.setType(KPI_ADDRESS);
             userKPITask.execute(new JSONObject[]{});

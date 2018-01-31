@@ -27,8 +27,8 @@ public class SignupTask extends BaseAppTask {
     private String decodedString;
     private String errorMessage;
 
-    public SignupTask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public SignupTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
     }
 
     @Override

@@ -13,7 +13,6 @@ import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
@@ -40,8 +39,8 @@ public class UserKPITask extends BaseAppTask {
     private int type;
     private HttpURLConnection httppost;
 
-    public UserKPITask(int id, Context context, ServerResponseListener serverResponseListener) {
-        super(id, context, serverResponseListener);
+    public UserKPITask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
+        super(id, context, serverResponseListener, showLoader);
         categoryDao = new CategoryListDao();
     }
 

@@ -1,7 +1,5 @@
 package com.touchmenotapps.marketplace.bo;
 
-import android.content.Context;
-
 import com.touchmenotapps.marketplace.framework.bo.BaseDao;
 
 import org.json.simple.JSONArray;
@@ -25,6 +23,7 @@ public class BusinessDao extends BaseDao {
     private long businessPhotosCount;
     private long businessFeedCount;
     private boolean bookmarked;
+    private long bookmarkId;
     private String businessProfileImage = "";
 
     private List<RatingsDao> ratingsDao = new ArrayList<>();
@@ -165,6 +164,14 @@ public class BusinessDao extends BaseDao {
         this.bookmarked = bookmarked;
     }
 
+    public long getBookmarkId() {
+        return bookmarkId;
+    }
+
+    public void setBookmarkId(long bookmarkId) {
+        this.bookmarkId = bookmarkId;
+    }
+
     @Override
     public void parse(JSONParser jsonParser, JSONObject jsonObject) throws Exception {
         if (jsonObject.containsKey("id")) {
@@ -226,8 +233,11 @@ public class BusinessDao extends BaseDao {
                 analyticsDao.add(analytics);
             }
         }
-        if(jsonObject.containsKey(bookmarked)) {
+        if(jsonObject.containsKey("bookmarked")) {
             setBookmarked(Boolean.parseBoolean(jsonObject.get("bookmarked").toString()));
+        }
+        if(jsonObject.containsKey("bookmarkId")) {
+            setBookmarkId(Long.parseLong(jsonObject.get("bookmarkId").toString()));
         }
     }
 

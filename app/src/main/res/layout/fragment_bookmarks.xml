@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/dark_grey">
+    android:background="@color/fragmentBackground">
 
     <LinearLayout
         android:id="@+id/bookmarks_empty"
@@ -26,7 +26,7 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:text="No bookmarks available here!"
-            android:textColor="@android:color/white"
+            android:textColor="@color/dark_grey"
             android:textSize="20sp" />
     </LinearLayout>
 

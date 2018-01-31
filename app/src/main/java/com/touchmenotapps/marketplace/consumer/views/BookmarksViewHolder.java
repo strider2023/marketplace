@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.consumer.dao.BookmarksDAO;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 
 import butterknife.BindView;

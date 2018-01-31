@@ -16,7 +16,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.ViewPagerDao;
 import com.touchmenotapps.marketplace.business.BusinessAddActivity;
-import com.touchmenotapps.marketplace.business.BusinessAddFeedActivity;
 import com.touchmenotapps.marketplace.common.adapters.ViewPagerAdapter;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
@@ -40,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARKED_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARK_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_CATEGORY_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
@@ -65,7 +65,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @BindView(R.id.bookmark_business_button)
     AppCompatTextView bookmark;
 
-    private long businessId = -1l;
+    private long businessId = -1l, bookmarkId = -1l;
     private AppPreferences appPreferences;
     private ViewPagerAdapter viewPagerAdapter;
     private List<ViewPagerDao> fragments = new ArrayList<>();
@@ -90,6 +90,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
         if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
             bookmark.setText("Unfollow");
+            bookmarkId = getIntent().getLongExtra(BUSINESS_BOOKMARK_ID_TAG, -1l);
         }
         if(getIntent().getStringExtra(BUSINESS_NAME_TAG) != null) {
             getSupportActionBar().setTitle(getIntent().getStringExtra(BUSINESS_NAME_TAG));
@@ -175,11 +176,11 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.bookmark_business_button)
     public void onBusinessBookmark() {
         if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
-            bookmarksTask = new BookmarksTask(1, this, this);
-            bookmarksTask.setBookmarkId(businessId);
+            bookmarksTask = new BookmarksTask(1, this, this, false);
+            bookmarksTask.setBookmarkId(bookmarkId);
             bookmarksTask.execute(new JSONObject[]{});
         } else {
-            bookmarksTask = new BookmarksTask(2, this, this);
+            bookmarksTask = new BookmarksTask(2, this, this, false);
             bookmarksTask.setBusinessId(businessId);
             bookmarksTask.execute(new JSONObject[]{});
         }
@@ -188,7 +189,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
         options.close(true);
-        Intent intent = new Intent(this, BusinessAddFeedActivity.class);
+        Intent intent = new Intent(this, AddOfferActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
     }

@@ -29,10 +29,12 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
     private JSONParser parser;
     private ProgressDialog mProgress;
     private Context context;
+    private boolean showLoader = true;
 
-    public BaseAppTask(int id, Context context, ServerResponseListener serverResponseListener){
+    public BaseAppTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader){
         this.id = id;
         this.context = context;
+        this.showLoader = showLoader;
         this.serverResponseListener = serverResponseListener;
         this.networkUtils = new NetworkUtils(context);
         this.appPreferences = new AppPreferences(context);
@@ -45,13 +47,17 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        mProgress.show();
+        if(showLoader) {
+            mProgress.show();
+        }
     }
 
     @Override
     protected void onPostExecute(ServerEvents serverEvents) {
         super.onPostExecute(serverEvents);
-        mProgress.dismiss();
+        if(showLoader) {
+            mProgress.dismiss();
+        }
     }
 
     public int getId() {

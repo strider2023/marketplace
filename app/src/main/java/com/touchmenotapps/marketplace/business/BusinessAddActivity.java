@@ -107,7 +107,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         setContentView(R.layout.activity_add_business);
         ButterKnife.bind(this);
 
-        new GetCategoriesTask(1, this, this)
+        new GetCategoriesTask(1, this, this, false)
                 .execute(new JSONObject[]{});
 
         hoursOfOperationDao = new HoursOfOperationDao();
@@ -124,7 +124,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
-            businessTask = new BusinessTask(3, this, this);
+            businessTask = new BusinessTask(3, this, this, true);
             businessTask.setBusinessDetails(businessId, RequestType.GET);
             businessTask.execute(new JSONObject[]{});
         }
@@ -188,12 +188,12 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
             if(isEdit) {
                 //If edit then update
-                businessTask = new BusinessTask(4, this, this);
+                businessTask = new BusinessTask(4, this, this, true);
                 businessTask.setBusinessDetails(businessId, RequestType.PUT);
                 businessTask.execute(new JSONObject[]{businessDao.toJSON()});
             } else {
                 //Add new business
-                businessTask = new BusinessTask(2, this, this);
+                businessTask = new BusinessTask(2, this, this, true);
                 businessTask.execute(new JSONObject[]{businessDao.toJSON()});
             }
         } else {
