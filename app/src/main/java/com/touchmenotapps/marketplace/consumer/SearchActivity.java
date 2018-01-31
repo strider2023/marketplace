@@ -98,9 +98,16 @@ public class SearchActivity extends AppCompatActivity
                     queryData = new Bundle();
                     queryData.putDouble("lat", 0);
                     queryData.putDouble("lng", 0);
+                    if(subCategory != null ) {
+                        queryData.putString("categories", subCategory);
+                    } else {
+                        queryData.putString("categories", category);
+                    }
+                    queryData.putString("sortby", filterBy);
+                    queryData.putString("order", filterOrder);
                     queryData.putString("name", searchText.getEditableText().toString().trim());
                     getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
+                            .restartLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
                 }
             }
         });

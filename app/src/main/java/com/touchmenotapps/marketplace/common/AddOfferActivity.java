@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -24,6 +26,7 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.FeedTask;
@@ -39,6 +42,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,16 +84,28 @@ public class AddOfferActivity extends AppCompatActivity
     private ArrayAdapter<String> businessAdapter;
     private List<BusinessDao> businessDaoList = new ArrayList<>();
     private FeedTask feedTask;
-    private boolean isUpdate;
-    private File photo;
+    private boolean isUpdate, isCameraEnabled;
     private Uri imageUri;
+    private PermissionsUtil permissionsUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_business_feed);
+        setContentView(R.layout.activity_add_offer);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(Build.VERSION.SDK_INT >= 24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        permissionsUtil = new PermissionsUtil(this);
+        isCameraEnabled = permissionsUtil.checkCameraPermission(feedImage);
 
         feedDao = new FeedDao();
         feedDao.setStartDateFromToday(1l);

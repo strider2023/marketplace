@@ -73,6 +73,7 @@ public class SearchLocationActivity extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedLocation = locations.get(position);
+                locationSearch.setText(selectedLocation.getCity());
             }
         });
     }
@@ -87,6 +88,7 @@ public class SearchLocationActivity extends AppCompatActivity implements
         Intent data = new Intent();
         data.putExtra("selectedLocation", selectedLocation);
         setResult(RESULT_OK, data);
+        finish();
     }
 
     @Override

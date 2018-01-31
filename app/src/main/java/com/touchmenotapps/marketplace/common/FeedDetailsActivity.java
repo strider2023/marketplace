@@ -47,6 +47,7 @@ public class FeedDetailsActivity extends AppCompatActivity
     private FeedDao feedDao;
     private DeleteFeedDialog feedDialog;
     private AppPreferences appPreferences;
+    private MenuItem delete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,8 @@ public class FeedDetailsActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.feed_menu, menu);
+        delete = menu.findItem(R.id.navigation_delete);
+        delete.setVisible(feedDao.isCanDelete());
         return true;
     }
 

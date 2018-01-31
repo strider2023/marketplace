@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
+import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
@@ -30,6 +33,7 @@ import org.json.simple.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +56,10 @@ public class UploadBusinessImageActivity extends AppCompatActivity
     private long businessId = -1l;
     private boolean isImageSelected;
     private Bitmap selectedImage;
+    private PermissionsUtil permissionsUtil;
     private BusinessImageDao businessImageDao;
     private ImageTask imageTask;
-    private boolean isUpdate;
-    private File photo;
+    private boolean isUpdate, isCameraEnabled;
     private Uri imageUri;
 
     @Override
@@ -65,7 +69,18 @@ public class UploadBusinessImageActivity extends AppCompatActivity
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if(Build.VERSION.SDK_INT >= 24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
         businessImageDao = new BusinessImageDao();
+        permissionsUtil = new PermissionsUtil(this);
+        isCameraEnabled = permissionsUtil.checkCameraPermission(image);
 
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
@@ -124,7 +139,7 @@ public class UploadBusinessImageActivity extends AppCompatActivity
                 imageTask.setImageDetails(businessId, -1l, RequestType.POST);
                 imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
             } else {
-                Snackbar.make(image, "Please select image.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(image, "Please select an image.", Snackbar.LENGTH_LONG).show();
             }
         }
     }
@@ -136,6 +151,7 @@ public class UploadBusinessImageActivity extends AppCompatActivity
             case SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
                     try {
+                        isImageSelected = true;
                         final Uri imageUri = imageReturnedIntent.getData();
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         selectedImage = BitmapFactory.decodeStream(imageStream);
@@ -150,6 +166,7 @@ public class UploadBusinessImageActivity extends AppCompatActivity
             case TAKE_PICTURE:
                 if (resultCode == RESULT_OK) {
                     try {
+                        isImageSelected = true;
                         getContentResolver().notifyChange(imageUri, null);
                         ContentResolver cr = getContentResolver();
                         selectedImage = android.provider.MediaStore.Images.Media.getBitmap(cr, imageUri);

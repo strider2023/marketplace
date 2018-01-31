@@ -71,7 +71,7 @@ public class BookmarksTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), null);
+                getServerResponseListener().onSuccess(getId(), bookmarkId);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);
@@ -88,7 +88,7 @@ public class BookmarksTask extends BaseAppTask {
             data.put("businessId", String.valueOf(businessId));
         }
         if(bookmarkId != -1l) {
-            data.put("feedId", String.valueOf(bookmarkId));
+            data.put("bookmarkId", String.valueOf(bookmarkId));
         }
         switch (requestType) {
             case POST:
@@ -112,6 +112,10 @@ public class BookmarksTask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
+        JSONObject response = (JSONObject) getParser().parse(sb.toString());
+        if(response.containsKey("id")) {
+            bookmarkId = Long.parseLong(response.get("id").toString());
+        }
         return ServerEvents.SUCCESS;
     }
 }

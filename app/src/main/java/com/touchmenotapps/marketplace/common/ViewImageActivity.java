@@ -47,6 +47,10 @@ public class ViewImageActivity extends AppCompatActivity
 
         if(getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG) != null) {
             businessImageDao = getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG);
+            if(!businessImageDao.isCanDelete()) {
+                findViewById(R.id.edit_image).setVisibility(View.GONE);
+                findViewById(R.id.delete_image).setVisibility(View.GONE);
+            }
             Glide.with(this)
                     .load(businessImageDao.getFile())
                     .error(R.drawable.ic_shop)

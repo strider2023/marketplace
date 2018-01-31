@@ -20,42 +20,68 @@
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
+        <LinearLayout
             android:id="@+id/take_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:text="Camera" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_camera" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:text="Camera"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <View
-            android:layout_width="2dp"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:layout_margin="5dp"/>
+            android:layout_margin="5dp"
+            android:background="@android:color/white" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <LinearLayout
             android:id="@+id/select_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:fontFamily="sans-serif-condensed"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:text="Gallery" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_images" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:text="Gallery"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
         android:layout_alignParentBottom="true"
         app:cardCornerRadius="5dp"
+        app:cardUseCompatPadding="true"
         app:contentPadding="10dp">
 
         <LinearLayout

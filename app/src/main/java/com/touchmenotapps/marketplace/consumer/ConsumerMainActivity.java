@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -73,7 +74,7 @@ public class ConsumerMainActivity extends AppCompatActivity
     LinearLayout locationAccess;
 
     private PermissionsUtil permissionsUtil;
-    private boolean isLocationAccessible;
+    private boolean isLocationAccessible, isGPSOn;
 
     //Define a request code to send to Google Play services
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -81,8 +82,7 @@ public class ConsumerMainActivity extends AppCompatActivity
     private LocationRequest mLocationRequest;
     private double currentLatitude, currentLongitude;
     private Geocoder geoCoder;
-
-    private HomeFragment homeFragment;
+    private LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class ConsumerMainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         navigation.setOnNavigationItemSelectedListener(this);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         permissionsUtil = new PermissionsUtil(this);
         geoCoder = new Geocoder(this, Locale.getDefault());
@@ -119,6 +120,11 @@ public class ConsumerMainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            isGPSOn = true;
+        } else {
+            isGPSOn = false;
+        }
         new FeedCountTask(1, this, this, false)
                 .execute(new JSONObject[]{});
         if(isLocationAccessible) {
@@ -180,6 +186,8 @@ public class ConsumerMainActivity extends AppCompatActivity
             if(locationDao != null) {
                 currentLatitude = locationDao.getLatitude();
                 currentLongitude = locationDao.getLongitude();
+                locationText.setText(locationDao.getCity());
+                isLocationAccessible = true; //Fake access
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
                         .commit();
@@ -269,11 +277,11 @@ public class ConsumerMainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.navigation_offers:
                 if(isLocationAccessible) {
-                    locationAccess.setVisibility(View.GONE);
-                    //TODO if not default value check
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
-                            .commit();
+                        locationAccess.setVisibility(View.GONE);
+                        //TODO if not default value check
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
+                                .commit();
                 } else {
                     locationAccess.setVisibility(View.VISIBLE);
                 }

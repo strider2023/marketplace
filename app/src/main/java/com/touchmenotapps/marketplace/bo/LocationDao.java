@@ -70,10 +70,10 @@ public class LocationDao extends BaseDao implements Parcelable {
             setCountry(jsonObject.get("country").toString());
         }
         if(jsonObject.containsKey("state")) {
-            setCountry(jsonObject.get("country").toString());
+            setState(jsonObject.get("state").toString());
         }
         if(jsonObject.containsKey("city")) {
-            setCountry(jsonObject.get("country").toString());
+            setCity(jsonObject.get("city").toString());
         }
         if(jsonObject.containsKey("lat")) {
             setLatitude(Double.parseDouble(jsonObject.get("lat").toString()));

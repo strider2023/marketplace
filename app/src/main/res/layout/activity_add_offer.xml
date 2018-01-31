@@ -33,9 +33,9 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:fontFamily="sans-serif-condensed"
-                    android:textStyle="bold"
+                    android:text="Select a Business"
                     android:textSize="20sp"
-                    android:text="Select a Business" />
+                    android:textStyle="bold" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/feed_select_business"
@@ -52,8 +52,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:text="Take/Select Image" />
+            android:text="Take/Select Image"
+            android:textStyle="bold" />
 
         <android.support.v7.widget.CardView
             android:id="@+id/feed_image_btn"
@@ -71,14 +71,13 @@
                     android:id="@+id/feed_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_camera" />
+                    android:scaleType="centerCrop" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.3"
-                    android:background="@android:color/black"/>
+                    android:background="@android:color/black" />
 
                 <LinearLayout
                     android:id="@+id/image_btn_holder"
@@ -86,33 +85,59 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <LinearLayout
                         android:id="@+id/take_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                        android:text="Camera" />
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_camera" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:gravity="center"
+                            android:text="Camera"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <View
-                        android:layout_width="2dp"
+                        android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:background="@android:color/white"
-                        android:layout_margin="5dp"/>
+                        android:layout_margin="5dp"
+                        android:background="@android:color/white" />
 
-                    <android.support.v7.widget.AppCompatTextView
+                    <LinearLayout
                         android:id="@+id/select_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:text="Gallery" />
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_images" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:gravity="center"
+                            android:text="Gallery"
+                            android:textColor="@android:color/white"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -146,8 +171,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Starts From" />
+                android:text="Starts From"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/feed_start_date"
@@ -161,8 +186,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Ends After" />
+                android:text="Ends After"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/feed_end_date"
@@ -185,8 +210,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Starts From" />
+                android:text="Starts From"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/start_date"
@@ -194,16 +219,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Starts From" />
+                android:text="Starts From"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Ends After" />
+                android:text="Ends After"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/end_date"
@@ -211,8 +236,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="Starts From" />
+                android:text="Starts From"
+                android:textStyle="bold" />
 
         </LinearLayout>
 

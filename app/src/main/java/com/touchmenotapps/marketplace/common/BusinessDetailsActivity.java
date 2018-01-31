@@ -71,6 +71,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     private List<ViewPagerDao> fragments = new ArrayList<>();
     private DeleteBusinessDailog deleteBusinessDailog;
     private BookmarksTask bookmarksTask;
+    private boolean isBookmarked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
         rating.setText(String.valueOf(getIntent().getFloatExtra(BUSINESS_RATING_TAG, 0.0f)));
 
         if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
+            isBookmarked = true;
             bookmark.setText("Unfollow");
             bookmarkId = getIntent().getLongExtra(BUSINESS_BOOKMARK_ID_TAG, -1l);
         }
@@ -136,7 +138,9 @@ public class BusinessDetailsActivity extends AppCompatActivity
                     options.setVisibility(View.GONE);
                 }
                 if(tab.getText().toString().equalsIgnoreCase("About")) {
-                    options.setVisibility(View.VISIBLE);
+                    if(appPreferences.getUserType() == UserType.BUSINESS) {
+                        options.setVisibility(View.VISIBLE);
+                    }
                     findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
                     findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
                 }
@@ -175,7 +179,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.bookmark_business_button)
     public void onBusinessBookmark() {
-        if(getIntent().getBooleanExtra(BUSINESS_BOOKMARKED_TAG, false)) {
+        if(isBookmarked) {
             bookmarksTask = new BookmarksTask(1, this, this, false);
             bookmarksTask.setBookmarkId(bookmarkId);
             bookmarksTask.execute(new JSONObject[]{});
@@ -188,7 +192,6 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
-        options.close(true);
         Intent intent = new Intent(this, AddOfferActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
@@ -218,9 +221,14 @@ public class BusinessDetailsActivity extends AppCompatActivity
     public void onSuccess(int threadId, Object object) {
         switch (threadId) {
             case 1:
+                bookmark.setText("Follow");
+                isBookmarked = false;
                 Snackbar.make(options, "Bookmark removed.", Snackbar.LENGTH_LONG).show();
                 break;
             case 2:
+                bookmark.setText("Unfollow");
+                bookmarkId = (long) object;
+                isBookmarked = true;
                 Snackbar.make(options, "Bookmark saved.", Snackbar.LENGTH_LONG).show();
                 break;
         }

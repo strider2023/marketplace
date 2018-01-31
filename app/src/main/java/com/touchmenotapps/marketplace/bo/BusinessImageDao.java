@@ -36,7 +36,7 @@ public class BusinessImageDao extends BaseDao implements Parcelable {
             setCaption(jsonObject.get("caption").toString());
         }
         if(jsonObject.containsKey("canDelete")) {
-            setCanDelete(Boolean.parseBoolean(jsonObject.get("updatedOn").toString()));
+            setCanDelete(Boolean.parseBoolean(jsonObject.get("canDelete").toString()));
         }
     }
 
