@@ -65,10 +65,10 @@
             android:name=".onboarding.AppIntroActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".business.BusinessAddActivity"
+            android:name=".common.BusinessAddActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".common.AddOfferActivity"
+            android:name=".common.BusinessOfferActivity"
             android:label="Add Offer" />
         <activity
             android:name=".common.BusinessDetailsActivity"
@@ -77,7 +77,7 @@
             android:name=".common.FeedDetailsActivity"
             android:label="Offer Details" />
         <activity
-            android:name=".common.UploadBusinessImageActivity"
+            android:name=".common.BusinessImageActivity"
             android:label="Upload Image" />
         <activity
             android:name=".common.ViewImageActivity"

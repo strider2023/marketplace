@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/fragmentBackground"
-    tools:context="com.touchmenotapps.marketplace.common.AddOfferActivity">
+    tools:context="com.touchmenotapps.marketplace.common.BusinessOfferActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

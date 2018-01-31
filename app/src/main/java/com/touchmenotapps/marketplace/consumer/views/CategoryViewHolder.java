@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.consumer.dao.HomeCategoryDao;
+import com.touchmenotapps.marketplace.bo.HomeCategoryDao;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
 
 import butterknife.BindView;

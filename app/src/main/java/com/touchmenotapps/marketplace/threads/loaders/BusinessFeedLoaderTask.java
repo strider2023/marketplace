@@ -10,7 +10,7 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.framework.NetworkUtils;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
@@ -34,7 +34,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
  * Created by arindamnath on 03/01/18.
  */
 
-public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
+public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<OffersDao>> {
 
     private AppPreferences appPreferences;
     private NetworkUtils networkUtil;
@@ -42,7 +42,7 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
     private Bundle args;
     private HttpURLConnection httppost;
 
-    private List<FeedDao> data = new ArrayList<>();
+    private List<OffersDao> data = new ArrayList<>();
     private String decodedString;
 
     public BusinessFeedLoaderTask(Context context, Bundle args) {
@@ -54,7 +54,7 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
     }
 
     @Override
-    public List<FeedDao> loadInBackground() {
+    public List<OffersDao> loadInBackground() {
         if(networkUtil.isNetworkAvailable()) {
             try {
                 data.clear();
@@ -62,9 +62,9 @@ public class BusinessFeedLoaderTask extends AsyncTaskLoader<List<FeedDao>> {
                 if(response != null) {
                     if(response.size() > 0) {
                         for (int i = 0; i < response.size(); i++) {
-                            FeedDao feedDao = new FeedDao();
-                            feedDao.parse(jsonParser, (JSONObject) response.get(i));
-                            data.add(feedDao);
+                            OffersDao offersDao = new OffersDao();
+                            offersDao.parse(jsonParser, (JSONObject) response.get(i));
+                            data.add(offersDao);
                         }
                     }
                 }

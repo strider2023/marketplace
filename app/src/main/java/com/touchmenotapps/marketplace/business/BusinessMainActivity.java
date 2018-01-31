@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.business.fragments.MyBusinessesFragment;
 
@@ -22,7 +22,8 @@ import butterknife.ButterKnife;
  * Created by i7 on 22-12-2017.
  */
 
-public class BusinessMainActivity extends AppCompatActivity {
+public class BusinessMainActivity extends AppCompatActivity
+    implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.app_name_text)
     TextView titleText;
@@ -42,7 +43,7 @@ public class BusinessMainActivity extends AppCompatActivity {
         Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
         titleText.setTypeface(myTypeface);
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(this);
 
         /** Start with the offers page **/
         getSupportFragmentManager().beginTransaction()
@@ -50,30 +51,25 @@ public class BusinessMainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_businesses:
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.business_content, MyBusinessesFragment.newInstance())
-                            .commit();
-                    return true;
-                case R.id.navigation_business_feed:
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.business_content, BusinessFeedFragment.newInstance(-1l))
-                            .commit();
-                    return true;
-                case R.id.navigation_profile:
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.business_content, ProfileFragment.newInstance())
-                            .commit();
-                    return true;
-            }
-            return false;
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_businesses:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.business_content, MyBusinessesFragment.newInstance())
+                        .commit();
+                return true;
+            case R.id.navigation_business_feed:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.business_content, BusinessOffersFragment.newInstance(-1l))
+                        .commit();
+                return true;
+            case R.id.navigation_profile:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.business_content, ProfileFragment.newInstance())
+                        .commit();
+                return true;
         }
-
-    };
+        return false;
+    }
 }

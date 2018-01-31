@@ -24,8 +24,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
-import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_CAPTION_TAG;
-import static com.touchmenotapps.marketplace.framework.constants.AppConstants.IMAGE_URL_TAG;
 
 public class ViewImageActivity extends AppCompatActivity
     implements FeedDeleteListener{
@@ -87,7 +85,7 @@ public class ViewImageActivity extends AppCompatActivity
 
     @OnClick(R.id.edit_image)
     public void onEdit() {
-        Intent intent = new Intent(this, UploadBusinessImageActivity.class);
+        Intent intent = new Intent(this, BusinessImageActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, getIntent().getLongExtra(BUSINESS_ID_TAG, -1l));
         intent.putExtra(BUSINESS_IMAGE_TAG, businessImageDao);
         startActivity(intent);

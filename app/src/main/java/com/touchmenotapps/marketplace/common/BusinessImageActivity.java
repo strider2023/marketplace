@@ -42,7 +42,7 @@ import butterknife.OnClick;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
 
-public class UploadBusinessImageActivity extends AppCompatActivity
+public class BusinessImageActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener {
 
     private final int SELECT_PHOTO = 1;

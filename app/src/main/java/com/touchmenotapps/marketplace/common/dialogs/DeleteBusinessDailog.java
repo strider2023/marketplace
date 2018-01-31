@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
+import com.touchmenotapps.marketplace.framework.enums.DeleteDialogType;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -23,6 +24,7 @@ public class DeleteBusinessDailog implements ServerResponseListener {
     private AlertDialog dialog;
     private BusinessDeleteListener businessDeleteListener;
     private BusinessTask businessTask;
+    private DeleteDialogType deleteDialogType = DeleteDialogType.BUSINESS;
 
     public DeleteBusinessDailog(Activity activity, long businessId, BusinessDeleteListener businessDeleteListener) {
         this.activity = activity;

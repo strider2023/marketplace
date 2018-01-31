@@ -1,6 +1,6 @@
 package com.touchmenotapps.marketplace.common.interfaces;
 
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 
 /**
  * Created by arindamnath on 03/01/18.
@@ -8,5 +8,5 @@ import com.touchmenotapps.marketplace.bo.FeedDao;
 
 public interface BusinessFeedSelectedListener {
 
-    void onBusinessFeedSelected(FeedDao feedDao);
+    void onBusinessFeedSelected(OffersDao offersDao);
 }

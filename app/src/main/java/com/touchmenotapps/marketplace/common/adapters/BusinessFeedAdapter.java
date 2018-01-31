@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
-import com.touchmenotapps.marketplace.common.views.BusinessFeedViewHolder;
+import com.touchmenotapps.marketplace.common.views.BusinessOfferViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,36 +17,36 @@ import java.util.List;
  * Created by arindamnath on 03/01/18.
  */
 
-public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedViewHolder>{
+public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessOfferViewHolder>{
 
-    private List<FeedDao> feedDaoList = new ArrayList<>();
+    private List<OffersDao> offersDaoList = new ArrayList<>();
     private BusinessFeedSelectedListener businessFeedSelectedListener;
 
     public BusinessFeedAdapter(BusinessFeedSelectedListener callback) {
         this.businessFeedSelectedListener = callback;
     }
 
-    public void setData(List<FeedDao> feedDaoList) {
-        this.feedDaoList.clear();
-        this.feedDaoList.addAll(feedDaoList);
+    public void setData(List<OffersDao> offersDaoList) {
+        this.offersDaoList.clear();
+        this.offersDaoList.addAll(offersDaoList);
         notifyDataSetChanged();
     }
 
     @Override
-    public BusinessFeedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BusinessOfferViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_feed,
                 parent, false);
-        return new BusinessFeedViewHolder(view);
+        return new BusinessOfferViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(BusinessFeedViewHolder holder, int position) {
+    public void onBindViewHolder(BusinessOfferViewHolder holder, int position) {
         holder.setBusinessFeedSelectedListener(businessFeedSelectedListener);
-        holder.setData(feedDaoList.get(position));
+        holder.setData(offersDaoList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return feedDaoList.size();
+        return offersDaoList.size();
     }
 }

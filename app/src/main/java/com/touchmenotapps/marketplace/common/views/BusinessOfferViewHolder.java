@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 
 import butterknife.BindView;
@@ -19,7 +19,7 @@ import butterknife.OnClick;
  * Created by arindamnath on 03/01/18.
  */
 
-public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
+public class BusinessOfferViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.feed_image)
     ImageView image;
@@ -35,10 +35,10 @@ public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
     AppCompatTextView businessName;
 
     private BusinessFeedSelectedListener businessFeedSelectedListener;
-    private FeedDao feedDao;
+    private OffersDao offersDao;
     private Context context;
 
-    public BusinessFeedViewHolder(View itemView) {
+    public BusinessOfferViewHolder(View itemView) {
         super(itemView);
         context = itemView.getContext();
         ButterKnife.bind(this, itemView);
@@ -47,7 +47,7 @@ public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
     @OnClick(R.id.business_feed_base_container)
     public void onBusinessClicked() {
         if(businessFeedSelectedListener != null){
-            businessFeedSelectedListener.onBusinessFeedSelected(feedDao);
+            businessFeedSelectedListener.onBusinessFeedSelected(offersDao);
         }
     }
 
@@ -55,15 +55,15 @@ public class BusinessFeedViewHolder extends RecyclerView.ViewHolder {
         this.businessFeedSelectedListener = businessFeedSelectedListener;
     }
 
-    public void setData(FeedDao feedDao) {
-        this.feedDao = feedDao;
-        this.description.setText(feedDao.getCaption());
-        this.startsOn.setText(feedDao.getStartDate());
-        this.endsOn.setText(feedDao.getEndDate());
-        this.coupon.setText(feedDao.getRedeeemCode());
-        this.businessName.setText(feedDao.getBusinessName());
+    public void setData(OffersDao offersDao) {
+        this.offersDao = offersDao;
+        this.description.setText(offersDao.getCaption());
+        this.startsOn.setText(offersDao.getStartDate());
+        this.endsOn.setText(offersDao.getEndDate());
+        this.coupon.setText(offersDao.getRedeeemCode());
+        this.businessName.setText(offersDao.getBusinessName());
         Glide.with(context)
-                .load(feedDao.getImageURL())
+                .load(offersDao.getImageURL())
                 .error(R.drawable.ic_shop)
                 .placeholder(R.drawable.ic_shop)
                 .centerCrop()

@@ -12,7 +12,7 @@ import org.json.simple.parser.JSONParser;
  * Created by arindamnath on 30/12/17.
  */
 
-public class FeedDao extends BaseDao implements Parcelable {
+public class OffersDao extends BaseDao implements Parcelable {
 
     private String name;
     private String data;
@@ -28,7 +28,7 @@ public class FeedDao extends BaseDao implements Parcelable {
     private long startDateFromToday;
     private long endDateFromToday;
 
-    public FeedDao() {
+    public OffersDao() {
         analyticsDao = new AnalyticsDao();
     }
 
@@ -184,7 +184,7 @@ public class FeedDao extends BaseDao implements Parcelable {
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    public FeedDao(Parcel in){
+    public OffersDao(Parcel in){
         this.setId(in.readLong());
         this.businessId = in.readLong();
         this.caption =  in.readString();
@@ -217,12 +217,12 @@ public class FeedDao extends BaseDao implements Parcelable {
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        public FeedDao createFromParcel(Parcel in) {
-            return new FeedDao(in);
+        public OffersDao createFromParcel(Parcel in) {
+            return new OffersDao(in);
         }
 
-        public FeedDao[] newArray(int size) {
-            return new FeedDao[size];
+        public OffersDao[] newArray(int size) {
+            return new OffersDao[size];
         }
     };
 }

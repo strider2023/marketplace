@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
-import com.touchmenotapps.marketplace.bo.FeedDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;

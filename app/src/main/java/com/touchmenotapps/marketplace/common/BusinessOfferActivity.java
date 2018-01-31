@@ -34,7 +34,7 @@ import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetEncodedImageTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 
 import org.json.simple.JSONObject;
@@ -56,7 +56,7 @@ import butterknife.OnItemSelected;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
 
-public class AddOfferActivity extends AppCompatActivity
+public class BusinessOfferActivity extends AppCompatActivity
         implements ServerResponseListener, ImageEndcoderListener,
         LoaderManager.LoaderCallbacks<List<BusinessDao>> {
 
@@ -77,7 +77,7 @@ public class AddOfferActivity extends AppCompatActivity
     AppCompatButton addButton;
 
     private long businessId = -1l;
-    private FeedDao feedDao;
+    private OffersDao offersDao;
     private Bitmap selectedImage;
     private boolean isImageAdded = false;
     private Bundle queryData;
@@ -107,9 +107,9 @@ public class AddOfferActivity extends AppCompatActivity
         permissionsUtil = new PermissionsUtil(this);
         isCameraEnabled = permissionsUtil.checkCameraPermission(feedImage);
 
-        feedDao = new FeedDao();
-        feedDao.setStartDateFromToday(1l);
-        feedDao.setEndDateFromToday(7l);
+        offersDao = new OffersDao();
+        offersDao.setStartDateFromToday(1l);
+        offersDao.setEndDateFromToday(7l);
 
         //If activity is launched without a business pre-selected, then show menu by fetching data
         if (getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
@@ -125,11 +125,11 @@ public class AddOfferActivity extends AppCompatActivity
             isImageAdded = true;
             isUpdate = true;
 
-            feedDao = getIntent().getParcelableExtra(FEED_TAG);
-            businessId = feedDao.getBusinessId();
-            description.setText(feedDao.getCaption());
+            offersDao = getIntent().getParcelableExtra(FEED_TAG);
+            businessId = offersDao.getBusinessId();
+            description.setText(offersDao.getCaption());
             Glide.with(this)
-                    .load(feedDao.getImageURL())
+                    .load(offersDao.getImageURL())
                     .error(R.drawable.ic_shop)
                     .placeholder(R.drawable.ic_shop)
                     .centerCrop()
@@ -166,13 +166,13 @@ public class AddOfferActivity extends AppCompatActivity
     public void startDateSelected(Spinner spinner, int position) {
         switch (position) {
             case 0:
-                feedDao.setStartDateFromToday(0l);
+                offersDao.setStartDateFromToday(0l);
                 break;
             case 1:
-                feedDao.setStartDateFromToday(1l);
+                offersDao.setStartDateFromToday(1l);
                 break;
             case 2:
-                feedDao.setStartDateFromToday(7l);
+                offersDao.setStartDateFromToday(7l);
                 break;
         }
     }
@@ -181,13 +181,13 @@ public class AddOfferActivity extends AppCompatActivity
     public void endDateSelected(Spinner spinner, int position) {
         switch (position) {
             case 0:
-                feedDao.setEndDateFromToday(7l);
+                offersDao.setEndDateFromToday(7l);
                 break;
             case 1:
-                feedDao.setEndDateFromToday(14l);
+                offersDao.setEndDateFromToday(14l);
                 break;
             case 2:
-                feedDao.setEndDateFromToday(30l);
+                offersDao.setEndDateFromToday(30l);
                 break;
         }
     }
@@ -196,14 +196,14 @@ public class AddOfferActivity extends AppCompatActivity
     public void addNewFeed() {
         if (description.getEditableText().toString().trim().length() > 0
                 && isImageAdded) {
-            feedDao.setCaption(description.getEditableText().toString().trim());
+            offersDao.setCaption(description.getEditableText().toString().trim());
             feedTask = new FeedTask(1, this, this, true);
             if (isUpdate) {
-                feedTask.setFeedDetails(businessId, feedDao.getId(), RequestType.PUT);
+                feedTask.setFeedDetails(businessId, offersDao.getId(), RequestType.PUT);
             } else {
                 feedTask.setFeedDetails(businessId, -1l, RequestType.POST);
             }
-            feedTask.execute(new JSONObject[]{feedDao.toJSON()});
+            feedTask.execute(new JSONObject[]{offersDao.toJSON()});
         } else {
             Snackbar.make(description, "Description and image fields cannot be empty.", Snackbar.LENGTH_LONG).show();
         }
@@ -267,8 +267,8 @@ public class AddOfferActivity extends AppCompatActivity
 
     @Override
     public void onImageEncoded(int id, Bitmap bitmap, String base64String) {
-        feedDao.setName("Image_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        feedDao.setData(base64String);
+        offersDao.setName("Image_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+        offersDao.setData(base64String);
         isImageAdded = true;
     }
 

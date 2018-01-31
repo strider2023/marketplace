@@ -35,7 +35,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
  * Created by i7 on 29-01-2018.
  */
 
-public class PhotosFragment extends Fragment implements BusinessImageSelectedListener,
+public class BusinessPhotosFragment extends Fragment implements BusinessImageSelectedListener,
         LoaderManager.LoaderCallbacks<List<BusinessImageDao>> {
 
     @BindView(R.id.images_empty)
@@ -51,8 +51,8 @@ public class PhotosFragment extends Fragment implements BusinessImageSelectedLis
     private Bundle queryData;
     private AppPreferences appPreferences;
 
-    public static PhotosFragment newInstance(long businessId) {
-        PhotosFragment fragment = new PhotosFragment();
+    public static BusinessPhotosFragment newInstance(long businessId) {
+        BusinessPhotosFragment fragment = new BusinessPhotosFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(BUSINESS_ID_TAG, businessId);
         fragment.setArguments(bundle);
@@ -87,7 +87,7 @@ public class PhotosFragment extends Fragment implements BusinessImageSelectedLis
                 queryData = new Bundle();
                 queryData.putLong(BUSINESS_ID_TAG, businessId);
                 getActivity().getSupportLoaderManager()
-                        .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, PhotosFragment.this).forceLoad();
+                        .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessPhotosFragment.this).forceLoad();
             }
         });
         return mViewHolder;
@@ -99,7 +99,7 @@ public class PhotosFragment extends Fragment implements BusinessImageSelectedLis
         queryData = new Bundle();
         queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, PhotosFragment.this).forceLoad();
+                .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessPhotosFragment.this).forceLoad();
     }
 
     @Override

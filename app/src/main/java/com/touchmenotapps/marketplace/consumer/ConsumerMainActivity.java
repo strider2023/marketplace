@@ -35,7 +35,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.LocationDao;
-import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.HomeFragment;
@@ -289,7 +289,7 @@ public class ConsumerMainActivity extends AppCompatActivity
             case R.id.navigation_purchases:
                 locationAccess.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, BusinessFeedFragment.newInstance(-1l))
+                        .replace(R.id.content, BusinessOffersFragment.newInstance(-1l))
                         .commit();
                 return true;
             case R.id.navigation_bookmarks:

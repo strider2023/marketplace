@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -37,7 +35,7 @@ import butterknife.OnItemSelected;
  * Created by arindamnath on 27/01/18.
  */
 
-public class FilterFragment extends BottomSheetDialogFragment
+public class SearchFilterFragment extends BottomSheetDialogFragment
         implements ServerResponseListener {
 
     @BindView(R.id.filter_category)
@@ -61,6 +59,11 @@ public class FilterFragment extends BottomSheetDialogFragment
         void onFilterSelected(String category, String subcategory, String filterBy, String filterOrder);
     }
 
+    public static SearchFilterFragment newInstance() {
+        SearchFilterFragment fragment = new SearchFilterFragment();
+        return fragment;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -70,11 +73,6 @@ public class FilterFragment extends BottomSheetDialogFragment
             throw new ClassCastException(activity.toString()
                     + " must implement FilterListener");
         }
-    }
-
-    public static FilterFragment newInstance() {
-        FilterFragment fragment = new FilterFragment();
-        return fragment;
     }
 
     @Nullable

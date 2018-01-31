@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.framework.BaseAppTask;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.constants.URLConstants;
@@ -34,13 +34,13 @@ public class FeedTask extends BaseAppTask {
     private long businessId = -1l;
     private long feedId = -1l;
     private RequestType requestType = RequestType.POST;
-    private FeedDao feedDao;
+    private OffersDao offersDao;
     private String serverURL = "";
     private HttpURLConnection httppost;
 
     public FeedTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader) {
         super(id, context, serverResponseListener, showLoader);
-        feedDao = new FeedDao();
+        offersDao = new OffersDao();
     }
 
     public void setFeedDetails(long businessId, long feedId, RequestType requestType) {
@@ -77,7 +77,7 @@ public class FeedTask extends BaseAppTask {
         super.onPostExecute(serverEvents);
         switch (serverEvents) {
             case SUCCESS:
-                getServerResponseListener().onSuccess(getId(), feedDao);
+                getServerResponseListener().onSuccess(getId(), offersDao);
                 break;
             case FAILURE:
                 getServerResponseListener().onFaliure(ServerEvents.FAILURE, errorMessage);

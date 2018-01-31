@@ -1,4 +1,4 @@
-package com.touchmenotapps.marketplace.consumer.dao;
+package com.touchmenotapps.marketplace.bo;
 
 /**
  * Created by i7 on 20-10-2017.

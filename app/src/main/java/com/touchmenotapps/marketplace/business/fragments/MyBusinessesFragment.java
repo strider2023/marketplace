@@ -18,7 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.business.BusinessAddActivity;
+import com.touchmenotapps.marketplace.common.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;

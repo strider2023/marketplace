@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteFeedDialog;
 import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -44,7 +44,7 @@ public class FeedDetailsActivity extends AppCompatActivity
     @BindView(R.id.feed_kpi_total)
     AppCompatTextView total;
 
-    private FeedDao feedDao;
+    private OffersDao offersDao;
     private DeleteFeedDialog feedDialog;
     private AppPreferences appPreferences;
     private MenuItem delete;
@@ -59,21 +59,21 @@ public class FeedDetailsActivity extends AppCompatActivity
         appPreferences = new AppPreferences(this);
 
         if(getIntent().getParcelableExtra(FEED_TAG) != null) {
-            feedDao = getIntent().getParcelableExtra(FEED_TAG);
-            feedDialog = new DeleteFeedDialog(this, feedDao.getBusinessId(), feedDao.getId(), this);
-            caption.setText(feedDao.getCaption());
-            code.setText(feedDao.getRedeeemCode());
+            offersDao = getIntent().getParcelableExtra(FEED_TAG);
+            feedDialog = new DeleteFeedDialog(this, offersDao.getBusinessId(), offersDao.getId(), this);
+            caption.setText(offersDao.getCaption());
+            code.setText(offersDao.getRedeeemCode());
             Glide.with(this)
-                    .load(feedDao.getImageURL())
+                    .load(offersDao.getImageURL())
                     .error(R.drawable.ic_shop)
                     .placeholder(R.drawable.ic_shop)
                     .centerCrop()
                     .into(image);
             if(appPreferences.getUserType() == UserType.BUSINESS) {
-                today.setText(String.valueOf(feedDao.getAnalyticsDao().getToday()));
-                week.setText(String.valueOf(feedDao.getAnalyticsDao().getLastWeek()));
-                month.setText(String.valueOf(feedDao.getAnalyticsDao().getLastMonth()));
-                total.setText(String.valueOf(feedDao.getAnalyticsDao().getTotal()));
+                today.setText(String.valueOf(offersDao.getAnalyticsDao().getToday()));
+                week.setText(String.valueOf(offersDao.getAnalyticsDao().getLastWeek()));
+                month.setText(String.valueOf(offersDao.getAnalyticsDao().getLastMonth()));
+                total.setText(String.valueOf(offersDao.getAnalyticsDao().getTotal()));
             } else {
                 findViewById(R.id.kpi_contianer).setVisibility(View.GONE);
             }
@@ -84,8 +84,8 @@ public class FeedDetailsActivity extends AppCompatActivity
     public void onFeedEditClicked() {
         switch (appPreferences.getUserType()) {
             case BUSINESS:
-                Intent intent = new Intent(this, AddOfferActivity.class);
-                intent.putExtra(FEED_TAG, feedDao);
+                Intent intent = new Intent(this, BusinessOfferActivity.class);
+                intent.putExtra(FEED_TAG, offersDao);
                 startActivity(intent);
                 break;
             case CONSUMER:
@@ -98,7 +98,7 @@ public class FeedDetailsActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.feed_menu, menu);
         delete = menu.findItem(R.id.navigation_delete);
-        delete.setVisible(feedDao.isCanDelete());
+        delete.setVisible(offersDao.isCanDelete());
         return true;
     }
 

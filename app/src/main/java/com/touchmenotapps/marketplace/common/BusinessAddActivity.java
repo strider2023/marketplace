@@ -1,6 +1,5 @@
-package com.touchmenotapps.marketplace.business;
+package com.touchmenotapps.marketplace.common;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +13,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.bo.DailyTimeInfoDao;
 import com.touchmenotapps.marketplace.common.adapters.CategoriesAdapter;
+import com.touchmenotapps.marketplace.framework.DateTimeUtil;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
@@ -32,11 +31,7 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 
 import org.json.simple.JSONObject;
 
-import java.sql.Time;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -100,6 +95,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private boolean isEdit = false;
     private BusinessTask businessTask;
     private int currentPhoneCount = 1;
+    private DateTimeUtil dateTimeUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +108,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
         hoursOfOperationDao = new HoursOfOperationDao();
         categoryDao = new CategoryListDao();
+        dateTimeUtil = new DateTimeUtil();
 
         businessAddressDao = new BusinessAddressDao();
         businessDao = new BusinessDao();
@@ -155,12 +152,12 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
 
     @OnClick(R.id.business_start_time)
     public void onSelectStartTime() {
-        showTimePicker(startTime);
+        dateTimeUtil.showTimePicker(this, startTime);
     }
 
     @OnClick(R.id.business_close_time)
     public void onSelectCloseTime() {
-        showTimePicker(closeTime);
+        dateTimeUtil.showTimePicker(this, closeTime);
     }
 
     @OnClick(R.id.add_business_btn)
@@ -253,23 +250,6 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(name, object.toString(), Snackbar.LENGTH_LONG).show();
-    }
-
-    private void showTimePicker(final AppCompatTextView textView) {
-        final Calendar c = Calendar.getInstance();
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Time tme = new Time(hourOfDay, minute, 0);//seconds by default set to zero
-                        Format formatter = new SimpleDateFormat("h:mm a");
-                        textView.setText(formatter.format(tme));
-                    }
-                }, mHour, mMinute, false);
-        timePickerDialog.show();
     }
 
     private void setHoursOfOperation(List<DailyTimeInfoDao> data) {

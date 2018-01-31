@@ -15,13 +15,12 @@ import android.view.View;
 import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.ViewPagerDao;
-import com.touchmenotapps.marketplace.business.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.adapters.ViewPagerAdapter;
 import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
-import com.touchmenotapps.marketplace.common.fragment.BusinessFeedFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessInsightsFragment;
-import com.touchmenotapps.marketplace.common.fragment.PhotosFragment;
+import com.touchmenotapps.marketplace.common.fragment.BusinessPhotosFragment;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -106,11 +105,11 @@ public class BusinessDetailsActivity extends AppCompatActivity
             findViewById(R.id.bookmark_business_button).setVisibility(View.VISIBLE);
         }
 
-        fragments.add(new ViewPagerDao("Offers", BusinessFeedFragment.newInstance(businessId)));
+        fragments.add(new ViewPagerDao("Offers", BusinessOffersFragment.newInstance(businessId)));
         if(appPreferences.getUserType() == UserType.BUSINESS) {
             fragments.add(new ViewPagerDao("Insights", BusinessInsightsFragment.newInstance(businessId)));
         }
-        fragments.add(new ViewPagerDao("Photos", PhotosFragment.newInstance(businessId)));
+        fragments.add(new ViewPagerDao("Photos", BusinessPhotosFragment.newInstance(businessId)));
         fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);
@@ -157,7 +156,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.add_business_image_button)
     public void onAddImage() {
         options.close(true);
-        Intent intent = new Intent(this, UploadBusinessImageActivity.class);
+        Intent intent = new Intent(this, BusinessImageActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
     }
@@ -192,7 +191,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
 
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
-        Intent intent = new Intent(this, AddOfferActivity.class);
+        Intent intent = new Intent(this, BusinessOfferActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessId);
         startActivity(intent);
     }

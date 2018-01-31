@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
-import com.touchmenotapps.marketplace.common.AddOfferActivity;
+import com.touchmenotapps.marketplace.common.BusinessOfferActivity;
 import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
@@ -23,7 +23,7 @@ import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessFeedLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
-import com.touchmenotapps.marketplace.bo.FeedDao;
+import com.touchmenotapps.marketplace.bo.OffersDao;
 
 import java.util.List;
 
@@ -38,8 +38,8 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FE
  * Created by arindamnath on 30/12/17.
  */
 
-public class BusinessFeedFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<FeedDao>>, BusinessFeedSelectedListener{
+public class BusinessOffersFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<List<OffersDao>>, BusinessFeedSelectedListener{
 
     @BindView(R.id.my_business_feed_empty)
     LinearLayout emptyBusiness;
@@ -54,8 +54,8 @@ public class BusinessFeedFragment extends Fragment
     private BusinessFeedAdapter businessFeedAdapter;
     private AppPreferences appPreferences;
 
-    public static BusinessFeedFragment newInstance(long businessId) {
-        BusinessFeedFragment fragment = new BusinessFeedFragment();
+    public static BusinessOffersFragment newInstance(long businessId) {
+        BusinessOffersFragment fragment = new BusinessOffersFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(BUSINESS_ID_TAG, businessId);
         fragment.setArguments(bundle);
@@ -95,7 +95,7 @@ public class BusinessFeedFragment extends Fragment
                 queryData = new Bundle();
                 queryData.putLong(BUSINESS_ID_TAG, businessId);
                 getActivity().getSupportLoaderManager()
-                        .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
+                        .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
             }
         });
         return mViewHolder;
@@ -107,22 +107,22 @@ public class BusinessFeedFragment extends Fragment
         queryData = new Bundle();
         queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessFeedFragment.this).forceLoad();
+                .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
     }
 
     @OnClick(R.id.add_business_feed_button)
     public void onAddFeed() {
-        startActivity(new Intent(getActivity(), AddOfferActivity.class));
+        startActivity(new Intent(getActivity(), BusinessOfferActivity.class));
     }
 
     @Override
-    public Loader<List<FeedDao>> onCreateLoader(int id, Bundle args) {
+    public Loader<List<OffersDao>> onCreateLoader(int id, Bundle args) {
         refreshLayout.setRefreshing(true);
         return new BusinessFeedLoaderTask(getActivity(), args);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<FeedDao>> loader, List<FeedDao> data) {
+    public void onLoadFinished(Loader<List<OffersDao>> loader, List<OffersDao> data) {
         refreshLayout.setRefreshing(false);
         if(data.size() > 0) {
             emptyBusiness.setVisibility(View.GONE);
@@ -135,14 +135,14 @@ public class BusinessFeedFragment extends Fragment
     }
 
     @Override
-    public void onLoaderReset(Loader<List<FeedDao>> loader) {
+    public void onLoaderReset(Loader<List<OffersDao>> loader) {
         refreshLayout.setRefreshing(false);
     }
 
     @Override
-    public void onBusinessFeedSelected(FeedDao feedDao) {
+    public void onBusinessFeedSelected(OffersDao offersDao) {
         Intent intent = new Intent(getActivity(), FeedDetailsActivity.class);
-        intent.putExtra(FEED_TAG, feedDao);
+        intent.putExtra(FEED_TAG, offersDao);
         getActivity().startActivity(intent);
     }
 }
