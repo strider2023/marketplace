@@ -34,11 +34,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.bo.LocationDao;
 import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.HomeFragment;
+import com.touchmenotapps.marketplace.consumer.interfaces.CategoryFilterSelectionListener;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -58,7 +60,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class ConsumerMainActivity extends AppCompatActivity
     implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener {
+        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener, CategoryFilterSelectionListener {
 
     private final int GET_LOCATION = 1;
 
@@ -321,6 +323,11 @@ public class ConsumerMainActivity extends AppCompatActivity
 
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
+
+    }
+
+    @Override
+    public void onCategorySelected(CategoryDao categoryDao) {
 
     }
 }

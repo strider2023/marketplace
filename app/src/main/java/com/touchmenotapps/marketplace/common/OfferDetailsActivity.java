@@ -19,14 +19,19 @@ import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
+import com.touchmenotapps.marketplace.threads.asynctasks.UserKPITask;
+
+import org.json.simple.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_ADDRESS;
+import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_FEED;
 
-public class FeedDetailsActivity extends AppCompatActivity
+public class OfferDetailsActivity extends AppCompatActivity
     implements ServerResponseListener, FeedDeleteListener {
 
     @BindView(R.id.feed_image)
@@ -48,6 +53,7 @@ public class FeedDetailsActivity extends AppCompatActivity
     private DeleteFeedDialog feedDialog;
     private AppPreferences appPreferences;
     private MenuItem delete;
+    private UserKPITask userKPITask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,20 +83,24 @@ public class FeedDetailsActivity extends AppCompatActivity
             } else {
                 findViewById(R.id.kpi_contianer).setVisibility(View.GONE);
             }
+            if(!offersDao.isCanDelete()) {
+                findViewById(R.id.feed_edit_btn).setVisibility(View.GONE);
+            }
+            if(appPreferences.getUserType() == UserType.CONSUMER) {
+                userKPITask = new UserKPITask(1, this, this, false);
+                userKPITask.setBusinessId(offersDao.getBusinessId());
+                userKPITask.setFeedId(offersDao.getId());
+                userKPITask.setType(KPI_FEED);
+                userKPITask.execute(new JSONObject[]{});
+            }
         }
     }
 
     @OnClick(R.id.feed_edit_btn)
     public void onFeedEditClicked() {
-        switch (appPreferences.getUserType()) {
-            case BUSINESS:
-                Intent intent = new Intent(this, BusinessOfferActivity.class);
-                intent.putExtra(FEED_TAG, offersDao);
-                startActivity(intent);
-                break;
-            case CONSUMER:
-                break;
-        }
+        Intent intent = new Intent(this, BusinessOfferActivity.class);
+        intent.putExtra(FEED_TAG, offersDao);
+        startActivity(intent);
     }
 
     @Override

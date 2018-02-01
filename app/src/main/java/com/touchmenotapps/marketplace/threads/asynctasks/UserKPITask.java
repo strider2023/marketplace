@@ -119,7 +119,6 @@ public class UserKPITask extends BaseAppTask {
             sb.append(decodedString);
         in.close();
         Log.i(AppConstants.APP_TAG, sb.toString());
-        JSONObject response = (JSONObject) getParser().parse(sb.toString());
         return ServerEvents.SUCCESS;
     }
 }

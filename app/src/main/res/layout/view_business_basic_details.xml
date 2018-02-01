@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Website"
-                android:inputType="textNoSuggestions"
+                android:inputType="textWebEditText"
                 android:maxLines="1"
                 android:padding="10dp" />
         </android.support.design.widget.TextInputLayout>

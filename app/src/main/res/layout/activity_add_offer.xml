@@ -156,6 +156,7 @@
                 android:id="@+id/feed_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapSentences"
                 android:background="@android:color/transparent"
                 android:hint="Enter Description*" />
         </android.support.design.widget.TextInputLayout>
@@ -246,7 +247,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:backgroundTint="@color/lightGreen"
-            android:text="Add Feed"
+            android:text="Add Offer"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

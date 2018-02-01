@@ -53,7 +53,7 @@ public class OffersDao extends BaseDao implements Parcelable {
             setImageURL(jsonObject.get("file").toString());
         }
         if(jsonObject.containsKey("canDelete")) {
-            setCanDelete(Boolean.parseBoolean(jsonObject.get("updatedOn").toString()));
+            setCanDelete(Boolean.parseBoolean(jsonObject.get("canDelete").toString()));
         }
         if(jsonObject.containsKey("businessId")) {
             setBusinessId(Long.parseLong(jsonObject.get("businessId").toString()));

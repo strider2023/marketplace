@@ -47,7 +47,7 @@ public class AppIntroActivity extends AppCompatActivity {
                     Color.parseColor("#4e43f9"), R.drawable.ic_intro_basket, R.drawable.ic_point);
         } else {
             scr1 = new IntroOnboardingPage("Offers Near You",
-                    "The Bazaar helps you to quickly search for offers near you.",
+                    "Hyfi helps you to quickly search for offers near you.",
                     Color.parseColor("#4e43f9"), R.drawable.ic_intro_location, R.drawable.ic_point);
             scr2 = new IntroOnboardingPage("Discounts!",
                     "Follow different shops around you and get notified when new offers are posted.",

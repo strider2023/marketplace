@@ -2,6 +2,7 @@ package com.touchmenotapps.marketplace.common;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -9,7 +10,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
@@ -22,6 +25,7 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
 import com.touchmenotapps.marketplace.common.interfaces.ImageEndcoderListener;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
+import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
@@ -39,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
 
@@ -69,18 +75,8 @@ public class BusinessImageActivity extends AppCompatActivity
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(Build.VERSION.SDK_INT >= 24){
-            try{
-                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
-                m.invoke(null);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-
         businessImageDao = new BusinessImageDao();
         permissionsUtil = new PermissionsUtil(this);
-        isCameraEnabled = permissionsUtil.checkCameraPermission(image);
 
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             businessId = getIntent().getLongExtra(BUSINESS_ID_TAG, -1l);
@@ -88,6 +84,9 @@ public class BusinessImageActivity extends AppCompatActivity
         if(getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG) != null) {
             businessImageDao = getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG);
             isUpdate = true;
+            if(businessImageDao.getCaption() != null) {
+                caption.setText(businessImageDao.getCaption());
+            }
             Glide.with(this)
                     .load(businessImageDao.getFile())
                     .error(R.drawable.ic_shop)
@@ -100,11 +99,14 @@ public class BusinessImageActivity extends AppCompatActivity
 
     @OnClick(R.id.take_image)
     public void onTakeImage() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(), "Hyfi_" + String.valueOf(System.currentTimeMillis())+ ".jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, TAKE_PICTURE);
+        isCameraEnabled = permissionsUtil.checkCameraPermission(image);
+        if(isCameraEnabled) {
+            captureImage();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{CAMERA, READ_EXTERNAL_STORAGE}, AppConstants.REQUEST_ACCESS_CAMERA);
+            }
+        }
     }
 
     @OnClick(R.id.select_image)
@@ -140,6 +142,17 @@ public class BusinessImageActivity extends AppCompatActivity
                 imageTask.execute(new JSONObject[]{businessImageDao.toJSON()});
             } else {
                 Snackbar.make(image, "Please select an image.", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == AppConstants.REQUEST_ACCESS_CAMERA) {
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                isCameraEnabled = true;
+                captureImage();
             }
         }
     }
@@ -205,5 +218,14 @@ public class BusinessImageActivity extends AppCompatActivity
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(image, object.toString(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private void captureImage() {
+        File photo = new File(Environment.getExternalStorageDirectory(), "Hyfi_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+        imageUri = FileProvider.getUriForFile(this, "hyfi.provider", photo);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intent, TAKE_PICTURE);
     }
 }

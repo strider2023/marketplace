@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:hint="Enter Image caption"
-                    android:inputType="textPostalAddress|textCapWords"
+                    android:inputType="textCapSentences"
                     android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 

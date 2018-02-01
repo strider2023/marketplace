@@ -12,6 +12,7 @@ import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_SMS;
 
 /**
@@ -74,20 +75,21 @@ public class PermissionsUtil {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
-        if (activity.checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (activity.checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED
+                && activity.checkSelfPermission(READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
         if (activity.shouldShowRequestPermissionRationale(CAMERA)) {
-            Snackbar.make(view, "Camera access is required!", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(view, "Camera and storage access is required.", Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
-                            activity.requestPermissions(new String[]{CAMERA}, AppConstants.REQUEST_ACCESS_CAMERA);
+                            activity.requestPermissions(new String[]{CAMERA, READ_EXTERNAL_STORAGE}, AppConstants.REQUEST_ACCESS_CAMERA);
                         }
                     });
         } else {
-            activity.requestPermissions(new String[]{CAMERA}, AppConstants.REQUEST_ACCESS_CAMERA);
+            activity.requestPermissions(new String[]{CAMERA, READ_EXTERNAL_STORAGE}, AppConstants.REQUEST_ACCESS_CAMERA);
         }
         return false;
     }

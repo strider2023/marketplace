@@ -167,6 +167,9 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
             businessDao.setCategoryDao(categoryDao);
 
             businessDao.setName(name.getEditableText().toString().trim());
+            if(isEdit) {
+                businessDao.getPhoneNumber().clear();
+            }
             for(int i = 0; i < currentPhoneCount; i++) {
                 EditText phone = (EditText) phoneContainer.getChildAt(i).findViewById(R.id.business_phone) ;
                 businessDao.addPhoneNumber(phone.getEditableText().toString().trim());

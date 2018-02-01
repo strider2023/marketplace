@@ -76,7 +76,9 @@ public class PhoneBaseAdapter extends BaseAdapter {
         });
         holder.msg.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                activity.startActivity(Intent.createChooser(sharingIntent,"Connect using."));
             }
         });
         return view;

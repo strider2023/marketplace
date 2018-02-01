@@ -47,7 +47,7 @@ public class URLConstants {
     public static final String KPI_PHONE = "cb/metric/consumer/${businessId}?type=phv";
     public static final String KPI_ADDRESS = "cb/metric/consumer/${businessId}?type=adv";
     public static final String KPI_WEBSITE = "cb/common/geo";
-    public static final String KPI_FEED = "cb/metric/consumer/${businessId}?type=feedv&feedid={$feedId}";
+    public static final String KPI_FEED = "cb/metric/consumer/${businessId}?type=feedv&feedid=${feedId}";
 
     public static final String ACCOUNT_URL = "cb/account/settings";
 }

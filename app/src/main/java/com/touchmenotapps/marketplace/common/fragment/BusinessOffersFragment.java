@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.BusinessOfferActivity;
-import com.touchmenotapps.marketplace.common.FeedDetailsActivity;
+import com.touchmenotapps.marketplace.common.OfferDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
@@ -141,7 +141,7 @@ public class BusinessOffersFragment extends Fragment
 
     @Override
     public void onBusinessFeedSelected(OffersDao offersDao) {
-        Intent intent = new Intent(getActivity(), FeedDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), OfferDetailsActivity.class);
         intent.putExtra(FEED_TAG, offersDao);
         getActivity().startActivity(intent);
     }

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
+import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
@@ -45,7 +46,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 
 public class HomeFragment extends Fragment
         implements CategorySelectionListener, LoaderManager.LoaderCallbacks<List<BusinessDao>>,
-        BusinessSelectedListener {
+        BusinessSelectedListener{
 
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
@@ -91,7 +92,7 @@ public class HomeFragment extends Fragment
         homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_restaurants, "Restaurants", "RESTAURANTS_AND_COFFEESHOPS"));
         homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_apparel, "Apparels", "APPARELS"));
         homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_worker, "Assistance", "CLINICS_AND_HOSPITALS"));
-        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_view_all, "View All", "Food"));
+        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_view_all, "View All", "ALL"));
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_disco, "Pubs", "Food"));
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_jwellrey, "Jewellery", "Food"));
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_toys, "Toys", "Food"));
@@ -127,8 +128,14 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onCategorySelected(HomeCategoryDao homeCategoryDao) {
-        currentCategory = homeCategoryDao.getKeyword();
-        fetchData(currentLatitude, currentLongitude);
+        if(homeCategoryDao.getKeyword().equalsIgnoreCase("all")) {
+            CategoriesFragment bottomSheetFragment = CategoriesFragment.newInstance();
+            //bottomSheetFragment.setCancelable(false);
+            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
+        } else {
+            currentCategory = homeCategoryDao.getKeyword();
+            fetchData(currentLatitude, currentLongitude);
+        }
     }
 
     @Override

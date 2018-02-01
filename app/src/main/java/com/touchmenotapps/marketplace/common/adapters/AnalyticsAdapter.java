@@ -64,7 +64,11 @@ public class AnalyticsAdapter extends BaseAdapter {
             view.setTag(holder);
         }
 
-        holder.type.setText(ratingsDaos.get(i).getType());
+        if(ratingsDaos.get(i).getType().equalsIgnoreCase("adv")) {
+            holder.type.setText("Address Viewed");
+        } else if(ratingsDaos.get(i).getType().equalsIgnoreCase("phv")) {
+            holder.type.setText("Phone Number Viewed");
+        }
         holder.today.setText(String.valueOf(ratingsDaos.get(i).getToday()));
         holder.week.setText(String.valueOf(ratingsDaos.get(i).getLastWeek()));
         holder.month.setText(String.valueOf(ratingsDaos.get(i).getLastMonth()));
