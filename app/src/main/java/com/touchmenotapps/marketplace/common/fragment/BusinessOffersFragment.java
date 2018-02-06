@@ -7,17 +7,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.BusinessOfferActivity;
 import com.touchmenotapps.marketplace.common.OfferDetailsActivity;
-import com.touchmenotapps.marketplace.common.adapters.BusinessFeedAdapter;
+import com.touchmenotapps.marketplace.common.adapters.OffersAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessFeedSelectedListener;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
@@ -47,11 +53,13 @@ public class BusinessOffersFragment extends Fragment
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.details_list)
     RecyclerView detailsList;
+    @BindView(R.id.list_filter_text)
+    AppCompatEditText filterText;
 
     private View mViewHolder;
     private long businessId = -1l;
     private Bundle queryData;
-    private BusinessFeedAdapter businessFeedAdapter;
+    private OffersAdapter offersAdapter;
     private AppPreferences appPreferences;
 
     public static BusinessOffersFragment newInstance(long businessId) {
@@ -72,14 +80,15 @@ public class BusinessOffersFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mViewHolder = inflater.inflate(R.layout.fragment_my_business_feed, container, false);
+        mViewHolder = inflater.inflate(R.layout.fragment_offers, container, false);
         ButterKnife.bind(this, mViewHolder);
 
-        businessFeedAdapter = new BusinessFeedAdapter(this);
+        offersAdapter = new OffersAdapter(this);
         appPreferences = new AppPreferences(getContext());
         refreshLayout.setRefreshing(false);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        detailsList.setAdapter(businessFeedAdapter);
+        detailsList.setAdapter(offersAdapter);
+        filterText.setHint("Search Bookmarks");
 
         if(businessId != -1l) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
@@ -96,6 +105,31 @@ public class BusinessOffersFragment extends Fragment
                 queryData.putLong(BUSINESS_ID_TAG, businessId);
                 getActivity().getSupportLoaderManager()
                         .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
+            }
+        });
+
+        filterText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                offersAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    offersAdapter.getFilter().filter(filterText.getEditableText().toString().trim());
+                    filterText.clearFocus();
+                    return true;
+                }
+                return false;
             }
         });
         return mViewHolder;
@@ -127,7 +161,7 @@ public class BusinessOffersFragment extends Fragment
         if(data.size() > 0) {
             emptyBusiness.setVisibility(View.GONE);
             refreshLayout.setVisibility(View.VISIBLE);
-            businessFeedAdapter.setData(data);
+            offersAdapter.setData(data);
         } else {
             emptyBusiness.setVisibility(View.VISIBLE);
             refreshLayout.setVisibility(View.GONE);

@@ -31,7 +31,8 @@ public class URLConstants {
     public static final String CONSUMER_SEARCH_URL = "cb/consumer/search";
     public static final String CONSUMER_GET_BUSINESS_INFO_URL = "cb/consumer/entity/${businessId}";
     public static final String CONSUMER_GET_BUSINESS_PHOTO_URL = "cb/consumer/entity/photos/${businessId}";
-    public static final String CONSUMER_UPLOAD_BUSINESS_PHOTO_URL = "cb/consumer/entity/photos/${businessId}/${photoId}";
+    public static final String CONSUMER_UPLOAD_BUSINESS_PHOTO_URL = "cb/consumer/entity/photos/${businessId}";
+    public static final String CONSUMER_UPDATE_BUSINESS_PHOTO_URL = "cb/consumer/entity/photos/${businessId}/${photoId}";
     public static final String CONSUMER_DELETE_BUSINESS_PHOTO_URL = "cb/consumer/entity/photos/${businessId}/${photoId}";
     public static final String CONSUMER_GET_BUSINESS_FEED_URL = "cb/consumer/entity/feeds/${businessId}";
     public static final String CONSUMER_UPLOAD_BUSINESS_FEED_URL = "cb/consumer/entity/feeds/${businessId}";

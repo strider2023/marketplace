@@ -50,6 +50,7 @@ public class SearchActivity extends AppCompatActivity
     private BusinessAdapter businessAdapter;
     private LinearLayoutManager linearLayoutManager;
     private String category, subCategory, filterBy, filterOrder;
+    private double currentLatitude, currentLongitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,27 +58,17 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
+        currentLatitude = getIntent().getDoubleExtra("lat", 0);
+        currentLongitude = getIntent().getDoubleExtra("lng", 0);
+
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.toString().length() > 0) {
-                    queryData = new Bundle();
-                    queryData.putDouble("lat", 0);
-                    queryData.putDouble("lng", 0);
-                    queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
-                }
-                if(charSequence.toString().length() > 3) {
-                    queryData = new Bundle();
-                    queryData.putDouble("lat", 0);
-                    queryData.putDouble("lng", 0);
-                    queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getSupportLoaderManager()
-                            .initLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
+                if(charSequence.toString().length() > 2) {
+                    searchUserInput();
                 }
             }
 
@@ -94,20 +85,8 @@ public class SearchActivity extends AppCompatActivity
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(searchText.getEditableText().toString().trim().length() > 0) {
-                    queryData = new Bundle();
-                    queryData.putDouble("lat", 0);
-                    queryData.putDouble("lng", 0);
-                    if(subCategory != null ) {
-                        queryData.putString("categories", subCategory);
-                    } else {
-                        queryData.putString("categories", category);
-                    }
-                    queryData.putString("sortby", filterBy);
-                    queryData.putString("order", filterOrder);
-                    queryData.putString("name", searchText.getEditableText().toString().trim());
-                    getSupportLoaderManager()
-                            .restartLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
+                if(searchText.getEditableText().toString().trim().length() > 2) {
+                    searchUserInput();
                 }
             }
         });
@@ -116,7 +95,6 @@ public class SearchActivity extends AppCompatActivity
     @OnClick(R.id.filter_business_btn)
     public void onFilterSelected() {
         SearchFilterFragment bottomSheetFragment = SearchFilterFragment.newInstance();
-        //bottomSheetFragment.setCancelable(false);
         bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
     }
 
@@ -165,5 +143,21 @@ public class SearchActivity extends AppCompatActivity
         this.subCategory = subcategory;
         this.filterBy = filterBy;
         this.filterOrder = filterOrder;
+    }
+
+    private void searchUserInput() {
+        queryData = new Bundle();
+        queryData.putDouble("lat", currentLatitude);
+        queryData.putDouble("lng", currentLatitude);
+        if(subCategory != null ) {
+            queryData.putString("categories", subCategory);
+        } else {
+            queryData.putString("categories", category);
+        }
+        queryData.putString("sortby", filterBy);
+        queryData.putString("order", filterOrder);
+        queryData.putString("name", searchText.getEditableText().toString().trim());
+        getSupportLoaderManager()
+                .restartLoader(LoaderID.FETCH_BUSINESS_SEARCH.getValue(), queryData, SearchActivity.this).forceLoad();
     }
 }

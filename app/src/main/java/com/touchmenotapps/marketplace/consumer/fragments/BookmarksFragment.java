@@ -7,12 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
@@ -47,6 +53,8 @@ public class BookmarksFragment extends Fragment
     RecyclerView detailsList;
     @BindView(R.id.bookmarks_empty)
     LinearLayout emptyList;
+    @BindView(R.id.list_filter_text)
+    AppCompatEditText filterText;
 
     private View mViewHolder;
     private Bundle queryData;
@@ -74,6 +82,31 @@ public class BookmarksFragment extends Fragment
                 queryData = new Bundle();
                 getActivity().getSupportLoaderManager()
                         .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, BookmarksFragment.this).forceLoad();
+            }
+        });
+
+        filterText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                bookmarksAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    bookmarksAdapter.getFilter().filter(filterText.getEditableText().toString().trim());
+                    filterText.clearFocus();
+                    return true;
+                }
+                return false;
             }
         });
         return mViewHolder;

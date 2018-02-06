@@ -10,6 +10,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/view_search_bar"/>
+
         <include layout="@layout/view_refresh_list"/>
 
         <LinearLayout

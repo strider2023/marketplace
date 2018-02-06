@@ -1,15 +1,12 @@
-package com.touchmenotapps.marketplace.consumer.fragments;
+package com.touchmenotapps.marketplace.consumer;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryDao;
@@ -27,59 +24,42 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * Created by i7 on 30-01-2018.
+ * Created by i7 on 06-02-2018.
  */
 
-public class CategoriesFragment extends BottomSheetDialogFragment
+public class SelectCategoryActivity extends AppCompatActivity
         implements ServerResponseListener, CategoryFilterSelectionListener {
 
     @BindView(R.id.categories_list)
     RecyclerView detailsList;
 
-    private View mViewHolder;
     private CategoryListDao allCategoryDao;
     private List<CategoryDao> categories;
     private CategoriesFilterAdapter categoriesFilterAdapter;
-    private CategorySelectedListener categorySelectedListener;
-
-    public interface CategorySelectedListener {
-        void onCategorySelected(CategoryDao categoryDao);
-    }
-
-    public static CategoriesFragment newInstance() {
-        CategoriesFragment fragment = new CategoriesFragment();
-        return fragment;
-    }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            categorySelectedListener = (CategorySelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement FilterListener");
-        }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mViewHolder = inflater.inflate(R.layout.fragment_categories, container, false);
-        ButterKnife.bind(this, mViewHolder);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_select_category);
+        ButterKnife.bind(this);
 
         categoriesFilterAdapter = new CategoriesFilterAdapter(this);
-        detailsList.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        detailsList.setLayoutManager(new GridLayoutManager(this, 2));
         detailsList.setAdapter(categoriesFilterAdapter);
-        return mViewHolder;
+    }
+
+    @OnClick(R.id.close_selection)
+    public void onCloseSelection() {
+        finish();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new GetCategoriesTask(1, getContext(), this, true)
+        new GetCategoriesTask(1, this, this, true)
                 .execute(new JSONObject[]{});
     }
 
@@ -98,7 +78,9 @@ public class CategoriesFragment extends BottomSheetDialogFragment
 
     @Override
     public void onCategorySelected(CategoryDao categoryDao) {
-        categorySelectedListener.onCategorySelected(categoryDao);
-        dismiss();
+        Intent data = new Intent();
+        data.putExtra("selectedCategory", categoryDao);
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

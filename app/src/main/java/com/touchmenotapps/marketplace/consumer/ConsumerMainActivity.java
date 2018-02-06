@@ -63,6 +63,7 @@ public class ConsumerMainActivity extends AppCompatActivity
         BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener, CategoryFilterSelectionListener {
 
     private final int GET_LOCATION = 1;
+    public static final int GET_CATEGORY = 2;
 
     @BindView(R.id.app_location_text)
     TextView locationText;
@@ -163,7 +164,10 @@ public class ConsumerMainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_search:
-                startActivity(new Intent(this, SearchActivity.class));
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra("lat", currentLatitude);
+                intent.putExtra("lng", currentLongitude);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -183,16 +187,24 @@ public class ConsumerMainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GET_LOCATION && resultCode == RESULT_OK){
-            LocationDao locationDao = data.getParcelableExtra("selectedLocation");
-            if(locationDao != null) {
-                currentLatitude = locationDao.getLatitude();
-                currentLongitude = locationDao.getLongitude();
-                locationText.setText(locationDao.getCity());
-                isLocationAccessible = true; //Fake access
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
-                        .commit();
+        if(resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GET_LOCATION:
+                    LocationDao locationDao = data.getParcelableExtra("selectedLocation");
+                    if(locationDao != null) {
+                        currentLatitude = locationDao.getLatitude();
+                        currentLongitude = locationDao.getLongitude();
+                        locationText.setText(locationDao.getCity());
+                        isLocationAccessible = true; //Fake access
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
+                                .commit();
+                    }
+                    break;
+                case GET_CATEGORY:
+                    CategoryDao categoryDao = data.getParcelableExtra("selectedCategory");
+                    categoryText.setText(categoryDao.getDescription());
+                    break;
             }
         }
     }
@@ -224,8 +236,8 @@ public class ConsumerMainActivity extends AppCompatActivity
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             //If everything went fine lets get latitude and longitude
-            currentLatitude = 0d;//location.getLatitude();
-            currentLongitude = 0d;//location.getLongitude();
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
             locationText.setText(getCity(location));
             locationAccess.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
@@ -278,6 +290,7 @@ public class ConsumerMainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_offers:
+                toolbar.setVisibility(View.VISIBLE);
                 if(isLocationAccessible) {
                         locationAccess.setVisibility(View.GONE);
                         //TODO if not default value check
@@ -289,18 +302,21 @@ public class ConsumerMainActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.navigation_purchases:
+                toolbar.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BusinessOffersFragment.newInstance(-1l))
                         .commit();
                 return true;
             case R.id.navigation_bookmarks:
+                toolbar.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BookmarksFragment.newInstance())
                         .commit();
                 return true;
             case R.id.navigation_profile:
+                toolbar.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, ProfileFragment.newInstance())
@@ -317,7 +333,7 @@ public class ConsumerMainActivity extends AppCompatActivity
         BottomNavigationItemView itemView = (BottomNavigationItemView) v;
         View badgeView = LayoutInflater.from(this).inflate(R.layout.view_badge, bottomNavigationMenuView, false);
         itemView.addView(badgeView);
-        TextView badge = (TextView) badgeView.findViewById(R.id.notifications_badge);
+        TextView badge = badgeView.findViewById(R.id.notifications_badge);
         badge.setText(object.toString());
     }
 

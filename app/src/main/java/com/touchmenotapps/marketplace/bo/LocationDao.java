@@ -85,7 +85,6 @@ public class LocationDao extends BaseDao implements Parcelable {
 
     ///////////////////////////////////////////////////////////////////////////////
     public LocationDao(Parcel in){
-        this.setId(in.readLong());
         this.country = in.readString();
         this.state =  in.readString();
         this.city = in.readString();

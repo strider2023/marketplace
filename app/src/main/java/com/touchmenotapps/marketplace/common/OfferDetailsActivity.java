@@ -84,7 +84,7 @@ public class OfferDetailsActivity extends AppCompatActivity
                 findViewById(R.id.kpi_contianer).setVisibility(View.GONE);
             }
             if(!offersDao.isCanDelete()) {
-                findViewById(R.id.feed_edit_btn).setVisibility(View.GONE);
+                findViewById(R.id.feed_edit_btn).setVisibility(View.INVISIBLE);
             }
             if(appPreferences.getUserType() == UserType.CONSUMER) {
                 userKPITask = new UserKPITask(1, this, this, false);

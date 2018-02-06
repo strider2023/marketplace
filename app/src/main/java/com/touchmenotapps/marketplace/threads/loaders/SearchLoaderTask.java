@@ -83,9 +83,6 @@ public class SearchLoaderTask extends AsyncTaskLoader<List<BusinessDao>> {
             if(args.getString("name") != null) {
                 url += "&name=" + args.getString("name");
             }
-            if(args.getString("categories") != null) {
-                url += "&categories=" + args.getString("categories");
-            }
             if(args.getString("sortby") != null) {
                 url += "&sortby=" + args.getString("sortby");
             }

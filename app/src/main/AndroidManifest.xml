@@ -88,6 +88,9 @@
         <activity
             android:name=".consumer.SearchLocationActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".consumer.SelectCategoryActivity"
+            android:theme="@style/AppTheme.Transparent"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

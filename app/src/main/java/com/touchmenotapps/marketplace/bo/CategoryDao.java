@@ -1,5 +1,8 @@
 package com.touchmenotapps.marketplace.bo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.touchmenotapps.marketplace.framework.bo.BaseDao;
 
 import org.json.simple.JSONObject;
@@ -9,7 +12,7 @@ import org.json.simple.parser.JSONParser;
  * Created by arindamnath on 30/12/17.
  */
 
-public class CategoryDao extends BaseDao {
+public class CategoryDao extends BaseDao implements Parcelable {
 
     private String enumText;
     private String description;
@@ -43,4 +46,30 @@ public class CategoryDao extends BaseDao {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public CategoryDao(Parcel in){
+        this.enumText = in.readString();
+        this.description =  in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(enumText);
+        dest.writeString(description);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public CategoryDao createFromParcel(Parcel in) {
+            return new CategoryDao(in);
+        }
+
+        public CategoryDao[] newArray(int size) {
+            return new CategoryDao[size];
+        }
+    };
 }

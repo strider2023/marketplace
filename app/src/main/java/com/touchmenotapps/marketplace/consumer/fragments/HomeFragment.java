@@ -17,10 +17,11 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
+import com.touchmenotapps.marketplace.consumer.SelectCategoryActivity;
 import com.touchmenotapps.marketplace.consumer.adapters.CategoriesAdapter;
 import com.touchmenotapps.marketplace.bo.HomeCategoryDao;
 import com.touchmenotapps.marketplace.consumer.interfaces.CategorySelectionListener;
@@ -129,9 +130,7 @@ public class HomeFragment extends Fragment
     @Override
     public void onCategorySelected(HomeCategoryDao homeCategoryDao) {
         if(homeCategoryDao.getKeyword().equalsIgnoreCase("all")) {
-            CategoriesFragment bottomSheetFragment = CategoriesFragment.newInstance();
-            //bottomSheetFragment.setCancelable(false);
-            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), bottomSheetFragment.getTag());
+            startActivityForResult(new Intent(getActivity(), SelectCategoryActivity.class), ConsumerMainActivity.GET_CATEGORY);
         } else {
             currentCategory = homeCategoryDao.getKeyword();
             fetchData(currentLatitude, currentLongitude);
