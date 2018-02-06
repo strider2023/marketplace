@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:hint="Search Offers"
+            android:hint="Search"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLines="1"

@@ -75,6 +75,7 @@ public class BookmarksFragment extends Fragment
         bookmarksAdapter = new BookmarksAdapter(this);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(bookmarksAdapter);
+        filterText.setHint("Search Bookmarks");
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

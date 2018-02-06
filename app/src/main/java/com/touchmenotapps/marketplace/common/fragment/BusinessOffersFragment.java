@@ -88,7 +88,7 @@ public class BusinessOffersFragment extends Fragment
         refreshLayout.setRefreshing(false);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(offersAdapter);
-        filterText.setHint("Search Bookmarks");
+        filterText.setHint("Search Offers");
 
         if(businessId != -1l) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
