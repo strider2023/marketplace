@@ -76,10 +76,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp" />
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/business_sub_categories_spinner"
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/business_sub_categories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="18sp"
+            android:text="Select Sub-Category"
+            android:padding="10dp"
             android:layout_margin="10dp" />
 
     </LinearLayout>

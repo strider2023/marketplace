@@ -18,6 +18,8 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.bo.DailyTimeInfoDao;
 import com.touchmenotapps.marketplace.common.adapters.CategoriesAdapter;
+import com.touchmenotapps.marketplace.common.dialogs.SubCategorySelectionDialog;
+import com.touchmenotapps.marketplace.common.interfaces.SubCategorySelectedListener;
 import com.touchmenotapps.marketplace.framework.DateTimeUtil;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BusinessTask;
@@ -31,6 +33,7 @@ import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListene
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +45,8 @@ import butterknife.OnItemSelected;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_ID_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 
-public class BusinessAddActivity extends AppCompatActivity implements ServerResponseListener {
+public class BusinessAddActivity extends AppCompatActivity
+        implements ServerResponseListener, SubCategorySelectedListener {
 
     @BindView(R.id.business_name)
     AppCompatEditText name;
@@ -62,8 +66,8 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     AppCompatEditText zip;
     @BindView(R.id.business_categories_spinner)
     AppCompatSpinner categoriesSpinner;
-    @BindView(R.id.business_sub_categories_spinner)
-    AppCompatSpinner subCategoriesSpinner;
+    @BindView(R.id.business_sub_categories)
+    AppCompatTextView subCategoriesText;
     @BindView(R.id.business_start_time)
     AppCompatTextView startTime;
     @BindView(R.id.business_close_time)
@@ -87,10 +91,12 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     private BusinessAddressDao businessAddressDao;
     private CategoryListDao categoryDao;
     private HoursOfOperationDao hoursOfOperationDao;
-    private CategoriesAdapter categoriesAdapter, subCategoriesAdapter;
-    private String selectedCategory, selectedSubCategory;
+    private CategoriesAdapter categoriesAdapter;
+    private String selectedCategory;
     private CategoryListDao allCategoryDao;
-    private List<CategoryDao> categories, subCategories;
+    private List<CategoryDao> categories = new ArrayList<>();
+    private List<CategoryDao> selectedSubCategory = new ArrayList<>();
+    private SubCategorySelectionDialog subCategorySelectionDialog;
     private long businessId = -1l;
     private boolean isEdit = false;
     private BusinessTask businessTask;
@@ -109,14 +115,13 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
         hoursOfOperationDao = new HoursOfOperationDao();
         categoryDao = new CategoryListDao();
         dateTimeUtil = new DateTimeUtil();
+        subCategorySelectionDialog = new SubCategorySelectionDialog(this, this);
 
         businessAddressDao = new BusinessAddressDao();
         businessDao = new BusinessDao();
         categoriesAdapter = new CategoriesAdapter(this);
-        subCategoriesAdapter = new CategoriesAdapter(this);
 
         categoriesSpinner.setAdapter(categoriesAdapter);
-        subCategoriesSpinner.setAdapter(subCategoriesAdapter);
 
         if(getIntent().getLongExtra(BUSINESS_ID_TAG, -1l) != -1l) {
             isEdit = true;
@@ -141,13 +146,15 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @OnItemSelected(R.id.business_categories_spinner)
     public void categorySelected(Spinner spinner, int position) {
         selectedCategory = categories.get(position).getEnumText();
-        subCategories = allCategoryDao.getCategoriesMap().get(categories.get(position));
-        subCategoriesAdapter.setData(subCategories);
+        List<CategoryDao> current = allCategoryDao.getCategoriesMap().get(categories.get(position));
+        subCategorySelectionDialog.setCategoryListDao(current);
+        subCategorySelectionDialog.setSubCategoriesFiltered(selectedSubCategory);
+        subCategoriesText.setText("Select Sub-Category");
     }
 
-    @OnItemSelected(R.id.business_sub_categories_spinner)
-    public void subCategorySelected(Spinner spinner, int position) {
-        selectedSubCategory = subCategories.get(position).getEnumText();
+    @OnClick(R.id.business_sub_categories)
+    public void subCategorySelected() {
+        subCategorySelectionDialog.show();
     }
 
     @OnClick(R.id.business_start_time)
@@ -163,7 +170,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @OnClick(R.id.add_business_btn)
     public void addBusiness() {
         if(name.getEditableText().toString().trim().length() > 0) {
-            categoryDao.addCategory(selectedCategory,selectedSubCategory);
+            categoryDao.addCategory(selectedCategory, selectedSubCategory);
             businessDao.setCategoryDao(categoryDao);
 
             businessDao.setName(name.getEditableText().toString().trim());
@@ -171,7 +178,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 businessDao.getPhoneNumber().clear();
             }
             for(int i = 0; i < currentPhoneCount; i++) {
-                EditText phone = (EditText) phoneContainer.getChildAt(i).findViewById(R.id.business_phone) ;
+                EditText phone = phoneContainer.getChildAt(i).findViewById(R.id.business_phone) ;
                 businessDao.addPhoneNumber(phone.getEditableText().toString().trim());
             }
             businessDao.setWebsite(website.getEditableText().toString().trim());
@@ -216,9 +223,9 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                         new CategoryDao[allCategoryDao.getCategoriesMap().keySet().size()]));
                 categoriesAdapter.setData(categories);
 
-                subCategories = Arrays.asList(allCategoryDao.getCategoriesMap().get(categories.get(0)).toArray(
-                        new CategoryDao[allCategoryDao.getCategoriesMap().get(categories.get(0)).size()]));
-                subCategoriesAdapter.setData(subCategories);
+                List<CategoryDao> current = allCategoryDao.getCategoriesMap().get(categories.get(0));
+                subCategorySelectionDialog.setCategoryListDao(current);
+                subCategorySelectionDialog.setSubCategoriesFiltered(selectedSubCategory);
                 break;
             case 2:
                 //New business added. Close activity.
@@ -227,21 +234,7 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
             case 3:
                 //Map Business data
                 businessDao = (BusinessDao) object;
-                currentPhoneCount = businessDao.getPhoneNumber().size();
-                String[] phones = businessDao.getPhoneNumber().toArray(new String[businessDao.getPhoneNumber().size()]);
-                for(int i = 0; i < currentPhoneCount; i++) {
-                    if(i > 0) {
-                        addPhoneView();
-                    }
-                    EditText phone = (EditText) phoneContainer.getChildAt(i).findViewById(R.id.business_phone);
-                    phone.setText(phones[i]);
-                }
-                website.setText(businessDao.getWebsite());
-                line1.setText(businessDao.getBusinessAddressDao().getAddress());
-                city.setText(businessDao.getBusinessAddressDao().getCity());
-                state.setText(businessDao.getBusinessAddressDao().getState());
-                zip.setText(businessDao.getBusinessAddressDao().getZip());
-                setHoursOfOperation(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
+                setBusinessDetails();
                 break;
             case 4:
                 //Business updated. Close activity.
@@ -253,6 +246,31 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
     @Override
     public void onFaliure(ServerEvents serverEvents, Object object) {
         Snackbar.make(name, object.toString(), Snackbar.LENGTH_LONG).show();
+    }
+
+    private void setBusinessDetails() {
+        currentPhoneCount = businessDao.getPhoneNumber().size();
+        String[] phones = businessDao.getPhoneNumber().toArray(new String[businessDao.getPhoneNumber().size()]);
+        for(int i = 0; i < currentPhoneCount; i++) {
+            if(i > 0) {
+                addPhoneView();
+            }
+            EditText phone = phoneContainer.getChildAt(i).findViewById(R.id.business_phone);
+            phone.setText(phones[i]);
+        }
+        for(CategoryDao cat : businessDao.getCategoryDao().getCategoriesMap().keySet()) {
+            if(categories.contains(cat)) {
+                categoriesSpinner.setSelection(categories.indexOf(cat));
+                selectedSubCategory = businessDao.getCategoryDao().getCategoriesMap().get(cat);
+                break;
+            }
+        }
+        website.setText(businessDao.getWebsite());
+        line1.setText(businessDao.getBusinessAddressDao().getAddress());
+        city.setText(businessDao.getBusinessAddressDao().getCity());
+        state.setText(businessDao.getBusinessAddressDao().getState());
+        zip.setText(businessDao.getBusinessAddressDao().getZip());
+        setHoursOfOperation(businessDao.getHoursOfOperationDao().getDailyTimeInfoList());
     }
 
     private void setHoursOfOperation(List<DailyTimeInfoDao> data) {
@@ -306,5 +324,11 @@ public class BusinessAddActivity extends AppCompatActivity implements ServerResp
                 currentPhoneCount--;
             }
         });
+    }
+
+    @Override
+    public void onSubcategoriesSelected(String names, List<CategoryDao> subCategories) {
+        this.selectedSubCategory = subCategories;
+        subCategoriesText.setText(names);
     }
 }

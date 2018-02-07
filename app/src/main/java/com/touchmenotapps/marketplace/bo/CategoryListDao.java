@@ -30,14 +30,12 @@ public class CategoryListDao extends BaseDao {
         return categoriesMap;
     }
 
-    public void addCategory(String category, String subCategory) {
+    public void addCategory(String category, List<CategoryDao> subCategory) {
         Set<String> subCategorySet = new HashSet<>();
-        subCategorySet.add(subCategory);
+        for(CategoryDao subCat : subCategory) {
+            subCategorySet.add(subCat.getEnumText());
+        }
         this.businessCategory.put(category, subCategorySet);
-    }
-
-    public void setCategoriesMap(Map<CategoryDao, List<CategoryDao>> categoriesMap) {
-        this.categoriesMap = categoriesMap;
     }
 
     @Override
@@ -62,13 +60,11 @@ public class CategoryListDao extends BaseDao {
 
     public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
-        //jsonObject.putAll(categoriesMap);
         for(String key : businessCategory.keySet()) {
             JSONArray categories = new JSONArray();
             for (String category : businessCategory.get(key)) {
                 categories.add(category);
             }
-            //timeArray.add(categoriesMap.get(key));
             jsonObject.put(key, categories);
         }
         return jsonObject;

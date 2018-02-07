@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.widget.AppCompatMultiAutoCompleteTextView;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,15 @@ import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryDao;
 import com.touchmenotapps.marketplace.bo.CategoryListDao;
 import com.touchmenotapps.marketplace.common.adapters.CategoriesAdapter;
+import com.touchmenotapps.marketplace.common.dialogs.SubCategorySelectionDialog;
+import com.touchmenotapps.marketplace.common.interfaces.SubCategorySelectedListener;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
 import com.touchmenotapps.marketplace.threads.asynctasks.GetCategoriesTask;
 
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,24 +40,39 @@ import butterknife.OnItemSelected;
  */
 
 public class SearchFilterFragment extends BottomSheetDialogFragment
-        implements ServerResponseListener {
+        implements ServerResponseListener, SubCategorySelectedListener {
 
     @BindView(R.id.filter_category)
     AppCompatSpinner category;
     @BindView(R.id.filter_subcategory)
-    AppCompatMultiAutoCompleteTextView subCategory;
+    AppCompatTextView subCategoriesText;
     @BindView(R.id.filter_by)
     RadioGroup filterBy;
     @BindView(R.id.filter_sort_by)
     RadioGroup sortBy;
 
     private View mViewHolder;
-    private CategoriesAdapter categoriesAdapter, subCategoriesAdapter;
+    private CategoriesAdapter categoriesAdapter;
     private CategoryListDao allCategoryDao;
-    private List<CategoryDao> categories, subCategories;
+    private List<CategoryDao> categories;
+    private List<CategoryDao> selectedSubCategory = new ArrayList<>();
     private FilterListener filterListener;
     private CategoryDao selectedCategory;
+    private SubCategorySelectionDialog subCategorySelectionDialog;
     private String selectedSubCategories, filterdBy, sortedBy;
+
+    @Override
+    public void onSubcategoriesSelected(String names, List<CategoryDao> subCategories) {
+        this.selectedSubCategory = subCategories;
+        subCategoriesText.setText(names);
+        for(int i = 0; i < subCategories.size(); i++) {
+            if(i == 0) {
+                selectedSubCategories = subCategories.get(i).getEnumText();
+            } else {
+                selectedSubCategories += ", " + subCategories.get(i).getEnumText();
+            }
+        }
+    }
 
     public interface FilterListener {
         void onFilterSelected(String category, String subcategory, String filterBy, String filterOrder);
@@ -82,23 +101,10 @@ public class SearchFilterFragment extends BottomSheetDialogFragment
         ButterKnife.bind(this, mViewHolder);
 
         categoriesAdapter = new CategoriesAdapter(getContext());
-        subCategoriesAdapter = new CategoriesAdapter(getContext());
         selectedCategory = new CategoryDao();
+        subCategorySelectionDialog = new SubCategorySelectionDialog(getActivity(), this);
 
         category.setAdapter(categoriesAdapter);
-        subCategory.setAdapter(subCategoriesAdapter);
-        subCategory.setTokenizer(new AppCompatMultiAutoCompleteTextView.CommaTokenizer());
-
-        subCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(selectedSubCategories == null) {
-                    selectedSubCategories = subCategories.get(position).getEnumText();
-                } else {
-                    selectedSubCategories += "," + subCategories.get(position).getEnumText();
-                }
-            }
-        });
         return mViewHolder;
     }
 
@@ -106,9 +112,15 @@ public class SearchFilterFragment extends BottomSheetDialogFragment
     public void categorySelected(Spinner spinner, int position) {
         selectedSubCategories = null;
         selectedCategory = categories.get(position);
-        subCategories = allCategoryDao.getCategoriesMap().get(selectedCategory);
-        subCategoriesAdapter.setData(subCategories);
-        subCategory.setText("");
+        List<CategoryDao> current = allCategoryDao.getCategoriesMap().get(categories.get(position));
+        subCategorySelectionDialog.setCategoryListDao(current);
+        subCategorySelectionDialog.setSubCategoriesFiltered(selectedSubCategory);
+        subCategoriesText.setText("Select Sub-Category");
+    }
+
+    @OnClick(R.id.filter_subcategory)
+    public void onSubCategorySelected() {
+        subCategorySelectionDialog.show();
     }
 
     @Override

@@ -66,8 +66,6 @@
             android:id="@+id/consumer_location_access"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@color/fragmentBackground"
             android:gravity="center"
             android:orientation="vertical">
@@ -85,6 +83,8 @@
                 android:layout_margin="15dp"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="We need access to your location to get nearby offers."
                 android:textColor="@color/dark_grey"
                 android:textSize="20sp" />

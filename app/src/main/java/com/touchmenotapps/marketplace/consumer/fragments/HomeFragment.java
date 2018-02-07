@@ -67,11 +67,12 @@ public class HomeFragment extends Fragment
     private double currentLatitude, currentLongitude;
     private String currentCategory = null;
 
-    public static HomeFragment newInstance(double lat, double lng) {
+    public static HomeFragment newInstance(double lat, double lng, String category) {
         HomeFragment fragment = new HomeFragment();
         Bundle bundle = new Bundle();
         bundle.putDouble("lat", lat);
         bundle.putDouble("lng", lng);
+        bundle.putString("category", category);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment
         Bundle args = getArguments();
         currentLatitude = args.getDouble("lat", 0d);
         currentLongitude = args.getDouble("lng", 0d);
+        currentCategory = args.getString("category");
     }
 
     @Nullable

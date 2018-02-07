@@ -59,8 +59,8 @@ import butterknife.OnClick;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class ConsumerMainActivity extends AppCompatActivity
-    implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener, CategoryFilterSelectionListener {
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
+        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener {
 
     private final int GET_LOCATION = 1;
     public static final int GET_CATEGORY = 2;
@@ -77,7 +77,7 @@ public class ConsumerMainActivity extends AppCompatActivity
     LinearLayout locationAccess;
 
     private PermissionsUtil permissionsUtil;
-    private boolean isLocationAccessible, isGPSOn;
+    private boolean isLocationAccessible, isGPSOn, isUserDefined;
 
     //Define a request code to send to Google Play services
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -100,12 +100,12 @@ public class ConsumerMainActivity extends AppCompatActivity
 
         permissionsUtil = new PermissionsUtil(this);
         geoCoder = new Geocoder(this, Locale.getDefault());
-        isLocationAccessible = permissionsUtil.checkLocationPermission(navigation);
     }
 
     @OnClick(R.id.allow_gps_access)
     public void onAllowGPS() {
-        if(isLocationAccessible) {
+        //If location permission present switch on gps
+        if (isLocationAccessible) {
             final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         } else {
@@ -116,28 +116,17 @@ public class ConsumerMainActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.app_location_text)
-    public void onLocationSelectClicked(){
-        startActivityForResult(new Intent(this, SearchLocationActivity.class),GET_LOCATION);
+    public void onLocationSelectClicked() {
+        startActivityForResult(new Intent(this, SearchLocationActivity.class), GET_LOCATION);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            isGPSOn = true;
-        } else {
-            isGPSOn = false;
-        }
+        checkLocationAccess();
         new FeedCountTask(1, this, this, false)
                 .execute(new JSONObject[]{});
-        if(isLocationAccessible) {
-            initGeo();
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, AppConstants.REQUEST_ACCESS_LOCATION);
-            }
-        }
-        if(mGoogleApiClient != null) {
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
     }
@@ -145,7 +134,7 @@ public class ConsumerMainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
-        if(mGoogleApiClient != null) {
+        if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
                 LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                 mGoogleApiClient.disconnect();
@@ -179,7 +168,12 @@ public class ConsumerMainActivity extends AppCompatActivity
         if (requestCode == AppConstants.REQUEST_ACCESS_LOCATION) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 isLocationAccessible = true;
-                initGeo();
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    initGeo();
+                } else {
+                    final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
             }
         }
     }
@@ -187,23 +181,31 @@ public class ConsumerMainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case GET_LOCATION:
                     LocationDao locationDao = data.getParcelableExtra("selectedLocation");
-                    if(locationDao != null) {
+                    if (locationDao != null) {
                         currentLatitude = locationDao.getLatitude();
                         currentLongitude = locationDao.getLongitude();
                         locationText.setText(locationDao.getCity());
-                        isLocationAccessible = true; //Fake access
+                        isUserDefined = true;
+                        locationAccess.setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
+                                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
                                 .commit();
                     }
                     break;
-                case GET_CATEGORY:
+                default: //TODO Check Bug as to why the set ID is not returned
                     CategoryDao categoryDao = data.getParcelableExtra("selectedCategory");
                     categoryText.setText(categoryDao.getDescription());
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.content,
+                                    HomeFragment.newInstance(
+                                            currentLatitude,
+                                            currentLongitude,
+                                            categoryDao.getEnumText()))
+                            .commit();
                     break;
             }
         }
@@ -241,14 +243,15 @@ public class ConsumerMainActivity extends AppCompatActivity
             locationText.setText(getCity(location));
             locationAccess.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
+                    .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
                     .commit();
             Log.i(AppConstants.APP_TAG, currentLatitude + ", " + currentLongitude + " - Location");
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i) { }
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -291,12 +294,11 @@ public class ConsumerMainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.navigation_offers:
                 toolbar.setVisibility(View.VISIBLE);
-                if(isLocationAccessible) {
-                        locationAccess.setVisibility(View.GONE);
-                        //TODO if not default value check
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude))
-                                .commit();
+                if ((isLocationAccessible && isGPSOn) || isUserDefined) {
+                    locationAccess.setVisibility(View.GONE);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
+                            .commit();
                 } else {
                     locationAccess.setVisibility(View.VISIBLE);
                 }
@@ -342,8 +344,27 @@ public class ConsumerMainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onCategorySelected(CategoryDao categoryDao) {
+    private void checkLocationAccess() {
+        //Check if location permission present
+        isLocationAccessible = permissionsUtil.checkLocationPermission(navigation);
+        if (isLocationAccessible) {
+            //If yes check if gps connection is present and show
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                isGPSOn = true;
+                locationAccess.setVisibility(View.GONE);
+                initGeo();
+            } else {
+                isGPSOn = false;
+                locationAccess.setVisibility(View.VISIBLE);
+            }
+        }
 
+        if(isUserDefined) {
+            //If location access is not present but user defined location is
+            locationAccess.setVisibility(View.GONE);
+        } else {
+            //Else ask user to switch on gps or give access
+            locationAccess.setVisibility(View.VISIBLE);
+        }
     }
 }

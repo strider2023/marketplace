@@ -11,12 +11,15 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"/>
 
-    <android.support.v7.widget.AppCompatMultiAutoCompleteTextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/filter_subcategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:hint="Enter Sub-Category"/>
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="18sp"
+        android:text="Select Sub-Category"
+        android:padding="10dp"
+        android:layout_margin="5dp"/>
 
     <RadioGroup
         android:id="@+id/filter_by"

@@ -197,6 +197,10 @@ public class BusinessDao extends BaseDao {
         if (jsonObject.containsKey("displayCategoryDescription")) {
             setCategory(jsonObject.get("displayCategoryDescription").toString());
         }
+        if(jsonObject.containsKey("category")) {
+            categoryDao.parse(jsonParser,
+                    (JSONObject) jsonParser.parse(jsonObject.get("category").toString()));
+        }
         if (jsonObject.containsKey("address")) {
             businessAddressDao.parse(jsonParser,
                     (JSONObject) jsonParser.parse(jsonObject.get("address").toString()));
