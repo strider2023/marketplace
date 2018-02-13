@@ -29,7 +29,7 @@ public class BusinessDao extends BaseDao {
     private List<RatingsDao> ratingsDao = new ArrayList<>();
     private List<AnalyticsDao> analyticsDao = new ArrayList<>();
     private CategoryListDao categoryDao;
-    private String category, subCategory;
+    private String category;
     private HoursOfOperationDao hoursOfOperationDao;
     private BusinessAddressDao businessAddressDao;
     private float singleScoreRating;
@@ -62,10 +62,6 @@ public class BusinessDao extends BaseDao {
 
     public void addPhoneNumber(String phoneNumber) {
         this.phoneNumber.add(phoneNumber);
-    }
-
-    public void setPhoneNumber(Set<String> phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public long getBusinessPhotosCount() {
@@ -140,20 +136,8 @@ public class BusinessDao extends BaseDao {
         this.category = category;
     }
 
-    public String getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
-
     public List<AnalyticsDao> getAnalyticsDao() {
         return analyticsDao;
-    }
-
-    public void setAnalyticsDao(List<AnalyticsDao> analyticsDao) {
-        this.analyticsDao = analyticsDao;
     }
 
     public boolean isBookmarked() {
@@ -197,9 +181,9 @@ public class BusinessDao extends BaseDao {
         if (jsonObject.containsKey("displayCategoryDescription")) {
             setCategory(jsonObject.get("displayCategoryDescription").toString());
         }
-        if(jsonObject.containsKey("category")) {
-            categoryDao.parse(jsonParser,
-                    (JSONObject) jsonParser.parse(jsonObject.get("category").toString()));
+        if(jsonObject.containsKey("categoriesList")) {
+            JSONArray dataArray = (JSONArray) jsonParser.parse(jsonObject.get("categoriesList").toString());
+            categoryDao.parse(jsonParser,(JSONObject) dataArray.get(0));
         }
         if (jsonObject.containsKey("address")) {
             businessAddressDao.parse(jsonParser,

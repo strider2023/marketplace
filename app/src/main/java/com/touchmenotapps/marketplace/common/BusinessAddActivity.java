@@ -258,11 +258,28 @@ public class BusinessAddActivity extends AppCompatActivity
             EditText phone = phoneContainer.getChildAt(i).findViewById(R.id.business_phone);
             phone.setText(phones[i]);
         }
-        for(CategoryDao cat : businessDao.getCategoryDao().getCategoriesMap().keySet()) {
-            if(categories.contains(cat)) {
-                categoriesSpinner.setSelection(categories.indexOf(cat));
-                selectedSubCategory = businessDao.getCategoryDao().getCategoriesMap().get(cat);
-                break;
+        for(final CategoryDao cat : businessDao.getCategoryDao().getCategoriesMap().keySet()) {
+            for(CategoryDao allCat : categories) {
+                if(allCat.getEnumText().equalsIgnoreCase(cat.getEnumText())) {
+                    categoriesSpinner.setSelection(categories.indexOf(allCat));
+                    categoriesSpinner.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            selectedSubCategory = businessDao.getCategoryDao().getCategoriesMap().get(cat);
+                            subCategorySelectionDialog.setSubCategoriesFiltered(selectedSubCategory);
+                            String names = "";
+                            for(int i = 0; i < selectedSubCategory.size(); i++) {
+                                if(i == 0) {
+                                    names += selectedSubCategory.get(i).getDescription();
+                                } else {
+                                    names += ", " + selectedSubCategory.get(i).getDescription();
+                                }
+                            }
+                            subCategoriesText.setText(names);
+                        }
+                    }, 500);
+                    break;
+                }
             }
         }
         website.setText(businessDao.getWebsite());
@@ -329,6 +346,10 @@ public class BusinessAddActivity extends AppCompatActivity
     @Override
     public void onSubcategoriesSelected(String names, List<CategoryDao> subCategories) {
         this.selectedSubCategory = subCategories;
-        subCategoriesText.setText(names);
+        if(names.length() > 0) {
+            subCategoriesText.setText(names);
+        } else {
+            subCategoriesText.setText("Select Sub-Category");
+        }
     }
 }
