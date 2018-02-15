@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.CategoryDao;
+import com.touchmenotapps.marketplace.bo.HomeCategoryDao;
 import com.touchmenotapps.marketplace.bo.LocationDao;
 import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
@@ -59,7 +61,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class ConsumerMainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener {
+        BottomNavigationView.OnNavigationItemSelectedListener, ServerResponseListener, HomeFragment.HomeFragmentListener {
 
     private final int GET_LOCATION = 1;
     public static final int GET_CATEGORY = 2;
@@ -76,17 +78,15 @@ public class ConsumerMainActivity extends AppCompatActivity
     Toolbar toolbar;
     @BindView(R.id.navigation)
     BottomNavigationView navigation;
-    @BindView(R.id.consumer_location_access)
-    LinearLayout locationAccess;
 
     private PermissionsUtil permissionsUtil;
-    private boolean isLocationAccessible, isGPSOn, isUserDefined;
+    private boolean isLocationAccessible, isUserDefined;
 
     //Define a request code to send to Google Play services
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private double currentLatitude, currentLongitude;
+    private double currentLatitude = -1d, currentLongitude = -1d;
     private Geocoder geoCoder;
     private LocationManager locationManager;
 
@@ -108,19 +108,6 @@ public class ConsumerMainActivity extends AppCompatActivity
         geoCoder = new Geocoder(this, Locale.getDefault());
     }
 
-    @OnClick(R.id.allow_gps_access)
-    public void onAllowGPS() {
-        //If location permission present switch on gps
-        if (isLocationAccessible) {
-            final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(intent);
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, AppConstants.REQUEST_ACCESS_LOCATION);
-            }
-        }
-    }
-
     @OnClick(R.id.app_location_text)
     public void onLocationSelectClicked() {
         startActivityForResult(new Intent(this, SearchLocationActivity.class), GET_LOCATION);
@@ -129,7 +116,9 @@ public class ConsumerMainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        checkLocationAccess();
+        if(navigation.getSelectedItemId() == R.id.navigation_home) {
+            onActivityInit();
+        }
         new FeedCountTask(1, this, this, false)
                 .execute(new JSONObject[]{});
         if (mGoogleApiClient != null) {
@@ -176,7 +165,6 @@ public class ConsumerMainActivity extends AppCompatActivity
                         currentLongitude = locationDao.getLongitude();
                         locationText.setText(locationDao.getCity());
                         isUserDefined = true;
-                        locationAccess.setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
                                 .commit();
@@ -197,20 +185,6 @@ public class ConsumerMainActivity extends AppCompatActivity
         }
     }
 
-    private void initGeo() {
-        //Init location builder
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-    }
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -227,7 +201,6 @@ public class ConsumerMainActivity extends AppCompatActivity
             currentLatitude = location.getLatitude();
             currentLongitude = location.getLongitude();
             locationText.setText(getCity(location));
-            locationAccess.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
                     .commit();
@@ -237,6 +210,12 @@ public class ConsumerMainActivity extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
+        currentLatitude = -1d;
+        currentLongitude = -1d;
+        categoryText.setText("Recommended");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
+                .commit();
     }
 
     @Override
@@ -260,39 +239,19 @@ public class ConsumerMainActivity extends AppCompatActivity
         Log.i(AppConstants.APP_TAG, currentLatitude + ", " + currentLongitude + " - Location");
     }
 
-    private String getCity(Location location) {
-        String result = "";
-        try {
-            List<Address> list = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (list != null & list.size() > 0) {
-                Address address = list.get(0);
-                result = address.getLocality();
-                return result;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.navigation_offers:
+            case R.id.navigation_home:
                 toolbarContainer.setVisibility(View.VISIBLE);
                 titleText.setVisibility(View.GONE);
-                if ((isLocationAccessible && isGPSOn) || isUserDefined) {
-                    locationAccess.setVisibility(View.GONE);
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
-                            .commit();
-                } else {
-                    locationAccess.setVisibility(View.VISIBLE);
-                }
+                categoryText.setText("Recommended");
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
+                        .commit();
                 return true;
-            case R.id.navigation_purchases:
+            case R.id.navigation_offers:
                 toolbarContainer.setVisibility(View.GONE);
-                locationAccess.setVisibility(View.GONE);
                 titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BusinessOffersFragment.newInstance(-1l))
@@ -300,7 +259,6 @@ public class ConsumerMainActivity extends AppCompatActivity
                 return true;
             case R.id.navigation_bookmarks:
                 toolbarContainer.setVisibility(View.GONE);
-                locationAccess.setVisibility(View.GONE);
                 titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BookmarksFragment.newInstance())
@@ -308,7 +266,6 @@ public class ConsumerMainActivity extends AppCompatActivity
                 return true;
             case R.id.navigation_profile:
                 toolbarContainer.setVisibility(View.GONE);
-                locationAccess.setVisibility(View.GONE);
                 titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, ProfileFragment.newInstance())
@@ -334,27 +291,70 @@ public class ConsumerMainActivity extends AppCompatActivity
 
     }
 
-    private void checkLocationAccess() {
-        //Check if location permission present
+    @Override
+    public void onCategorySelected(HomeCategoryDao category) {
+        categoryText.setText(category.getCategoryName());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, category.getKeyword()))
+                .commit();
+    }
+
+    @Override
+    public void onAllowGPSAccessSelected() {
+        //If location permission present switch on gps
+        if (isLocationAccessible) {
+            final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{ACCESS_FINE_LOCATION}, AppConstants.REQUEST_ACCESS_LOCATION);
+            }
+        }
+    }
+    private void onActivityInit() {
         isLocationAccessible = permissionsUtil.checkLocationPermission(navigation);
         if (isLocationAccessible) {
             //If yes check if gps connection is present and show
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                isGPSOn = true;
-                locationAccess.setVisibility(View.GONE);
                 initGeo();
             } else {
-                isGPSOn = false;
-                locationAccess.setVisibility(View.VISIBLE);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
+                        .commit();
             }
-        }
-
-        if(isUserDefined) {
-            //If location access is not present but user defined location is
-            locationAccess.setVisibility(View.GONE);
         } else {
-            //Else ask user to switch on gps or give access
-            locationAccess.setVisibility(View.VISIBLE);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, HomeFragment.newInstance(currentLatitude, currentLongitude, null))
+                    .commit();
         }
+    }
+
+    private void initGeo() {
+        //Init location builder
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
+    }
+
+    private String getCity(Location location) {
+        String result = "";
+        try {
+            List<Address> list = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (list != null & list.size() > 0) {
+                Address address = list.get(0);
+                result = address.getLocality();
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.touchmenotapps.marketplace.consumer.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARKED_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_BOOKMARK_ID_TAG;
@@ -59,17 +61,25 @@ public class HomeFragment extends Fragment
     RecyclerView detailsList;
     @BindView(R.id.categories_list)
     RecyclerView categoriesList;
-    @BindView(R.id.offers_location_access)
+    @BindView(R.id.my_business_empty)
     LinearLayout emptyList;
+    @BindView(R.id.consumer_location_access)
+    LinearLayout locationAccess;
 
     private View mViewHolder;
     private List<HomeCategoryDao> homeCategoryDaoList = new ArrayList<>();
     private CategoriesAdapter categoriesAdapter;
     private Bundle queryData;
     private BusinessAdapter businessAdapter;
+    private HomeFragmentListener homeFragmentListener;
 
     private double currentLatitude, currentLongitude;
     private String currentCategory = null;
+
+    public interface HomeFragmentListener {
+        void onCategorySelected(HomeCategoryDao category);
+        void onAllowGPSAccessSelected();
+    }
 
     public static HomeFragment newInstance(double lat, double lng, String category) {
         HomeFragment fragment = new HomeFragment();
@@ -82,19 +92,30 @@ public class HomeFragment extends Fragment
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            homeFragmentListener = (HomeFragmentListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement FilterListener");
+        }
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         Bundle args = getArguments();
-        currentLatitude = args.getDouble("lat", 0d);
-        currentLongitude = args.getDouble("lng", 0d);
+        currentLatitude = args.getDouble("lat", -1d);
+        currentLongitude = args.getDouble("lng", -1d);
         currentCategory = args.getString("category");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mViewHolder = inflater.inflate(R.layout.fragment_businesses, container, false);
+        mViewHolder = inflater.inflate(R.layout.fragment_consumer_home, container, false);
         ButterKnife.bind(this, mViewHolder);
 
         homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_restaurants, "Restaurants", "RESTAURANTS_AND_COFFEESHOPS"));
@@ -105,7 +126,6 @@ public class HomeFragment extends Fragment
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_jwellrey, "Jewellery", "Food"));
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_toys, "Toys", "Food"));
 //        homeCategoryDaoList.add(new HomeCategoryDao(R.drawable.ic_travel, "Travel", "Food"));
-
 
         categoriesAdapter = new CategoriesAdapter(HomeFragment.this);
         categoriesList.setLayoutManager(new GridLayoutManager(getActivity(), 4));
@@ -130,7 +150,10 @@ public class HomeFragment extends Fragment
     @Override
     public void onResume() {
         super.onResume();
-        fetchData(currentLatitude, currentLongitude);
+        if(currentLatitude != -1l && currentLongitude !=-1d) {
+            locationAccess.setVisibility(View.GONE);
+            fetchData(currentLatitude, currentLongitude);
+        }
     }
 
     @Override
@@ -153,13 +176,17 @@ public class HomeFragment extends Fragment
         }
     }
 
+    @OnClick(R.id.allow_gps_access)
+    public void onAllowGPS() {
+        homeFragmentListener.onAllowGPSAccessSelected();
+    }
+
     @Override
     public void onCategorySelected(HomeCategoryDao homeCategoryDao) {
         if(homeCategoryDao.getKeyword().equalsIgnoreCase("all")) {
             startActivityForResult(new Intent(getActivity(), SelectCategoryActivity.class), ConsumerMainActivity.GET_CATEGORY);
         } else {
-            currentCategory = homeCategoryDao.getKeyword();
-            fetchData(currentLatitude, currentLongitude);
+            homeFragmentListener.onCategorySelected(homeCategoryDao);
         }
     }
 
