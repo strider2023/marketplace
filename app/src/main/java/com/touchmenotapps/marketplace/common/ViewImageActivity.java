@@ -14,8 +14,9 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessImageDao;
-import com.touchmenotapps.marketplace.common.dialogs.DeleteImageDialog;
-import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
+import com.touchmenotapps.marketplace.common.dialogs.DeleteDailog;
+import com.touchmenotapps.marketplace.common.interfaces.DeleteListener;
+import com.touchmenotapps.marketplace.framework.enums.DeleteDialogType;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +27,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_IMAGE_TAG;
 
 public class ViewImageActivity extends AppCompatActivity
-    implements FeedDeleteListener{
+    implements DeleteListener {
 
     @BindView(R.id.view_image)
     ImageView image;
@@ -35,13 +36,15 @@ public class ViewImageActivity extends AppCompatActivity
 
     private BusinessImageDao businessImageDao;
     private PhotoViewAttacher photoAttacher;
-    private DeleteImageDialog deleteImageDialog;
+    private DeleteDailog deleteDailog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
         ButterKnife.bind(this);
+
+        deleteDailog = new DeleteDailog(this, DeleteDialogType.IMAGE, this);
 
         if(getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG) != null) {
             businessImageDao = getIntent().getParcelableExtra(BUSINESS_IMAGE_TAG);
@@ -52,7 +55,7 @@ public class ViewImageActivity extends AppCompatActivity
             Glide.with(this)
                     .load(businessImageDao.getFile())
                     .error(R.drawable.ic_shop)
-                    .placeholder(R.drawable.ic_shop)
+                    .placeholder(R.drawable.ic_loader)
                     .listener(new RequestListener<String, GlideDrawable>() {
                         @Override
                         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -72,9 +75,6 @@ public class ViewImageActivity extends AppCompatActivity
             } else {
                 caption.setVisibility(View.GONE);
             }
-            deleteImageDialog = new DeleteImageDialog(this,
-                    getIntent().getLongExtra(BUSINESS_ID_TAG, -1l),
-                    businessImageDao.getId(), this);
         }
     }
 
@@ -93,7 +93,8 @@ public class ViewImageActivity extends AppCompatActivity
 
     @OnClick(R.id.delete_image)
     public void onDelete() {
-        deleteImageDialog.show();
+        deleteDailog.show( getIntent().getLongExtra(BUSINESS_ID_TAG, -1l),
+                businessImageDao.getId());
     }
 
     @Override

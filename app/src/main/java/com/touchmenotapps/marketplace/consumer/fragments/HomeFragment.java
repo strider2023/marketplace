@@ -11,16 +11,20 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
+import com.touchmenotapps.marketplace.common.DeleteDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.consumer.ConsumerMainActivity;
+import com.touchmenotapps.marketplace.consumer.SearchActivity;
 import com.touchmenotapps.marketplace.consumer.SelectCategoryActivity;
 import com.touchmenotapps.marketplace.consumer.adapters.CategoriesAdapter;
 import com.touchmenotapps.marketplace.bo.HomeCategoryDao;
@@ -80,6 +84,7 @@ public class HomeFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Bundle args = getArguments();
         currentLatitude = args.getDouble("lat", 0d);
         currentLongitude = args.getDouble("lng", 0d);
@@ -115,7 +120,6 @@ public class HomeFragment extends Fragment
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //TODO change to current lat and lng
                 fetchData(currentLatitude, currentLatitude);
             }
         });
@@ -127,6 +131,26 @@ public class HomeFragment extends Fragment
     public void onResume() {
         super.onResume();
         fetchData(currentLatitude, currentLongitude);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.home_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.home_search:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("lat", currentLatitude);
+                intent.putExtra("lng", currentLongitude);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -165,7 +189,7 @@ public class HomeFragment extends Fragment
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), DeleteDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());

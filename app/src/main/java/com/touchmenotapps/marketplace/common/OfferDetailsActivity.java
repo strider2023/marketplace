@@ -13,8 +13,9 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.OffersDao;
-import com.touchmenotapps.marketplace.common.dialogs.DeleteFeedDialog;
-import com.touchmenotapps.marketplace.common.interfaces.FeedDeleteListener;
+import com.touchmenotapps.marketplace.common.dialogs.DeleteDailog;
+import com.touchmenotapps.marketplace.common.interfaces.DeleteListener;
+import com.touchmenotapps.marketplace.framework.enums.DeleteDialogType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
@@ -28,11 +29,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FEED_TAG;
-import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_ADDRESS;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.KPI_FEED;
 
 public class OfferDetailsActivity extends AppCompatActivity
-    implements ServerResponseListener, FeedDeleteListener {
+    implements ServerResponseListener, DeleteListener {
 
     @BindView(R.id.feed_image)
     ImageView image;
@@ -50,7 +50,7 @@ public class OfferDetailsActivity extends AppCompatActivity
     AppCompatTextView total;
 
     private OffersDao offersDao;
-    private DeleteFeedDialog feedDialog;
+    private DeleteDailog deleteDailog;
     private AppPreferences appPreferences;
     private MenuItem delete;
     private UserKPITask userKPITask;
@@ -63,10 +63,10 @@ public class OfferDetailsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         appPreferences = new AppPreferences(this);
+        deleteDailog = new DeleteDailog(this, DeleteDialogType.OFFER, this);
 
         if(getIntent().getParcelableExtra(FEED_TAG) != null) {
             offersDao = getIntent().getParcelableExtra(FEED_TAG);
-            feedDialog = new DeleteFeedDialog(this, offersDao.getBusinessId(), offersDao.getId(), this);
             caption.setText(offersDao.getCaption());
             code.setText(offersDao.getRedeeemCode());
             Glide.with(this)
@@ -107,7 +107,7 @@ public class OfferDetailsActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.feed_menu, menu);
-        delete = menu.findItem(R.id.navigation_delete);
+        delete = menu.findItem(R.id.offer_delete);
         delete.setVisible(offersDao.isCanDelete());
         return true;
     }
@@ -118,8 +118,8 @@ public class OfferDetailsActivity extends AppCompatActivity
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.navigation_delete:
-                feedDialog.show();
+            case R.id.offer_delete:
+                deleteDailog.show(offersDao.getBusinessId(), offersDao.getId());
                 break;
         }
         return super.onOptionsItemSelected(item);

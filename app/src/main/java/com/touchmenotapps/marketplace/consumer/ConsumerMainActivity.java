@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,11 +19,10 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -40,7 +40,6 @@ import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.ProfileFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.BookmarksFragment;
 import com.touchmenotapps.marketplace.consumer.fragments.HomeFragment;
-import com.touchmenotapps.marketplace.consumer.interfaces.CategoryFilterSelectionListener;
 import com.touchmenotapps.marketplace.framework.PermissionsUtil;
 import com.touchmenotapps.marketplace.framework.constants.AppConstants;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
@@ -65,10 +64,14 @@ public class ConsumerMainActivity extends AppCompatActivity
     private final int GET_LOCATION = 1;
     public static final int GET_CATEGORY = 2;
 
+    @BindView(R.id.app_name_text)
+    TextView titleText;
     @BindView(R.id.app_location_text)
-    TextView locationText;
+    AppCompatTextView locationText;
     @BindView(R.id.app_category_text)
-    TextView categoryText;
+    AppCompatTextView categoryText;
+    @BindView(R.id.toolbar_contianer)
+    LinearLayout toolbarContainer;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.navigation)
@@ -94,6 +97,9 @@ public class ConsumerMainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(), "fonts/font.ttf");
+        titleText.setTypeface(myTypeface);
 
         navigation.setOnNavigationItemSelectedListener(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -140,26 +146,6 @@ public class ConsumerMainActivity extends AppCompatActivity
                 mGoogleApiClient.disconnect();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.consumer_main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.navigation_search:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra("lat", currentLatitude);
-                intent.putExtra("lng", currentLongitude);
-                startActivity(intent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -293,7 +279,8 @@ public class ConsumerMainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_offers:
-                toolbar.setVisibility(View.VISIBLE);
+                toolbarContainer.setVisibility(View.VISIBLE);
+                titleText.setVisibility(View.GONE);
                 if ((isLocationAccessible && isGPSOn) || isUserDefined) {
                     locationAccess.setVisibility(View.GONE);
                     getSupportFragmentManager().beginTransaction()
@@ -304,22 +291,25 @@ public class ConsumerMainActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.navigation_purchases:
-                toolbar.setVisibility(View.GONE);
+                toolbarContainer.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
+                titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BusinessOffersFragment.newInstance(-1l))
                         .commit();
                 return true;
             case R.id.navigation_bookmarks:
-                toolbar.setVisibility(View.GONE);
+                toolbarContainer.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
+                titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, BookmarksFragment.newInstance())
                         .commit();
                 return true;
             case R.id.navigation_profile:
-                toolbar.setVisibility(View.GONE);
+                toolbarContainer.setVisibility(View.GONE);
                 locationAccess.setVisibility(View.GONE);
+                titleText.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content, ProfileFragment.newInstance())
                         .commit();

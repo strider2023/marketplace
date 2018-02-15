@@ -1,5 +1,7 @@
 package com.touchmenotapps.marketplace.common.fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,10 +12,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -45,7 +51,8 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.FE
  */
 
 public class BusinessOffersFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<OffersDao>>, BusinessFeedSelectedListener{
+        implements LoaderManager.LoaderCallbacks<List<OffersDao>>, BusinessFeedSelectedListener,
+        SearchView.OnQueryTextListener {
 
     @BindView(R.id.my_business_feed_empty)
     LinearLayout emptyBusiness;
@@ -53,10 +60,9 @@ public class BusinessOffersFragment extends Fragment
     SwipeRefreshLayout refreshLayout;
     @BindView(R.id.details_list)
     RecyclerView detailsList;
-    @BindView(R.id.list_filter_text)
-    AppCompatEditText filterText;
 
     private View mViewHolder;
+    private SearchView searchView;
     private long businessId = -1l;
     private Bundle queryData;
     private OffersAdapter offersAdapter;
@@ -73,6 +79,7 @@ public class BusinessOffersFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Bundle args = getArguments();
         businessId = args.getLong(BUSINESS_ID_TAG, -1l);
     }
@@ -88,7 +95,6 @@ public class BusinessOffersFragment extends Fragment
         refreshLayout.setRefreshing(false);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(offersAdapter);
-        filterText.setHint("Search Offers");
 
         if(businessId != -1l) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
@@ -108,30 +114,6 @@ public class BusinessOffersFragment extends Fragment
             }
         });
 
-        filterText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                offersAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
-
-        filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    offersAdapter.getFilter().filter(filterText.getEditableText().toString().trim());
-                    filterText.clearFocus();
-                    return true;
-                }
-                return false;
-            }
-        });
         return mViewHolder;
     }
 
@@ -142,6 +124,23 @@ public class BusinessOffersFragment extends Fragment
         queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
                 .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.offers_menu, menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.offers_search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setQueryHint("Search Offers");
+        //searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                offersAdapter.getFilter().filter(searchView.getQuery().toString().trim());
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @OnClick(R.id.add_business_feed_button)
@@ -178,5 +177,17 @@ public class BusinessOffersFragment extends Fragment
         Intent intent = new Intent(getActivity(), OfferDetailsActivity.class);
         intent.putExtra(FEED_TAG, offersDao);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        offersAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        offersAdapter.getFilter().filter(newText);
+        return false;
     }
 }

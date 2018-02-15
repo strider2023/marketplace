@@ -71,7 +71,7 @@
             android:name=".common.BusinessOfferActivity"
             android:label="Add Offer" />
         <activity
-            android:name=".common.BusinessDetailsActivity"
+            android:name=".common.DeleteDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".common.OfferDetailsActivity"

@@ -7,22 +7,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
+import com.touchmenotapps.marketplace.common.DeleteDetailsActivity;
 import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 import com.touchmenotapps.marketplace.threads.loaders.BookmarkLoaderTask;
@@ -45,7 +43,8 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
  */
 
 public class BookmarksFragment extends Fragment
-        implements BookmarkSelectionListener, LoaderManager.LoaderCallbacks<List<BusinessDao>>{
+        implements BookmarkSelectionListener, LoaderManager.LoaderCallbacks<List<BusinessDao>>,
+        SearchView.OnQueryTextListener{
 
     @BindView(R.id.refresh_layout)
     SwipeRefreshLayout refreshLayout;
@@ -53,16 +52,21 @@ public class BookmarksFragment extends Fragment
     RecyclerView detailsList;
     @BindView(R.id.bookmarks_empty)
     LinearLayout emptyList;
-    @BindView(R.id.list_filter_text)
-    AppCompatEditText filterText;
 
     private View mViewHolder;
+    private SearchView searchView;
     private Bundle queryData;
     private BookmarksAdapter bookmarksAdapter;
 
     public static BookmarksFragment newInstance() {
         BookmarksFragment fragment = new BookmarksFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -75,7 +79,6 @@ public class BookmarksFragment extends Fragment
         bookmarksAdapter = new BookmarksAdapter(this);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(bookmarksAdapter);
-        filterText.setHint("Search Bookmarks");
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -85,44 +88,7 @@ public class BookmarksFragment extends Fragment
                         .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, BookmarksFragment.this).forceLoad();
             }
         });
-
-        filterText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                bookmarksAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) { }
-        });
-
-        filterText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    bookmarksAdapter.getFilter().filter(filterText.getEditableText().toString().trim());
-                    filterText.clearFocus();
-                    return true;
-                }
-                return false;
-            }
-        });
         return mViewHolder;
-    }
-
-    @Override
-    public void onBookmarkSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
-        intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
-        intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
-        intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
-        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
-        intent.putExtra(BUSINESS_BOOKMARKED_TAG, businessDao.isBookmarked());
-        intent.putExtra(BUSINESS_BOOKMARK_ID_TAG, businessDao.getBookmarkId());
-        startActivity(intent);
     }
 
     @Override
@@ -131,6 +97,23 @@ public class BookmarksFragment extends Fragment
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
                 .initLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.offers_menu, menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.offers_search);
+        searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setQueryHint("Search Offers");
+        //searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bookmarksAdapter.getFilter().filter(searchView.getQuery().toString().trim());
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -155,5 +138,29 @@ public class BookmarksFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<List<BusinessDao>> loader) {
         refreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onBookmarkSelected(BusinessDao businessDao) {
+        Intent intent = new Intent(getActivity(), DeleteDetailsActivity.class);
+        intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
+        intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
+        intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
+        intent.putExtra(BUSINESS_RATING_TAG, businessDao.getSingleScoreRating());
+        intent.putExtra(BUSINESS_BOOKMARKED_TAG, businessDao.isBookmarked());
+        intent.putExtra(BUSINESS_BOOKMARK_ID_TAG, businessDao.getBookmarkId());
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        bookmarksAdapter.getFilter().filter(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        bookmarksAdapter.getFilter().filter(newText);
+        return false;
     }
 }

@@ -16,12 +16,13 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.ViewPagerDao;
 import com.touchmenotapps.marketplace.common.adapters.ViewPagerAdapter;
-import com.touchmenotapps.marketplace.common.dialogs.DeleteBusinessDailog;
+import com.touchmenotapps.marketplace.common.dialogs.DeleteDailog;
 import com.touchmenotapps.marketplace.common.fragment.BusinessDetailFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessOffersFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessInsightsFragment;
 import com.touchmenotapps.marketplace.common.fragment.BusinessPhotosFragment;
-import com.touchmenotapps.marketplace.common.interfaces.BusinessDeleteListener;
+import com.touchmenotapps.marketplace.common.interfaces.DeleteListener;
+import com.touchmenotapps.marketplace.framework.enums.DeleteDialogType;
 import com.touchmenotapps.marketplace.threads.asynctasks.BookmarksTask;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.enums.UserType;
@@ -44,8 +45,8 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
-public class BusinessDetailsActivity extends AppCompatActivity
-        implements ServerResponseListener, BusinessDeleteListener {
+public class DeleteDetailsActivity extends AppCompatActivity
+        implements ServerResponseListener, DeleteListener {
 
     @BindView(R.id.toolbar_layout)
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -68,7 +69,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     private AppPreferences appPreferences;
     private ViewPagerAdapter viewPagerAdapter;
     private List<ViewPagerDao> fragments = new ArrayList<>();
-    private DeleteBusinessDailog deleteBusinessDailog;
+    private DeleteDailog deleteDailog;
     private BookmarksTask bookmarksTask;
     private boolean isBookmarked;
 
@@ -81,6 +82,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         appPreferences = new AppPreferences(this);
+        deleteDailog = new DeleteDailog(this, DeleteDialogType.BUSINESS, this);
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -113,10 +115,6 @@ public class BusinessDetailsActivity extends AppCompatActivity
         fragments.add(new ViewPagerDao("About", BusinessDetailFragment.newInstance(businessId)));
 
         viewPagerAdapter.setFragments(fragments);
-
-        if(businessId != -1l) {
-            deleteBusinessDailog = new DeleteBusinessDailog(this, businessId, this);
-        }
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -173,7 +171,7 @@ public class BusinessDetailsActivity extends AppCompatActivity
     @OnClick(R.id.delete_business_btn)
     public void onViewDelete() {
         options.close(true);
-        deleteBusinessDailog.show();
+        deleteDailog.show(businessId);
     }
 
     @OnClick(R.id.bookmark_business_button)
