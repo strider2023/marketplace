@@ -96,7 +96,7 @@ public class BookmarksFragment extends Fragment
         super.onResume();
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
+                .restartLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
     }
 
     @Override

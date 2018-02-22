@@ -123,7 +123,7 @@ public class BusinessOffersFragment extends Fragment
         queryData = new Bundle();
         queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
+                .restartLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
     }
 
     @Override

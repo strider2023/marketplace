@@ -96,7 +96,7 @@ public class MyBusinessesFragment extends Fragment
         super.onResume();
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, MyBusinessesFragment.this).forceLoad();
+                .restartLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, MyBusinessesFragment.this).forceLoad();
     }
 
     @OnClick(R.id.add_business_button)
