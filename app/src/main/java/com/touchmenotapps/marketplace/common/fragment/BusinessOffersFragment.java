@@ -96,10 +96,6 @@ public class BusinessOffersFragment extends Fragment
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
         detailsList.setAdapter(offersAdapter);
 
-        if(businessId != -1l) {
-            mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
-        }
-
         if(appPreferences.getUserType() == UserType.CONSUMER) {
             mViewHolder.findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
         }

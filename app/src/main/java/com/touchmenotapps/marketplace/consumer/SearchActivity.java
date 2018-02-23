@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.common.DeleteDetailsActivity;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.consumer.fragments.SearchFilterFragment;
@@ -129,7 +129,7 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(this, DeleteDetailsActivity.class);
+        Intent intent = new Intent(this, BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());
