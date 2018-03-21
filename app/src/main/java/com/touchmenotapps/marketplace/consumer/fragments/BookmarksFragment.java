@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
-import com.touchmenotapps.marketplace.common.DeleteDetailsActivity;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.consumer.adapters.BookmarksAdapter;
 import com.touchmenotapps.marketplace.consumer.interfaces.BookmarkSelectionListener;
 import com.touchmenotapps.marketplace.threads.loaders.BookmarkLoaderTask;
@@ -96,7 +96,7 @@ public class BookmarksFragment extends Fragment
         super.onResume();
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
+                .restartLoader(LoaderID.FETCH_BOOKMARKS.getValue(), queryData,this).forceLoad();
     }
 
     @Override
@@ -142,7 +142,7 @@ public class BookmarksFragment extends Fragment
 
     @Override
     public void onBookmarkSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), DeleteDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());

@@ -99,7 +99,7 @@ public class BusinessPhotosFragment extends Fragment implements BusinessImageSel
         queryData = new Bundle();
         queryData.putLong(BUSINESS_ID_TAG, businessId);
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessPhotosFragment.this).forceLoad();
+                .restartLoader(LoaderID.FETCH_BUSINESS_IMAGES.getValue(), queryData, BusinessPhotosFragment.this).forceLoad();
     }
 
     @Override

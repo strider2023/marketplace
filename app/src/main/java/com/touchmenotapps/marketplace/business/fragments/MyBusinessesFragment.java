@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.BusinessAddActivity;
-import com.touchmenotapps.marketplace.common.DeleteDetailsActivity;
+import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
@@ -96,7 +96,7 @@ public class MyBusinessesFragment extends Fragment
         super.onResume();
         queryData = new Bundle();
         getActivity().getSupportLoaderManager()
-                .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, MyBusinessesFragment.this).forceLoad();
+                .restartLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, MyBusinessesFragment.this).forceLoad();
     }
 
     @OnClick(R.id.add_business_button)
@@ -134,7 +134,7 @@ public class MyBusinessesFragment extends Fragment
 
     @Override
     public void onBusinessSelected(BusinessDao businessDao) {
-        Intent intent = new Intent(getActivity(), DeleteDetailsActivity.class);
+        Intent intent = new Intent(getActivity(), BusinessDetailsActivity.class);
         intent.putExtra(BUSINESS_ID_TAG, businessDao.getId());
         intent.putExtra(BUSINESS_NAME_TAG, businessDao.getName());
         intent.putExtra(BUSINESS_CATEGORY_TAG, businessDao.getCategory());

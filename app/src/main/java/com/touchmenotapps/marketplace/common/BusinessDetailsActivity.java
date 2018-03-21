@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -45,7 +46,7 @@ import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BU
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_NAME_TAG;
 import static com.touchmenotapps.marketplace.framework.constants.AppConstants.BUSINESS_RATING_TAG;
 
-public class DeleteDetailsActivity extends AppCompatActivity
+public class BusinessDetailsActivity extends AppCompatActivity
         implements ServerResponseListener, DeleteListener {
 
     @BindView(R.id.toolbar_layout)
@@ -116,39 +117,47 @@ public class DeleteDetailsActivity extends AppCompatActivity
 
         viewPagerAdapter.setFragments(fragments);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getText().toString().equalsIgnoreCase("Offers")) {
-                    findViewById(R.id.add_business_feed_button).setVisibility(View.VISIBLE);
-                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
-                    options.setVisibility(View.GONE);
-                }
-                if(tab.getText().toString().equalsIgnoreCase("Insights")) {
-                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
-                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
-                    options.setVisibility(View.GONE);
-                }
-                if(tab.getText().toString().equalsIgnoreCase("Photos")) {
-                    findViewById(R.id.add_business_image_button).setVisibility(View.VISIBLE);
-                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
-                    options.setVisibility(View.GONE);
-                }
-                if(tab.getText().toString().equalsIgnoreCase("About")) {
-                    if(appPreferences.getUserType() == UserType.BUSINESS) {
-                        options.setVisibility(View.VISIBLE);
-                    }
-                    findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
-                    findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
-                }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageSelected(int position) {
+                setFabButton(tabLayout.getTabAt(position));
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
+            public void onPageScrollStateChanged(int state) { }
         });
+    }
+
+    private void setFabButton(TabLayout.Tab tab) {
+        if(tab.getText().toString().equalsIgnoreCase("Offers")) {
+            Log.i("Test", tab.getText().toString());
+            findViewById(R.id.add_business_feed_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+            options.setVisibility(View.GONE);
+        }
+        if(tab.getText().toString().equalsIgnoreCase("Insights")) {
+            Log.i("Test", tab.getText().toString());
+            findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+            findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+            options.setVisibility(View.GONE);
+        }
+        if(tab.getText().toString().equalsIgnoreCase("Photos")) {
+            Log.i("Test", tab.getText().toString());
+            findViewById(R.id.add_business_image_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+            options.setVisibility(View.GONE);
+        }
+        if(tab.getText().toString().equalsIgnoreCase("About")) {
+            Log.i("Test", tab.getText().toString());
+            if(appPreferences.getUserType() == UserType.BUSINESS) {
+                options.setVisibility(View.VISIBLE);
+            }
+            findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
+            findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.add_business_image_button)

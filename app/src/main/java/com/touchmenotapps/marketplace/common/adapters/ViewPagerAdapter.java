@@ -28,6 +28,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return super.getItemPosition(object);
+    }
+
+    @Override
     public Fragment getItem(int position) {
         return fragments.get(position).getFragment();
     }
