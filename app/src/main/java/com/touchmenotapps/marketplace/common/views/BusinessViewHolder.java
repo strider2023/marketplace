@@ -19,6 +19,7 @@ import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by arindamnath on 30/12/17.
@@ -111,6 +112,7 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
                 .load(businessDao.getBusinessProfileImage())
                 .error(R.drawable.ic_shop)
                 .placeholder(R.drawable.ic_shop)
+                .bitmapTransform(new CropCircleTransformation(context))
                 .centerCrop()
                 .into(image);
     }

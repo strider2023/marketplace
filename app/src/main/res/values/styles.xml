@@ -3,7 +3,6 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowContentTransitions">true</item>
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -17,6 +16,23 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Base application dark theme. -->
+    <style name="AppDarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/colorDarkPrimary</item>
+        <item name="colorPrimaryDark">@color/colorDarkPrimaryDark</item>
+        <item name="colorAccent">@color/colorDarkAccent</item>
+    </style>
+
+    <style name="AppDarkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppDarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppDarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="HintLabel" parent="TextAppearance.AppCompat">
         <!-- Hint color and label color in FALSE state -->
@@ -50,8 +66,8 @@
     </style>
 
     <style name="BottomNavigation">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="itemBackground">@color/colorPrimary</item>
+        <item name="android:background">@color/dark_grey</item>
+        <item name="itemBackground">@color/dark_grey</item>
         <item name="itemIconTint">@drawable/selector_bottom_nav_btn</item>
         <item name="itemTextColor">@drawable/selector_bottom_nav_text</item>
         <item name="paddingStart">0dp</item>

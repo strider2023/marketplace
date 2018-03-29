@@ -34,72 +34,49 @@
                     android:src="@drawable/ic_user"
                     android:background="@drawable/shape_oval_primary"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Name"
-                        android:textColor="#BBB"
-                        android:layout_marginRight="5dp"/>
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phone"
-                        android:textColor="#BBB"
-                        android:layout_marginLeft="5dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/profile_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="NA"
-                        android:textSize="20sp" />
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/profile_name_edit"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="right"
-                        android:layout_weight="1"
-                        android:hint="Enter Name"
-                        android:visibility="gone"/>
-
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:background="#CCC"
-                        android:layout_margin="5dp"/>
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/profile_phone_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="NA"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/profile_role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:text="NA"
-                    android:textColor="@color/dark_orange"
+                    android:textColor="@color/text_light_grey"
                     android:textStyle="bold" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@color/text_light_grey"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textSize="20sp" />
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/profile_name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Name"
+                    android:visibility="gone"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Phone"
+                    android:textColor="@color/text_light_grey"/>
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/profile_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="NA"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -111,7 +88,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit_black_24dp"
             android:visibility="visible"
-            app:backgroundTint="@color/lightGreen"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             app:fabSize="mini" />

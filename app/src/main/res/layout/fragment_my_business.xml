@@ -70,8 +70,7 @@
         android:layout_alignParentRight="true"
         app:fabSize="normal"
         android:src="@drawable/ic_add_black_24dp"
-        android:tint="@color/yellow"
-        app:backgroundTint="@color/lightGreen"
+        android:tint="@android:color/white"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 

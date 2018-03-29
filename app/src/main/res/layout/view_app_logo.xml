@@ -23,7 +23,8 @@
             android:layout_width="@dimen/splash_image"
             android:layout_height="@dimen/splash_image"
             android:src="@drawable/ic_shop"
-            android:transitionName="splash" />
+            android:transitionName="splash"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/splash_app_name"

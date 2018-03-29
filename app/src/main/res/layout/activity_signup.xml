@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_splash_gradient"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_gravity="center"
     android:animateLayoutChanges="true"
-    tools:context="com.touchmenotapps.marketplace.signup.SignupActivity">
+    android:background="@drawable/bg_splash_gradient"
+    android:padding="@dimen/activity_horizontal_margin">
 
-    <include layout="@layout/view_app_logo"
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.3"
+        android:background="@drawable/ic_city" />
+
+    <include
+        android:id="@+id/header_container"
+        layout="@layout/view_app_logo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/signup_select_user_type"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -30,7 +36,7 @@
             app:cardCornerRadius="5dp"
             app:cardElevation="5dp"
             app:cardUseCompatPadding="true"
-            app:contentPadding="10dp">
+            app:contentPadding="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,21 +47,21 @@
                 <ImageView
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:src="@drawable/ic_byuer"
-                    android:cropToPadding="true"
-                    android:padding="5dp"
+                    android:layout_margin="10dp"
                     android:background="@drawable/shape_oval_primary"
+                    android:cropToPadding="true"
                     android:elevation="5dp"
-                    android:layout_margin="10dp"/>
+                    android:padding="5dp"
+                    android:src="@drawable/ic_byuer" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Looking to\nPurchase"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center_horizontal"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif-light"/>
+                    android:text="Looking to\nPurchase"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
@@ -79,40 +85,45 @@
                 <ImageView
                     android:layout_width="90dp"
                     android:layout_height="90dp"
-                    android:src="@drawable/ic_seller"
-                    android:cropToPadding="true"
-                    android:padding="5dp"
+                    android:layout_margin="10dp"
                     android:background="@drawable/shape_oval_primary"
+                    android:cropToPadding="true"
                     android:elevation="5dp"
-                    android:layout_margin="10dp"/>
+                    android:padding="5dp"
+                    android:src="@drawable/ic_seller" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Looking to\nSell"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center_horizontal"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif-light"/>
+                    android:text="Looking to\nSell"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/existing_user_signin_btn"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal|bottom"
-            android:text="@string/existing_user_login"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif-condensed"
-            android:textSize="18sp"/>
-
     </LinearLayout>
 
-    <include layout="@layout/view_user_signup_info"/>
+    <include
+        layout="@layout/view_user_signup_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header_container"
+        android:layout_above="@+id/existing_user_signin_btn"/>
 
-</LinearLayout>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/existing_user_signin_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center_horizontal|bottom"
+        android:text="@string/existing_user_login"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</RelativeLayout>

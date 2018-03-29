@@ -30,8 +30,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.splash_app_name)
     AppCompatTextView splashText;
-    @BindView(R.id.splash_app_icon)
-    ImageView splashIcon;
+    //@BindView(R.id.splash_app_icon)
+    //ImageView splashIcon;
     @BindView(R.id.splash_login_btn)
     AppCompatButton splashLogin;
     @BindView(R.id.splash_signup_btn)
@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private AppPreferences appPreferences;
 
-    private Animation animFast, animSlow, animVerySlow;
+    //private Animation animFast, animSlow, animVerySlow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +51,13 @@ public class SplashActivity extends AppCompatActivity {
         splashText.setTypeface(myTypeface);
 
         appPreferences = new AppPreferences(this);
-        animFast = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim);
+        /*animFast = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim);
         animSlow = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim_slow);
         animVerySlow = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.float_anim_very_slow);
 
         findViewById(R.id.cloud_image_1).startAnimation(animVerySlow);
         findViewById(R.id.cloud_image_2).startAnimation(animSlow);
-        findViewById(R.id.cloud_image_3).startAnimation(animFast);
+        findViewById(R.id.cloud_image_3).startAnimation(animFast);*/
 
         if(appPreferences.isUserLoggedIn()) {
             new Handler().postDelayed(new Runnable() {
@@ -98,10 +98,10 @@ public class SplashActivity extends AppCompatActivity {
     @OnClick(R.id.splash_login_btn)
     public void onLoginClicked() {
         Intent intent = new Intent(this, LoginActivity.class);
-        Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
+        //Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
         Pair<View, String> p2 = Pair.create((View) splashText, "splash");
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, p1, p2);
+        //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p2);
         startActivity(intent, options.toBundle());
         finish();
     }
@@ -109,10 +109,10 @@ public class SplashActivity extends AppCompatActivity {
     @OnClick(R.id.splash_signup_btn)
     public void onSignupClicked(){
         Intent intent = new Intent(this, SignupActivity.class);
-        Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
+        //Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");
         Pair<View, String> p2 = Pair.create((View) splashText, "splash");
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, p1, p2);
+        //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1, p2);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p2);
         startActivity(intent, options.toBundle());
         finish();
     }

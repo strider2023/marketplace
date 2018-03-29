@@ -1,7 +1,7 @@
 <resources>
     <string name="base_url">http://bazaar-830807618.ap-south-1.elb.amazonaws.com/</string>
     <string name="app_name">Hify</string>
-    <string name="app_caption">Your one stop location for the best deals near you.</string>
+    <string name="app_caption">We get you the best offers in the city.</string>
 
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

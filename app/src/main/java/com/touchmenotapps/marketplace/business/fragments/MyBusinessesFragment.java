@@ -17,6 +17,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.common.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
@@ -113,7 +115,7 @@ public class MyBusinessesFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<List<BusinessDao>> loader, final List<BusinessDao> data) {
         refreshLayout.setRefreshing(false);
-        if(data.size() > 0) {
+        if (data.size() > 0) {
             mViewHolder.findViewById(R.id.cloud_image_1).clearAnimation();
             mViewHolder.findViewById(R.id.cloud_image_2).clearAnimation();
             emptyBusiness.setVisibility(View.GONE);
@@ -124,6 +126,22 @@ public class MyBusinessesFragment extends Fragment
             refreshLayout.setVisibility(View.GONE);
             mViewHolder.findViewById(R.id.cloud_image_1).startAnimation(animFast);
             mViewHolder.findViewById(R.id.cloud_image_2).startAnimation(animSlow);
+            // Prompt user to add a new business
+            TapTargetView.showFor(getActivity(),
+                    TapTarget.forView(
+                            mViewHolder.findViewById(R.id.add_business_button),
+                            "Add New Business",
+                            "Click the add button to list a new business.")
+                            .dimColor(R.color.dark_grey)
+                            .cancelable(true)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            startActivity(new Intent(getActivity(), BusinessAddActivity.class));
+                        }
+                    });
         }
     }
 

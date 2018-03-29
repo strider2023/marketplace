@@ -90,7 +90,7 @@ public class SignupActivity extends AppCompatActivity implements ServerResponseL
         }
     }
 
-    @OnClick({R.id.existing_user_signin_btn, R.id.signup_go_to_login_btn})
+    @OnClick(R.id.existing_user_signin_btn)
     public void onSignupClicked() {
         Intent intent = new Intent(this, LoginActivity.class);
         Pair<View, String> p1 = Pair.create((View) splashIcon, "splash");

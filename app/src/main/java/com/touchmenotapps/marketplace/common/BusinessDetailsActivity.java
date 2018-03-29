@@ -139,19 +139,16 @@ public class BusinessDetailsActivity extends AppCompatActivity
             options.setVisibility(View.GONE);
         }
         if(tab.getText().toString().equalsIgnoreCase("Insights")) {
-            Log.i("Test", tab.getText().toString());
             findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
             findViewById(R.id.add_business_image_button).setVisibility(View.GONE);
             options.setVisibility(View.GONE);
         }
         if(tab.getText().toString().equalsIgnoreCase("Photos")) {
-            Log.i("Test", tab.getText().toString());
             findViewById(R.id.add_business_image_button).setVisibility(View.VISIBLE);
             findViewById(R.id.add_business_feed_button).setVisibility(View.GONE);
             options.setVisibility(View.GONE);
         }
         if(tab.getText().toString().equalsIgnoreCase("About")) {
-            Log.i("Test", tab.getText().toString());
             if(appPreferences.getUserType() == UserType.BUSINESS) {
                 options.setVisibility(View.VISIBLE);
             }

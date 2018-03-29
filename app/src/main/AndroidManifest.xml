@@ -27,7 +27,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,7 +35,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".business.BusinessMainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
@@ -66,25 +66,27 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".common.BusinessAddActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppDarkTheme.NoActionBar" />
         <activity
             android:name=".common.BusinessOfferActivity"
+            android:theme="@style/AppDarkTheme.NoActionBar"
             android:label="Add Offer" />
         <activity
             android:name=".common.BusinessDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppDarkTheme.NoActionBar" />
         <activity
             android:name=".common.OfferDetailsActivity"
+            android:theme="@style/AppDarkTheme.NoActionBar"
             android:label="Offer Details" />
         <activity
             android:name=".common.BusinessImageActivity"
             android:label="Upload Image" />
         <activity
             android:name=".common.ViewImageActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppDarkTheme.NoActionBar" />
         <activity
             android:name=".consumer.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppDarkTheme.NoActionBar" />
         <activity
             android:name=".consumer.SearchLocationActivity"
             android:theme="@style/AppTheme.NoActionBar"/>

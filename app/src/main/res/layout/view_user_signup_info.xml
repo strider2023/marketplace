@@ -2,45 +2,50 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/signup_user_info"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
+    android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
     android:visibility="gone">
 
+    <android.support.v7.widget.CardView
+        style="@style/LoginEdittextCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:theme="@style/HintLabel">
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/signup_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textColor="@android:color/white" />
+        </android.support.design.widget.TextInputLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <android.support.v7.widget.CardView
-                style="@style/LoginEdittextCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:theme="@style/HintLabel">
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/signup_phone_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:hint="Phone Number"
-                        android:inputType="phone"
-                        android:maxLength="10"
-                        android:maxLines="1"
-                        android:textColor="@android:color/white" />
-                </android.support.design.widget.TextInputLayout>
-            </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 style="@style/LoginEdittextCard"
@@ -122,20 +127,9 @@
         android:id="@+id/signup_btn"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:backgroundTint="#fced2a"
+        android:backgroundTint="@color/colorAccent"
         android:elevation="5dp"
         android:text="@string/signup"
-        android:textColor="@color/colorPrimary" />
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/signup_go_to_login_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center_horizontal|bottom"
-        android:text="@string/existing_user_login"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:textColor="@android:color/white" />
 
 </LinearLayout>
