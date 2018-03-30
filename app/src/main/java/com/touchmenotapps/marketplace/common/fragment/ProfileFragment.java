@@ -9,12 +9,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.touchmenotapps.marketplace.R;
 import com.touchmenotapps.marketplace.SplashActivity;
 import com.touchmenotapps.marketplace.bo.ProfileDao;
+import com.touchmenotapps.marketplace.common.BusinessOfferActivity;
 import com.touchmenotapps.marketplace.framework.enums.RequestType;
 import com.touchmenotapps.marketplace.framework.enums.ServerEvents;
 import com.touchmenotapps.marketplace.framework.interfaces.ServerResponseListener;
@@ -56,6 +62,12 @@ public class ProfileFragment extends Fragment
         return fragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,6 +78,26 @@ public class ProfileFragment extends Fragment
 
         phoneNumber.setText(appPreferences.getUserPhoneNumber());
         role.setText(appPreferences.getUserType().toString());
+
+        // Prompt user to add a new offer
+        if(!appPreferences.isProfileEditShown()) {
+            TapTargetView.showFor(getActivity(), TapTarget.forView(
+                    mViewHolder.findViewById(R.id.edit_profile_button),
+                    "Update Profile",
+                    "Click the edit button to update your profile.")
+                            .outerCircleColor(R.color.primary)
+                            .dimColor(R.color.dark_grey)
+                            .cancelable(true)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            appPreferences.setProfileEditShown();
+                            onEditSelected();
+                        }
+                    });
+        }
         return mViewHolder;
     }
 
@@ -77,11 +109,23 @@ public class ProfileFragment extends Fragment
         profileTask.execute(new JSONObject[]{});
     }
 
-    @OnClick(R.id.profile_logout)
-    public void onLogout() {
-        appPreferences.setLoggedOut();
-        startActivity(new Intent(getActivity(), SplashActivity.class));
-        getActivity().finish();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.logout_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout_user:
+                appPreferences.setLoggedOut();
+                startActivity(new Intent(getActivity(), SplashActivity.class));
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @OnClick(R.id.edit_profile_button)

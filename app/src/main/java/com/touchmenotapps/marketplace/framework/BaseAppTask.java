@@ -30,6 +30,8 @@ public abstract class BaseAppTask extends AsyncTask<Object, Void, ServerEvents> 
     private ProgressDialog mProgress;
     private Context context;
     private boolean showLoader = true;
+    public int timeOut = 20000;
+    public String timeOutMessage = "Server is taking longer than expected to process your request. Please try again.";
 
     public BaseAppTask(int id, Context context, ServerResponseListener serverResponseListener, boolean showLoader){
         this.id = id;

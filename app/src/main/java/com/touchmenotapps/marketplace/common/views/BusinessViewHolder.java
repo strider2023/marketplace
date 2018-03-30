@@ -60,9 +60,9 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
         appPreferences = new AppPreferences(context);
         if(appPreferences.getUserType() == UserType.BUSINESS) {
             time.setVisibility(View.GONE);
-            category.setVisibility(View.GONE);
-            callBtn.setVisibility(View.GONE);
-            locationBtn.setVisibility(View.GONE);
+           //category.setVisibility(View.INVISIBLE);
+            callBtn.setVisibility(View.INVISIBLE);
+            locationBtn.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -110,10 +110,7 @@ public class BusinessViewHolder extends RecyclerView.ViewHolder {
         this.feed_count.setText(String.valueOf(businessDao.getBusinessFeedCount()));
         Glide.with(context)
                 .load(businessDao.getBusinessProfileImage())
-                .error(R.drawable.ic_shop)
-                .placeholder(R.drawable.ic_shop)
                 .bitmapTransform(new CropCircleTransformation(context))
-                .centerCrop()
                 .into(image);
     }
 }

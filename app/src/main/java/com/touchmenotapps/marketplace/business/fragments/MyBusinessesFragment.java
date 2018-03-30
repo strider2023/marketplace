@@ -24,6 +24,7 @@ import com.touchmenotapps.marketplace.common.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.BusinessDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.BusinessAdapter;
 import com.touchmenotapps.marketplace.common.interfaces.BusinessSelectedListener;
+import com.touchmenotapps.marketplace.framework.persist.AppPreferences;
 import com.touchmenotapps.marketplace.threads.loaders.BusinessLoaderTask;
 import com.touchmenotapps.marketplace.framework.enums.LoaderID;
 import com.touchmenotapps.marketplace.bo.BusinessDao;
@@ -59,6 +60,7 @@ public class MyBusinessesFragment extends Fragment
     private Bundle queryData;
     private BusinessAdapter adapter;
     private Animation animFast, animSlow;
+    private AppPreferences appPreferences;
 
     public static MyBusinessesFragment newInstance() {
         MyBusinessesFragment fragment = new MyBusinessesFragment();
@@ -71,6 +73,7 @@ public class MyBusinessesFragment extends Fragment
         mViewHolder = inflater.inflate(R.layout.fragment_my_business, container, false);
         ButterKnife.bind(this, mViewHolder);
 
+        appPreferences = new AppPreferences(getContext());
         adapter = new BusinessAdapter(this);
         refreshLayout.setRefreshing(false);
         detailsList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,6 +92,26 @@ public class MyBusinessesFragment extends Fragment
                         .initLoader(LoaderID.FETCH_MY_BUSINESS.getValue(), queryData, MyBusinessesFragment.this).forceLoad();
             }
         });
+
+        // Prompt user to add a new business
+        if(!appPreferences.isSellerAddBusinessShown()) {
+            TapTargetView.showFor(getActivity(), TapTarget.forView(
+                            mViewHolder.findViewById(R.id.add_business_button),
+                            "Add New Business",
+                            "Click the add button to list a new business.")
+                            .outerCircleColor(R.color.primary)
+                            .dimColor(R.color.dark_grey)
+                            .cancelable(true)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            appPreferences.setSellerAddBusinessShown();
+                            onAddBusinessClick();
+                        }
+                    });
+        }
 
         return mViewHolder;
     }
@@ -126,22 +149,6 @@ public class MyBusinessesFragment extends Fragment
             refreshLayout.setVisibility(View.GONE);
             mViewHolder.findViewById(R.id.cloud_image_1).startAnimation(animFast);
             mViewHolder.findViewById(R.id.cloud_image_2).startAnimation(animSlow);
-            // Prompt user to add a new business
-            TapTargetView.showFor(getActivity(),
-                    TapTarget.forView(
-                            mViewHolder.findViewById(R.id.add_business_button),
-                            "Add New Business",
-                            "Click the add button to list a new business.")
-                            .dimColor(R.color.dark_grey)
-                            .cancelable(true)
-                            .transparentTarget(true),
-                    new TapTargetView.Listener() {
-                        @Override
-                        public void onTargetClick(TapTargetView view) {
-                            super.onTargetClick(view);
-                            startActivity(new Intent(getActivity(), BusinessAddActivity.class));
-                        }
-                    });
         }
     }
 

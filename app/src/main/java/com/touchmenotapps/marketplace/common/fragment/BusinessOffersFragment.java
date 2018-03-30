@@ -26,7 +26,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.touchmenotapps.marketplace.R;
+import com.touchmenotapps.marketplace.common.BusinessAddActivity;
 import com.touchmenotapps.marketplace.common.BusinessOfferActivity;
 import com.touchmenotapps.marketplace.common.OfferDetailsActivity;
 import com.touchmenotapps.marketplace.common.adapters.OffersAdapter;
@@ -109,6 +112,26 @@ public class BusinessOffersFragment extends Fragment
                         .initLoader(LoaderID.FETCH_BUSINESS_FEED.getValue(), queryData, BusinessOffersFragment.this).forceLoad();
             }
         });
+
+        // Prompt user to add a new offer
+        if(!appPreferences.isSellerAddOfferShown()) {
+            TapTargetView.showFor(getActivity(), TapTarget.forView(
+                    mViewHolder.findViewById(R.id.add_business_feed_button),
+                    "Add New Offer",
+                    "Click the add button to list a new offer.")
+                            .outerCircleColor(R.color.primary)
+                            .dimColor(R.color.dark_grey)
+                            .cancelable(true)
+                            .transparentTarget(true),
+                    new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);
+                            appPreferences.setSellerAddOfferShown();
+                            onAddFeed();
+                        }
+                    });
+        }
 
         return mViewHolder;
     }

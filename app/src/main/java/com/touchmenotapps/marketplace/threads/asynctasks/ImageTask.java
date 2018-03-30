@@ -99,7 +99,7 @@ public class ImageTask extends BaseAppTask {
                 if(getAppPreferences().getUserType() == UserType.BUSINESS) {
                     serverURL = StrSubstitutor.replace(URLConstants.UDPATE_BUSINESS_PHOTO_URL, data);
                 } else {
-                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_UPDATE_BUSINESS_PHOTO_URL, data);
+                    serverURL = StrSubstitutor.replace(URLConstants.CONSUMER_UPLOAD_BUSINESS_PHOTO_URL, data);
                 }
                 break;
             case POST:

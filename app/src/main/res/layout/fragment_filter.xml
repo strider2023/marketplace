@@ -9,7 +9,8 @@
         android:id="@+id/filter_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"/>
+        android:layout_margin="5dp"
+        android:spinnerMode="dialog"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/filter_subcategory"
@@ -69,7 +70,7 @@
         android:id="@+id/filter_submit"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:backgroundTint="@color/dark_orange"
+        android:backgroundTint="@color/colorDarkAccent"
         android:elevation="5dp"
         android:text="Filter"
         android:textColor="@android:color/white" />

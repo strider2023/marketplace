@@ -74,7 +74,8 @@
             android:id="@+id/business_categories_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp" />
+            android:layout_margin="10dp"
+            android:spinnerMode="dialog"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/business_sub_categories"

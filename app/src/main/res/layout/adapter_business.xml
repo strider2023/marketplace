@@ -16,83 +16,91 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="5dp">
-
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/business_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:background="@android:color/darker_gray"
-                android:cropToPadding="true"
-                android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:cropToPadding="true"
                 android:src="@drawable/ic_shop" />
 
             <ImageView
                 android:id="@+id/business_fav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:src="@drawable/ic_favorite_black_24dp"
                 android:tint="#ddd"
-                android:layout_margin="5dp"
-                android:visibility="visible"/>
+                android:visibility="gone" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/business_call_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/business_location_button"
                 android:src="@drawable/ic_phone_green_24dp"
                 android:tint="@android:color/white"
                 android:visibility="visible"
                 app:backgroundTint="@color/lightPrimary"
-                android:layout_toLeftOf="@+id/business_location_button"
-                app:useCompatPadding="true"
                 app:fabSize="mini" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/business_location_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_location_green"
+                android:tint="@android:color/white"
                 android:visibility="visible"
                 app:backgroundTint="@color/dark_orange"
-                android:layout_alignParentRight="true"
-                android:tint="@android:color/white"
-                app:useCompatPadding="true"
                 app:fabSize="mini" />
 
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/business_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/business_location_button"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/business_image"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-condensed"
+                android:maxLines="2"
+                android:text="Central"
+                android:textColor="@color/text_dark_grey"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/business_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/business_name"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/business_image"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Category"
+                android:textColor="@color/dark_orange"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
         </RelativeLayout>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/business_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:fontFamily="sans-serif-condensed"
-            android:textStyle="bold"
-            android:text="Central"
-            android:textColor="@color/text_dark_grey"
-            android:layout_alignParentBottom="true"
-            android:textSize="24sp" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/business_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Category"
-            android:textColor="@color/dark_orange"
-            android:textStyle="bold"
-            android:visibility="gone"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#ddd"/>
+            android:layout_marginTop="10dp"
+            android:background="#ddd" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,10 +118,10 @@
                 android:id="@+id/image_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="4" />
+                android:text="4"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="24dp"
@@ -126,10 +134,10 @@
                 android:id="@+id/feed_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="4" />
+                android:text="4"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="24dp"
@@ -142,15 +150,15 @@
                 android:id="@+id/business_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:fontFamily="sans-serif-condensed"
-                android:textStyle="bold"
-                android:text="4.4" />
+                android:text="4.4"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <android.support.v4.widget.Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/business_time"
@@ -159,7 +167,7 @@
                 android:drawableLeft="@drawable/ic_time_green"
                 android:drawablePadding="5dp"
                 android:text="Closed"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
 

@@ -15,7 +15,9 @@ import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 
 /**
@@ -41,7 +43,7 @@ public class LoginTask extends BaseAppTask {
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e(AppConstants.APP_TAG, e.getMessage());
-                errorMessage = "Oops something went wrong!";
+                errorMessage = e.getMessage();
                 return ServerEvents.FAILURE;
             }
         } else {
@@ -67,26 +69,47 @@ public class LoginTask extends BaseAppTask {
     }
 
     private ServerEvents getServerResponse(JSONObject object) throws Exception {
-        HttpURLConnection httppost = getNetworkUtils().getHttpURLConInstance(
-                getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, RequestType.POST);
-        DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
-        out.writeBytes(object.toString());
-        out.flush();
-        out.close();
-        StringBuilder sb = new StringBuilder();
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                httppost.getInputStream()));
-        while ((decodedString = in.readLine()) != null)
-            sb.append(decodedString);
-        in.close();
-        Log.i(AppConstants.APP_TAG, sb.toString());
-        JSONObject response = (JSONObject) getParser().parse(sb.toString());
-        getAppPreferences().setAuthResponse(
-                response.get("token").toString(),
-                response.get("expires").toString(),
-                response.get("accountType").toString()
-        );
-        getAppPreferences().setLoggedIn();
-        return ServerEvents.SUCCESS;
+        HttpURLConnection httppost = null;
+        try {
+            httppost = getNetworkUtils().getHttpURLConInstance(
+                    getContext().getString(R.string.base_url) + URLConstants.AUTH_URL, RequestType.POST);
+            httppost.setConnectTimeout(timeOut);
+            httppost.setReadTimeout(timeOut);
+            DataOutputStream out = new DataOutputStream(httppost.getOutputStream());
+            out.writeBytes(object.toString());
+            out.flush();
+            out.close();
+            StringBuilder sb = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    httppost.getInputStream()));
+            while ((decodedString = in.readLine()) != null)
+                sb.append(decodedString);
+            in.close();
+            Log.i(AppConstants.APP_TAG, sb.toString());
+            JSONObject response = (JSONObject) getParser().parse(sb.toString());
+            getAppPreferences().setAuthResponse(
+                    response.get("token").toString(),
+                    response.get("expires").toString(),
+                    response.get("accountType").toString()
+            );
+            getAppPreferences().setLoggedIn();
+            return ServerEvents.SUCCESS;
+        } catch (java.net.SocketTimeoutException e) {
+            throw new Exception(timeOutMessage);
+        } catch(ConnectException ce){
+            throw new Exception(timeOutMessage);
+        } catch(IOException io) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(httppost.getErrorStream()));
+                String line = "";
+                while ((line = in.readLine()) != null)
+                    sb.append(line);
+                in.close();
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+            throw new Exception(sb.toString());
+        }
     }
 }

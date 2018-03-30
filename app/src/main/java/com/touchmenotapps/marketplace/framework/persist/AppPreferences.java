@@ -29,6 +29,24 @@ public class AppPreferences {
         edit.commit();
     }
 
+    public void setSellerAddBusinessShown() {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putBoolean("sellerAddBusinessShown", true);
+        edit.commit();
+    }
+
+    public void setSellerAddOfferShown() {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putBoolean("sellerAddOfferShown", true);
+        edit.commit();
+    }
+
+    public void setProfileEditShown() {
+        SharedPreferences.Editor edit = mAppPrefs.edit();
+        edit.putBoolean("profileEditShown", true);
+        edit.commit();
+    }
+
     public void setLoggedOut() {
         SharedPreferences.Editor edit = mAppPrefs.edit();
         edit.putBoolean("appLoggedIn", false);
@@ -87,5 +105,17 @@ public class AppPreferences {
 
     public boolean isRegisterOTPComplete() {
         return mAppPrefs.getBoolean("registerOTP", true);
+    }
+
+    public boolean isSellerAddBusinessShown() {
+        return mAppPrefs.getBoolean("sellerAddBusinessShown", false);
+    }
+
+    public boolean isSellerAddOfferShown() {
+        return mAppPrefs.getBoolean("sellerAddOfferShown", false);
+    }
+
+    public boolean isProfileEditShown() {
+        return mAppPrefs.getBoolean("profileEditShown", false);
     }
 }
