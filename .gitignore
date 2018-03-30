@@ -59,3 +59,4 @@ freeline.py
 freeline/
 freeline_project_description.json
 .idea/modules.xml
+app/release/output.json
